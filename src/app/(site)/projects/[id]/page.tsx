@@ -7,7 +7,12 @@ import { allProjects } from "@/app/data/projects";
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+// Explicit type for page props with async params
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const project = allProjects.find(p => p.id === parseInt(id));
   
@@ -23,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ProjectDetailPage({ params }: PageProps) {
   const { id } = await params;
   const project = allProjects.find(p => p.id === parseInt(id));
 
