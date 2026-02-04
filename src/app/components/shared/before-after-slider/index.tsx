@@ -38,8 +38,8 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
    * Calculate slider position from event coordinates
    * Converts mouse/touch position to percentage (0-100)
    */
-  const calculatePosition = useCallback((clientX: number) => {
-    if (!containerRef.current) return;
+  const calculatePosition = useCallback((clientX: number): number => {
+    if (!containerRef.current) return 50; // Default to center if container not available
 
     const rect = containerRef.current.getBoundingClientRect();
     const x = clientX - rect.left;

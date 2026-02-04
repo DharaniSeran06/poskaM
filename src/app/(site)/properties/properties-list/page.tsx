@@ -8,8 +8,9 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-const Page = ({ searchParams }: any) => {
-  const category = searchParams?.category || ''; 
+const Page = async ({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) => {
+  const resolvedSearchParams = await searchParams;
+  const category = (typeof resolvedSearchParams?.category === 'string' ? resolvedSearchParams.category : '') || ''; 
 
   return (
     <>

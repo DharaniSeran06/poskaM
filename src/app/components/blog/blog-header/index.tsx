@@ -4,12 +4,13 @@ import { format } from "date-fns";
 import Image from "next/image";
 
 type Props = {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 };
 
 export async function generateMetadata({ params }: Props) {
+    const { slug } = await params;
     const posts = getAllPosts(["title", "date", "excerpt", "coverImage", "slug"]);
-    const post = getPostBySlug(params.slug, [
+    const post = getPostBySlug(slug, [
         "title",
         "author",
         "content",
@@ -60,8 +61,9 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function BlogHead({ params }: Props) {
+    const { slug } = await params;
     const posts = getAllPosts(["title", "date", "excerpt", "coverImage", "slug"]);
-    const post = getPostBySlug(params.slug, [
+    const post = getPostBySlug(slug, [
         "title",
         "author",
         "authorImage",

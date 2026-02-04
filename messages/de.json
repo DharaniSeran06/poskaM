@@ -298,6 +298,10 @@
   "services": {
     "title": "Unsere Dienstleistungen",
     "description": "Umfassende Baulösungen, die auf Ihre Bedürfnisse zugeschnitten sind.",
+    "breadcrumb": {
+      "home": "Startseite",
+      "services": "Dienstleistungen"
+    },
     "heroDescription": "Professionelle {service} Dienstleistungen mit Schweizer Präzision und Zuverlässigkeit.",
     "transformationShowcase": "Transformations-Showcase",
     "transformationDescription": "Ziehen Sie den Griff, um die Vorher-Nachher-Transformation zu sehen",
@@ -309,6 +313,13 @@
     "readyToStart": "Bereit, Ihr Projekt zu starten?",
     "readyToStartDescription": "Kontaktieren Sie uns noch heute für eine kostenlose Beratung und ein Angebot zu Ihren {service} Bedürfnissen.",
     "contactUs": "Kontaktieren Sie uns",
+    "learnMore": "Mehr erfahren",
+    "noServices": "Keine Dienstleistungen gefunden. Bitte schauen Sie später wieder vorbei.",
+    "cta": {
+      "title": "Bereit loszulegen?",
+      "description": "Kontaktieren Sie uns noch heute, um Ihr Projekt zu besprechen und ein kostenloses Angebot zu erhalten.",
+      "button": "Kontaktieren Sie uns"
+    },
     "descriptions": {
       "plasterCasts": "Professionelle Innen- und Außenputzdienstleistungen. Glatte Oberflächen, strukturierte Flächen und dekorative Putzarbeiten zur Verschönerung Ihres Raums. Unser Expertenteam liefert präzise Gipsabgussarbeiten für Wohn- und Gewerbeprojekte und gewährleistet dauerhafte und ästhetisch ansprechende Ergebnisse.",
       "drywall": "Komplette Trockenbau-Installations- und Fertigstellungsdienstleistungen. Professionelle Trockenbaulösungen für Innenräume, einschließlich Rahmenbau, Installation, Verklebung und Fertigstellung. Wir bieten glatte, nahtlose Wände und Decken, die höchsten Qualitätsstandards entsprechen.",

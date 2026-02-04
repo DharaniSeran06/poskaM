@@ -44,9 +44,14 @@ export const GET = async (request: Request) => {
       "slug": slug.current
     }`;
 
-    const projects = await client.fetch(projectsQuery, {
-      query: `*${query}*`,
-    });
+    const searchPattern = `*${query}*`;
+    
+    // Type assertion needed because query string uses template literals
+    // which prevents TypeScript from inferring parameter types
+    const projects = await client.fetch<any[]>(
+      projectsQuery,
+      { query: searchPattern } as any
+    );
 
     projects.forEach((project: any) => {
       results.push({
@@ -89,9 +94,10 @@ export const GET = async (request: Request) => {
       "slug": slug.current
     }`;
 
-    const services = await client.fetch(servicesQuery, {
-      query: `*${query}*`,
-    });
+    const services = await client.fetch<any[]>(
+      servicesQuery,
+      { query: searchPattern } as any
+    );
 
     services.forEach((service: any) => {
       results.push({

@@ -7,11 +7,13 @@ import Availability from '@/app/components/property-details/availability';
 import Tabbar from '@/app/components/property-details/tabbar';
 import TextSection from '@/app/components/property-details/text-section';
 import DiscoverProperties from '@/app/components/home/property-option';
+import type { HomeStatsData } from '@/sanity/lib/homeStats';
 
 
 export default function Details() {
   const { slug } = useParams();
   const [properties, setProperties] = useState<any[]>([])
+  const [homeStats, setHomeStats] = useState<HomeStatsData | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +30,22 @@ export default function Details() {
 
     fetchData()
   }, [])
+
+  useEffect(() => {
+    const fetchHomeStats = async () => {
+      try {
+        const res = await fetch('/api/home-stats');
+        if (!res.ok) throw new Error('Failed to fetch home stats');
+        const data = await res.json();
+        setHomeStats(data);
+      } catch (error) {
+        console.error('Error fetching home stats:', error);
+        setHomeStats(null);
+      }
+    };
+
+    fetchHomeStats();
+  }, []);
 
   const item = properties.find((item) => item.slug === slug);
 
@@ -57,7 +75,7 @@ export default function Details() {
         </div>
       </section>
       <TextSection />
-      <CompanyInfo />
+      <CompanyInfo homeStats={homeStats} />
       <Tabbar />
       <Availability />
       <DiscoverProperties />

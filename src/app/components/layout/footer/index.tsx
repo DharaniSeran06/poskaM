@@ -89,18 +89,18 @@ const Footer: React.FC<FooterProps> = ({ footerData }) => {
   const description = footerData?.description || t('description');
   const logo = footerData?.logo || '/images/logo.png';
   const navigationLinks = footerData?.navigationLinks || [
-    { href: "/", label: t('links.home') },
-    { href: "/about", label: t('links.aboutUs') },
-    { href: "/services/plaster-casts", label: t('links.services') },
-    { href: "/projects", label: t('links.projects') },
-    { href: "/contact", label: t('links.contact') },
+    { url: "/", label: t('links.home') },
+    { url: "/about", label: t('links.aboutUs') },
+    { url: "/services/plaster-casts", label: t('links.services') },
+    { url: "/projects", label: t('links.projects') },
+    { url: "/contact", label: t('links.contact') },
   ];
   const servicesLinks = footerData?.servicesLinks || [
-    { href: "/services/plaster-casts", label: t('serviceLinks.plasterCasts') },
-    { href: "/services/drywall", label: t('serviceLinks.drywall') },
-    { href: "/services/painting", label: t('serviceLinks.painting') },
-    { href: "/services/facades-and-insulation", label: t('serviceLinks.facadesAndInsulation') },
-    { href: "/services/customer-masons", label: t('serviceLinks.customerMasons') },
+    { url: "/services/plaster-casts", label: t('serviceLinks.plasterCasts') },
+    { url: "/services/drywall", label: t('serviceLinks.drywall') },
+    { url: "/services/painting", label: t('serviceLinks.painting') },
+    { url: "/services/facades-and-insulation", label: t('serviceLinks.facadesAndInsulation') },
+    { url: "/services/customer-masons", label: t('serviceLinks.customerMasons') },
   ];
   const socialMediaLinks = footerData?.socialMediaLinks || [];
   const copyright = footerData?.copyright || t('copyright', { year: new Date().getFullYear() });

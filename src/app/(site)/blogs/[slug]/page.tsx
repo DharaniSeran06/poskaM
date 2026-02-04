@@ -5,13 +5,13 @@ import Link from "next/link";
 import Markdown from "react-markdown";
 
 type Props = {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 };
 
-export async function generateMetadata({ params }: any) {
-    const data = await params;
+export async function generateMetadata({ params }: Props) {
+    const { slug } = await params;
     const posts = getAllPosts(["title", "date", "excerpt", "coverImage", "slug"]);
-    const post = getPostBySlug(data.slug, [
+    const post = getPostBySlug(slug, [
         "title",
         "author",
         "content",
@@ -61,10 +61,10 @@ export async function generateMetadata({ params }: any) {
     }
 }
 
-export default async function Post({ params }: any) {
-    const data = await params;
+export default async function Post({ params }: Props) {
+    const { slug } = await params;
     const posts = getAllPosts(["title", "date", "excerpt", "coverImage", "slug"]);
-    const post = getPostBySlug(data.slug, [
+    const post = getPostBySlug(slug, [
         "title",
         "author",
         "authorImage",

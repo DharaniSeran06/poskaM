@@ -298,6 +298,10 @@
   "services": {
     "title": "Our Services",
     "description": "Comprehensive construction solutions tailored to your needs.",
+    "breadcrumb": {
+      "home": "Home",
+      "services": "Services"
+    },
     "heroDescription": "Professional {service} services with Swiss precision and reliability.",
     "transformationShowcase": "Transformation Showcase",
     "transformationDescription": "Drag the handle to see the before and after transformation",
@@ -309,6 +313,13 @@
     "readyToStart": "Ready to Start Your Project?",
     "readyToStartDescription": "Contact us today for a free consultation and quote on your {service} needs.",
     "contactUs": "Contact Us",
+    "learnMore": "Learn More",
+    "noServices": "No services found. Please check back later.",
+    "cta": {
+      "title": "Ready to Get Started?",
+      "description": "Contact us today to discuss your project and get a free quote.",
+      "button": "Contact Us"
+    },
     "descriptions": {
       "plasterCasts": "Professional interior and exterior plastering services. Smooth finishes, textured surfaces, and decorative plasterwork to enhance your space. Our expert team delivers precision plaster casting work for both residential and commercial projects, ensuring durable and aesthetically pleasing results.",
       "drywall": "Complete drywall installation and finishing services. Professional drywalling solutions for interior spaces, including framing, installation, taping, and finishing. We provide smooth, seamless walls and ceilings that meet the highest quality standards.",

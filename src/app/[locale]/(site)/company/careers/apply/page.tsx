@@ -18,10 +18,11 @@ export default async function JobApplicationPage({
   searchParams 
 }: { 
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ position?: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { locale } = await params;
-  const { position } = await searchParams;
+  const resolvedSearchParams = await searchParams;
+  const position = typeof resolvedSearchParams?.position === 'string' ? resolvedSearchParams.position : undefined;
   const t = await getTranslations('jobApplication');
   const tNav = await getTranslations('navbar');
   const tVacancies = await getTranslations('vacancies');
