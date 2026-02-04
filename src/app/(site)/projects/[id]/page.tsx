@@ -7,8 +7,9 @@ import { allProjects } from "@/app/data/projects";
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const project = allProjects.find(p => p.id === parseInt(params.id));
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const project = allProjects.find(p => p.id === parseInt(id));
   
   if (!project) {
     return {
@@ -22,8 +23,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
-export default function ProjectDetailPage({ params }: { params: { id: string } }) {
-  const project = allProjects.find(p => p.id === parseInt(params.id));
+export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const project = allProjects.find(p => p.id === parseInt(id));
 
   if (!project) {
     notFound();
