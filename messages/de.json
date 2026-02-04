@@ -1,0 +1,425 @@
+{
+  "home": {
+    "hero": {
+      "title": "POSKA MANOLITO AG",
+      "subtitle": "Bau • Verputzen • Fassaden • Malerei • Renovierung",
+      "description": "Professionelle Bauservices mit Schweizer Präzision und Zuverlässigkeit. Wir verwandeln Ihre Vision mit Expertenhandwerk und Liebe zum Detail in die Realität.",
+      "contactUs": "Kontaktieren Sie uns",
+      "getQuote": "Angebot anfordern",
+      "rating": "4,9/5",
+      "fromReviews": "von 658 Bewertungen",
+      "yearsExperience": "Jahre Erfahrung",
+      "projectsCompleted": "Abgeschlossene Projekte"
+    },
+    "services": {
+      "title": "Unsere Dienstleistungen",
+      "description": "Umfassende Baulösungen, die auf Ihre Bedürfnisse zugeschnitten sind. Qualitätshandwerk und professioneller Service.",
+      "learnMore": "Mehr erfahren",
+      "items": {
+        "construction": {
+          "title": "Bau",
+          "description": "Komplette Bauservices vom Fundament bis zur Fertigstellung. Wir übernehmen alle Aspekte des Gebäudebaus mit Präzision und qualitativ hochwertigem Handwerk."
+        },
+        "plastering": {
+          "title": "Verputzen",
+          "description": "Professionelle Innen- und Außenputzdienstleistungen. Glatte Oberflächen, strukturierte Flächen und dekorative Putzarbeiten zur Verschönerung Ihres Raums."
+        },
+        "facades": {
+          "title": "Fassaden",
+          "description": "Experten-Fassadendesign, Installation und Renovierung. Moderne Materialien und Techniken zum Schutz und zur Verschönerung Ihrer Gebäudeaußenseite."
+        },
+        "painting": {
+          "title": "Malerei",
+          "description": "Innen- und Außenmalereidienstleistungen mit hochwertigen Farben und Beschichtungen. Professionelle Vorbereitung und Anwendung für dauerhafte Ergebnisse."
+        },
+        "renovation": {
+          "title": "Renovierung",
+          "description": "Komplette Renovierungsdienstleistungen für Wohn- und Gewerbeimmobilien. Von der Planung bis zur Ausführung verwandeln wir Ihren Raum effizient."
+        }
+      }
+    },
+    "about": {
+      "title": "Über POSKA MANOLITO AG",
+      "description1": "Mit über 15 Jahren Erfahrung in der Bauindustrie hat sich POSKA MANOLITO AG als vertrauenswürdiger Partner für Bau-, Putz-, Fassaden-, Malerei- und Renovierungsprojekte in der gesamten Schweiz etabliert.",
+      "description2": "Unser Engagement für Exzellenz, Liebe zum Detail und Schweizer Präzision zeichnet uns aus. Wir kombinieren traditionelles Handwerk mit modernen Techniken, um Ergebnisse zu liefern, die Erwartungen übertreffen.",
+      "description3": "Wir sind stolz auf Zuverlässigkeit, Professionalität und den Aufbau langfristiger Beziehungen zu unseren Kunden. Jedes Projekt wird mit der gleichen Hingabe an Qualität und Kundenzufriedenheit angegangen.",
+      "projectsCompleted": "Abgeschlossene Projekte",
+      "clientSatisfaction": "Kundenzufriedenheit",
+      "learnMore": "Erfahren Sie mehr über uns",
+      "watchStory": "Unsere Geschichte ansehen",
+      "ourStoryTitle": "Unsere Geschichte in Bewegung",
+      "ourStorySubtitle": "Vertrauen, Qualität und Handwerkskunst seit 2003",
+      "videoDescription": "Entdecken Sie die Reise von POSKA MANOLITO AG, von unseren bescheidenen Anfängen im Jahr 2003 bis hin zu einem vertrauenswürdigen Marktführer in Bau, Putz, Fassaden und Malereidienstleistungen in der gesamten Schweiz.",
+      "videoNotSupported": "Ihr Browser unterstützt das Video-Tag nicht.",
+      "yearsExperience": "Jahre Erfahrung"
+    },
+    "whyChooseUs": {
+      "title": "Warum uns wählen",
+      "description": "Wir kombinieren Erfahrung, Expertise und Engagement, um außergewöhnliche Ergebnisse für jedes Projekt zu liefern.",
+      "features": {
+        "experience": {
+          "title": "Große Erfahrung",
+          "description": "Mit über 15 Jahren Erfahrung in Bau, Putz, Fassaden, Malerei und Renovierung bringen wir Schweizer Präzision und Zuverlässigkeit in jedes Projekt."
+        },
+        "trust": {
+          "title": "Vertrauen & Zuverlässigkeit",
+          "description": "Wir bauen langfristige Beziehungen zu unseren Kunden durch Transparenz, Professionalität und konsistente Lieferung hochwertiger Bauservices auf."
+        }
+      }
+    },
+    "projects": {
+      "title": "Unsere Projekte",
+      "description": "Eine Vorschau unserer abgeschlossenen Projekte. Jedes Projekt spiegelt unser Engagement für Qualität und Exzellenz wider.",
+      "viewDetails": "Details anzeigen",
+      "viewAllProjects": "Alle Projekte anzeigen",
+      "items": {
+        "project1": {
+          "title": "Modernes Wohnkomplex",
+          "category": "Bau",
+          "description": "Vollständiger Bau eines modernen Wohnkomplexes mit 50 Einheiten, mit zeitgenössischem Design und energieeffizienten Systemen."
+        },
+        "project2": {
+          "title": "Renovierung historisches Gebäude",
+          "category": "Renovierung",
+          "description": "Umfassende Renovierung eines historischen Gebäudes, Erhaltung der ursprünglichen Architektur bei Modernisierung der Innensysteme."
+        },
+        "project3": {
+          "title": "Gewerbliche Fassadenmodernisierung",
+          "category": "Fassaden",
+          "description": "Vollständige Fassadenrenovierung mit modernen Materialien und Dämmsystemen, Verbesserung von Ästhetik und Energieeffizienz."
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Was unsere Kunden sagen",
+      "description": "Vertraut von Kunden in der gesamten Schweiz für qualitativ hochwertige Bau- und Renovierungsdienstleistungen.",
+      "items": {
+        "testimonial1": {
+          "name": "Stephanie Sue",
+          "designation": "Immobilienbesitzerin",
+          "content": "POSKA MANOLITO AG lieferte außergewöhnliche Ergebnisse bei unserem Renovierungsprojekt. Ihre Aufmerksamkeit für Details und professionelle Herangehensweise machten den gesamten Prozess reibungslos und stressfrei. Die Qualität der Arbeit übertraf unsere Erwartungen."
+        },
+        "testimonial2": {
+          "name": "Michael Schneider",
+          "designation": "Gebäudemanager",
+          "content": "Wir haben mit POSKA MANOLITO AG an mehreren Projekten gearbeitet, und sie liefern durchgehend hochwertige Arbeit. Ihr Team ist zuverlässig, professionell und schließt Projekte immer pünktlich und im Budget ab."
+        },
+        "testimonial3": {
+          "name": "Anna Müller",
+          "designation": "Hauseigentümerin",
+          "content": "Die von POSKA MANOLITO AG durchgeführte Fassadenrenovierung hat unser Gebäude transformiert. Die Handwerkskunst ist hervorragend, und das Team war während des gesamten Projekts höflich und respektvoll. Sehr empfehlenswert!"
+        },
+        "testimonial4": {
+          "name": "Thomas Weber",
+          "designation": "Gewerbeentwickler",
+          "content": "Professionell, effizient und ergebnisorientiert. POSKA MANOLITO AG hat unser Bauprojekt mit Expertise und Präzision durchgeführt. Ihre Kommunikation war ausgezeichnet, und das Endergebnis spricht für sich."
+        }
+      }
+    }
+  },
+  "navbar": {
+    "home": "Startseite",
+    "services": "Dienstleistungen",
+    "company": "Unternehmen",
+    "projects": "Projekte",
+    "contact": "Kontakt",
+    "getQuote": "Angebot anfordern",
+    "menu": "Menü",
+    "submenu": {
+      "plasterCasts": "Gipsabgüsse",
+      "drywall": "Trockenbau",
+      "painting": "Malerei",
+      "facadesAndInsulation": "Fassaden und Isolierung",
+      "customerMasons": "Kundenmaurer",
+      "bathroomKitchenRenovation": "Badezimmer-Küchen-Renovierung",
+      "generalDemolitionWork": "Allgemeine Abbrucharbeiten",
+      "aboutUs": "Über uns",
+      "vacancies": "Stellenangebote"
+    }
+  },
+  "footer": {
+    "description": "Professionelle Bauservices mit Schweizer Präzision. Spezialisiert auf Bau, Putz, Fassaden, Malerei und Renovierungsprojekte in der gesamten Schweiz.",
+    "quickLinks": "Schnelllinks",
+    "services": "Dienstleistungen",
+    "contactUs": "Kontaktieren Sie uns",
+    "links": {
+      "home": "Startseite",
+      "aboutUs": "Über uns",
+      "services": "Dienstleistungen",
+      "projects": "Projekte",
+      "contact": "Kontakt"
+    },
+    "serviceLinks": {
+      "plasterCasts": "Gipsabgüsse",
+      "drywall": "Trockenbau",
+      "painting": "Malerei",
+      "facadesAndInsulation": "Fassaden und Isolierung",
+      "customerMasons": "Kundenmaurer"
+    },
+    "address": "Haldenstrasse 50\nCH-8400 Winterthur",
+    "switzerland": "Schweiz",
+    "copyright": "© {year} POSKA MANOLITO AG. Alle Rechte vorbehalten.",
+    "privacyPolicy": "Datenschutzerklärung",
+    "termsOfService": "Nutzungsbedingungen"
+  },
+  "contact": {
+    "title": "Kontaktieren Sie uns",
+    "description": "Kontaktieren Sie POSKA MANOLITO AG für professionelle Bau-, Renovierungs- und Bauservices. Wir sind hier, um Ihr Projekt zum Leben zu erwecken.",
+    "breadcrumb": {
+      "home": "Startseite",
+      "contact": "Kontakt"
+    },
+    "info": {
+      "phone": "Telefon",
+      "callUsAnytime": "Rufen Sie uns jederzeit an",
+      "email": "E-Mail",
+      "sendUsEmail": "Senden Sie uns eine E-Mail",
+      "address": "Adresse"
+    },
+    "form": {
+      "getFreeQuote": "Kostenloses Angebot anfordern",
+      "formDescription": "Füllen Sie das untenstehende Formular aus und wir melden uns innerhalb von 24 Stunden mit einem detaillierten Angebot für Ihr Projekt bei Ihnen.",
+      "fullName": "Vollständiger Name *",
+      "emailAddress": "E-Mail-Adresse *",
+      "phoneNumber": "Telefonnummer *",
+      "serviceNeeded": "Benötigte Dienstleistung *",
+      "selectService": "Wählen Sie eine Dienstleistung",
+      "projectDetails": "Projektdetails *",
+      "projectDetailsPlaceholder": "Erzählen Sie uns von Ihrem Projekt...",
+      "sending": "Wird gesendet...",
+      "sendMessage": "Nachricht senden",
+      "thankYou": "Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet. Wir werden uns bald bei Ihnen melden.",
+      "contactInformation": "Kontaktinformationen",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "address": "Adresse",
+      "chatWhatsApp": "Chatten Sie mit uns auf WhatsApp",
+      "businessHours": "Geschäftszeiten",
+      "mondayFriday": "Montag - Freitag: 8:00 - 18:00 Uhr",
+      "saturday": "Samstag: 9:00 - 16:00 Uhr",
+      "sunday": "Sonntag: Geschlossen"
+    }
+  },
+  "projects": {
+    "title": "Unsere Projekte",
+    "description": "Präsentation unserer Expertise durch abgeschlossene Projekte. Jedes Projekt spiegelt unser Engagement für Qualität und Exzellenz wider.",
+    "breadcrumb": {
+      "home": "Startseite",
+      "projects": "Projekte"
+    },
+    "propertyId": "Objekt-ID:",
+    "object": "Objekt:",
+    "works": "Arbeiten:",
+    "architectureAndPlanning": "Architektur und Planung:",
+    "learnMore": "MEHR ERFAHREN",
+    "cta": {
+      "title": "Bereit, Ihr Projekt zu starten?",
+      "description": "Lassen Sie uns besprechen, wie wir Ihre Vision mit unseren professionellen Bauservices zum Leben erwecken können.",
+      "button": "Kostenloses Angebot anfordern"
+    }
+  },
+  "company": {
+    "title": "Über uns",
+    "description": "Erfahren Sie mehr über POSKA MANOLITO AG und unser Engagement für Exzellenz in Bauservices.",
+    "heroDescription": "Exzellenz im Bauwesen mit Schweizer Präzision und Zuverlässigkeit seit 2009",
+    "companyHistory": "Firmengeschichte",
+    "howWeBecame": "Wie wir Nummer eins wurden",
+    "historyText1": "Mit über 15 Jahren Erfahrung in der Bauindustrie hat sich POSKA MANOLITO AG als vertrauenswürdiger Partner für Bau-, Putz-, Fassaden-, Malerei- und Renovierungsprojekte in der gesamten Schweiz etabliert. Unser Engagement für Exzellenz, Liebe zum Detail und Schweizer Präzision zeichnet uns aus. Wir kombinieren traditionelles Handwerk mit modernen Techniken, um Ergebnisse zu liefern, die Erwartungen übertreffen.",
+    "historyText2": "Ermond Poshka verwirklichte seinen Traum, ein eigenes Unternehmen zu besitzen, und gründete das Einzelunternehmen \"POSKA Putzgeschäft\" in Zürich. Er erweiterte seine Dienstleistungen schrittweise, was seine Kunden sehr schätzten.",
+    "moreDetails": "Weitere Details",
+    "managingDirector": "Geschäftsführer",
+    "learnMore": "Mehr erfahren",
+    "bestConstructionCompany": "Bestes Bauunternehmen",
+    "yearsExperience": "Jahre Erfahrung",
+    "whoWeAre": "Wer wir sind",
+    "whoWeAreText1": "Mit über 15 Jahren Erfahrung in der Bauindustrie hat sich POSKA MANOLITO AG als vertrauenswürdiger Partner für Bau-, Putz-, Fassaden-, Malerei- und Renovierungsprojekte in der gesamten Schweiz etabliert.",
+    "whoWeAreText2": "Unser Engagement für Exzellenz, Liebe zum Detail und Schweizer Präzision zeichnet uns aus. Wir kombinieren traditionelles Handwerk mit modernen Techniken, um Ergebnisse zu liefern, die Erwartungen übertreffen.",
+    "whoWeAreText3": "Wir sind stolz auf Zuverlässigkeit, Professionalität und den Aufbau langfristiger Beziehungen zu unseren Kunden. Jedes Projekt wird mit der gleichen Hingabe an Qualität und Kundenzufriedenheit angegangen.",
+    "ourMission": "Unsere Mission",
+    "missionText": "Außergewöhnliche Bauservices zu liefern, die die Erwartungen der Kunden durch Schweizer Präzision, qualitativ hochwertiges Handwerk und unerschütterliches Engagement für Exzellenz in jedem Projekt übertreffen.",
+    "ourVision": "Unsere Vision",
+    "visionText": "Das vertrauenswürdigste und angesehenste Bauunternehmen in der Schweiz zu sein, anerkannt für unsere Zuverlässigkeit, Innovation und Hingabe, die Visionen unserer Kunden in die Realität umzusetzen.",
+    "expertWorkers": "Expertenarbeiter",
+    "projectsCompleted": "Abgeschlossene Projekte",
+    "clientSatisfaction": "Kundenzufriedenheit",
+    "whyChooseUsTitle": "Warum uns wählen",
+    "whyChooseUsDescription": "Was POSKA MANOLITO AG in der Bauindustrie auszeichnet",
+    "qualityMaterials": "Qualitätsmaterialien",
+    "qualityMaterialsText": "Wir verwenden nur hochwertigste Materialien von vertrauenswürdigen Lieferanten und gewährleisten Haltbarkeit, Langlebigkeit und überlegene Ergebnisse für jedes Projekt.",
+    "skilledWorkers": "Qualifizierte Arbeiter",
+    "skilledWorkersText": "Unser Team besteht aus hochqualifizierten, zertifizierten Fachkräften mit umfangreicher Erfahrung in Bau, Putz, Fassaden, Malerei und Renovierung.",
+    "onTimeDelivery": "Pünktliche Lieferung",
+    "onTimeDeliveryText": "Wir verstehen die Bedeutung von Terminen. Unser effizientes Projektmanagement gewährleistet eine termingerechte Fertigstellung ohne Kompromisse bei der Qualität.",
+    "safetyStandards": "Sicherheitsstandards",
+    "safetyStandardsText": "Sicherheit hat für uns oberste Priorität. Wir halten uns an die höchsten Sicherheitsstandards und Vorschriften und gewährleisten eine sichere Arbeitsumgebung für unser Team und unsere Kunden.",
+    "customerSatisfaction": "Kundenzufriedenheit",
+    "customerSatisfactionText": "Ihre Zufriedenheit ist unser Erfolg. Wir halten eine Kundenzufriedenheitsrate von 98% durch offene Kommunikation, Liebe zum Detail und Engagement für außergewöhnliche Ergebnisse, die Erwartungen übertreffen.",
+    "ourValues": "Unsere Werte",
+    "ourValuesDescription": "Die Grundprinzipien, die alles leiten, was wir tun",
+    "integrity": "Integrität",
+    "integrityText": "Ehrliche, transparente Kommunikation und ethische Geschäftspraktiken in all unseren Geschäften.",
+    "reliability": "Zuverlässigkeit",
+    "reliabilityText": "Zuverlässige Servicebereitstellung, Einhaltung von Terminen und konsequente Einhaltung unserer Verpflichtungen.",
+    "transparency": "Transparenz",
+    "transparencyText": "Klare Kommunikation, detaillierte Projektupdates und transparente Preisgestaltung ohne versteckte Kosten.",
+    "excellence": "Exzellenz",
+    "excellenceText": "Kompromisslose Qualitätsstandards und kontinuierliche Verbesserung in jedem Aspekt unserer Arbeit.",
+    "ctaTitle": "Bereit, Ihr Projekt zu starten?",
+    "ctaDescription": "Kontaktieren Sie uns noch heute für eine kostenlose Beratung und ein Angebot. Lassen Sie uns Ihre Bauvision zum Leben erwecken.",
+    "ctaButton": "Angebot anfordern",
+    "ermondPoshka": {
+      "title": "Ermond Poshka",
+      "subtitle": "Geschäftsführer - POSKA MANOLITO AG",
+      "whyPoskaManolito": "Warum Poska Manolito S.A.?",
+      "whyPoskaManolito1": "Wir kennen unsere Kunden und ihre Bedürfnisse.",
+      "whyPoskaManolito2": "Wir bieten die beste Auswahl an Dienstleistungen.",
+      "whyPoskaManolito3": "Wir sind stolz auf unsere erfahrenen und loyalen Mitarbeiter mit ihren menschlichen und fachlichen Stärken.",
+      "whyPoskaManolito4": "Wir garantieren das beste Preis-Leistungs-Verhältnis unserer Dienstleistungen.",
+      "companyTimeline": "Firmengeschichte",
+      "timeline2003": "2003",
+      "timeline2003Text": "Poshka Ermond verwirklicht seinen Traum, ein eigenes Unternehmen zu haben, und gründet das Einzelunternehmen «Gipsergeschäft POSKA» in Zürich. Nach und nach kann er seine Dienstleistungen erweitern, was seine Kunden sehr gerne nutzen.",
+      "timeline2009": "2009",
+      "timeline2009Text": "Die Firma \"Manolito AG\", die sich seit 30 Jahren auf Betontrennung spezialisiert hat, wird übernommen. Poska Ermond übernimmt hier auch die Geschäftsführung des Unternehmens.",
+      "timeline2012": "2012",
+      "timeline2012Text": "Das Einzelunternehmen «Gipsergeschäft POSKA» und die Aktiengesellschaft «Manolito AG» werden fusioniert. Daraus entsteht die neue Aktiengesellschaft \"Poska Manolito AG\" mit Sitz in Winterthur.",
+      "timeline2020": "2020",
+      "timeline2020Text": "Die Abteilung für Betonbohren und -fräsen wird verkauft. Das Unternehmen konzentriert sich hauptsächlich auf Putz, Fassaden und Malerei.",
+      "timelineNote": "Unsere hoch erfahrenen Mitarbeiter sind dem Unternehmen seit Jahren treu geblieben und erbringen täglich hochwertige Baudienstleistungen.",
+      "missionStatement": "Leitbild",
+      "mission1": "Seit 2003 ist Poska Manolito auf dem Baugewerbemarkt tätig und bietet verschiedene Putz-, Fassaden- und Malerarbeiten an. Um das Angebot zu vervollständigen, bieten wir auch kleine Abbruch-, Bau- und Serviceleistungen an.",
+      "mission2": "Wir sind ein unabhängiges und etabliertes Unternehmen im Kanton Zürich. Unser Fokus liegt auf kundenorientiertem Verhalten, Freundlichkeit, Lösungsorientierung und Einhaltung von Terminen.",
+      "mission3": "Wir legen großen Wert auf langfristige Partnerschaften mit Lieferanten, Kunden und Partnern.",
+      "mission4": "Um einwandfreie Ergebnisse zu gewährleisten, verwenden wir nur hochwertige Produkte. Wir folgen Trends, bleiben offen für Innovationen und führen Verbesserungen nach sorgfältiger Bewertung ein. Regelmäßige Qualitätskontrollen gewährleisten durchgehend hohe Standards.",
+      "mission5": "Unser Ziel ist langfristige Stabilität statt kurzfristigem Profit. Wir garantieren faire, marktorientierte Preise.",
+      "mission6": "Wir sind stolz auf unsere loyalen, erfahrenen und kompetenten Mitarbeiter. Wir pflegen eine familienorientierte Unternehmenskultur, die auf Respekt, Unterstützung und Teamwork basiert.",
+      "mission7": "Umweltverantwortung ist uns wichtig. Wir gehen sparsam mit Ressourcen um und entsorgen unvermeidbaren Abfall sicher."
+    }
+  },
+  "services": {
+    "title": "Unsere Dienstleistungen",
+    "description": "Umfassende Baulösungen, die auf Ihre Bedürfnisse zugeschnitten sind.",
+    "heroDescription": "Professionelle {service} Dienstleistungen mit Schweizer Präzision und Zuverlässigkeit.",
+    "transformationShowcase": "Transformations-Showcase",
+    "transformationDescription": "Ziehen Sie den Griff, um die Vorher-Nachher-Transformation zu sehen",
+    "before": "Vorher",
+    "after": "Nachher",
+    "getQuote": "Angebot anfordern",
+    "ourWork": "Unsere Arbeit",
+    "ourWorkDescription": "Sehen Sie Beispiele unserer {service} Projekte",
+    "readyToStart": "Bereit, Ihr Projekt zu starten?",
+    "readyToStartDescription": "Kontaktieren Sie uns noch heute für eine kostenlose Beratung und ein Angebot zu Ihren {service} Bedürfnissen.",
+    "contactUs": "Kontaktieren Sie uns",
+    "descriptions": {
+      "plasterCasts": "Professionelle Innen- und Außenputzdienstleistungen. Glatte Oberflächen, strukturierte Flächen und dekorative Putzarbeiten zur Verschönerung Ihres Raums. Unser Expertenteam liefert präzise Gipsabgussarbeiten für Wohn- und Gewerbeprojekte und gewährleistet dauerhafte und ästhetisch ansprechende Ergebnisse.",
+      "drywall": "Komplette Trockenbau-Installations- und Fertigstellungsdienstleistungen. Professionelle Trockenbaulösungen für Innenräume, einschließlich Rahmenbau, Installation, Verklebung und Fertigstellung. Wir bieten glatte, nahtlose Wände und Decken, die höchsten Qualitätsstandards entsprechen.",
+      "painting": "Innen- und Außenmalereidienstleistungen mit hochwertigen Farben und Beschichtungen. Professionelle Vorbereitung und Anwendung für dauerhafte Ergebnisse. Unsere geschickten Maler liefern makellose Oberflächen, die Ihr Eigentum schützen und verschönern, wobei wir nur hochwertigste Materialien und Techniken verwenden.",
+      "facadesAndInsulation": "Experten-Fassadendesign, Installation und Renovierung. Moderne Materialien und Techniken zum Schutz und zur Verschönerung Ihrer Gebäudeaußenseite. Umfassende Isolierungslösungen, die die Energieeffizienz verbessern und gleichzeitig die ästhetische Anziehungskraft Ihrer Immobilie steigern.",
+      "customerMasons": "Professionelle Maurerdienstleistungen für alle Ihre Bauanforderungen. Experten-Mauerwerk und Steinmetzarbeiten von geschickten Maurern. Wir liefern präzise Maurerarbeiten für Fundamente, Wände, Fassaden und dekorative Elemente und kombinieren traditionelles Handwerk mit modernen Techniken.",
+      "bathroomKitchenRenovation": "Komplette Renovierungsdienstleistungen für Badezimmer und Küchen. Von der Planung bis zur Ausführung verwandeln wir Ihren Raum effizient. Unsere Renovierungsexperten übernehmen alles von Sanitär- und Elektroarbeiten bis hin zu Fliesen, Schränken und Endbearbeitungen und stellen sicher, dass Ihr renovierter Raum Ihren genauen Spezifikationen entspricht.",
+      "generalDemolitionWork": "Professionelle Abbruchdienstleistungen für sichere und effiziente Strukturentfernung. Experten-Abbrucharbeiten für Renovierungen, Wiederaufbauten und Baustellenvorbereitung. Wir übernehmen alle Aspekte des Abbruchs mit Präzision, Sicherheit und Umweltverantwortung und gewährleisten ordnungsgemäße Entsorgung und Baustellenreinigung."
+    }
+  },
+  "projectDetail": {
+    "propertyId": "Objekt-ID:",
+    "object": "Objekt:",
+    "works": "Arbeiten:",
+    "architectureAndPlanning": "Architektur und Planung:",
+    "projectGallery": "Projektgalerie",
+    "galleryDescription": "Visuelle Dokumentation unserer Arbeit an diesem Projekt",
+    "projectDetails": "Projektdetails",
+    "projectDetailsText": "Dieses Projekt zeigt unser Engagement für qualitativ hochwertiges Handwerk und Liebe zum Detail. Unser Team arbeitete gewissenhaft daran, sicherzustellen, dass jeder Aspekt des Projekts die höchsten Standards erfüllte, von der ersten Planung bis zur endgültigen Fertigstellung. Das Ergebnis ist ein Beweis für unsere Expertise in {category} und unsere Hingabe, außergewöhnliche Ergebnisse für unsere Kunden zu liefern.",
+    "interestedInSimilar": "Interessiert an einem ähnlichen Projekt?",
+    "interestedDescription": "Kontaktieren Sie uns noch heute, um Ihre Projektanforderungen zu besprechen und eine kostenlose Beratung zu erhalten.",
+    "getQuote": "Angebot anfordern",
+    "contactUs": "Kontaktieren Sie uns"
+  },
+  "blog": {
+    "title": "Blog-Liste",
+    "description": "Letraset-Blätter mit Lorem Ipsum-Passagen und kürzlich mit Desktop-Publishing Variou",
+    "breadcrumb": {
+      "home": "Startseite",
+      "blogList": "Blog-Liste"
+    }
+  },
+  "vacancies": {
+    "title": "Karriere & Stellenangebote",
+    "description": "Werden Sie Teil unseres Teams und bauen Sie Ihre Karriere bei POSKA MANOLITO AG auf. Wir suchen ständig talentierte und engagierte Fachkräfte für unser Bau- und Renovierungsteam.",
+    "heroDescription": "Werden Sie Teil unseres Teams und bauen Sie Ihre Karriere bei POSKA MANOLITO AG auf",
+    "introText": "Wir suchen ständig talentierte und engagierte Fachkräfte für unser Team. Bei POSKA MANOLITO AG bieten wir wettbewerbsfähige Möglichkeiten in Bau, Putz, Fassaden, Malerei und Renovierung in der gesamten Schweiz.",
+    "openPositions": "Offene Stellen",
+    "openPositionsDescription": "Entdecken Sie aktuelle Karrieremöglichkeiten und finden Sie die perfekte Position für Sie",
+    "applyNow": "Jetzt bewerben",
+    "sendResume": "Lebenslauf senden",
+    "noVacancies": "Keine offenen Stellen",
+    "noVacanciesDescription": "Wir haben derzeit keine offenen Stellen, aber wir sind immer daran interessiert, von talentierten Fachkräften zu hören. Bitte schauen Sie später wieder vorbei oder senden Sie uns Ihren Lebenslauf für zukünftige Möglichkeiten.",
+    "cta": {
+      "title": "Keine passende Stelle gefunden?",
+      "description": "Wir sind immer daran interessiert, von talentierten Fachkräften zu hören. Senden Sie uns Ihren Lebenslauf und wir behalten Sie für zukünftige Möglichkeiten im Auge.",
+      "button": "Kontaktieren Sie uns"
+    },
+    "ctaTitle": "Keine passende Stelle gefunden?",
+    "ctaDescription": "Wir sind immer daran interessiert, von talentierten Fachkräften zu hören. Senden Sie uns Ihren Lebenslauf und wir behalten Sie für zukünftige Möglichkeiten im Auge.",
+    "jobs": {
+      "seniorPlasterer": {
+        "title": "Senior Gipser",
+        "department": "Putz",
+        "location": "Winterthur, Schweiz",
+        "type": "Vollzeit",
+        "description": "Wir suchen einen erfahrenen Gipser für unser Team. Der ideale Kandidat sollte umfangreiche Erfahrung in Innen- und Außenputzarbeiten haben."
+      },
+      "facadeSpecialist": {
+        "title": "Fassadenspezialist",
+        "department": "Fassaden",
+        "location": "Winterthur, Schweiz",
+        "type": "Vollzeit",
+        "description": "Werden Sie Teil unseres Fassadenteams als Spezialist. Erfahrung mit modernen Fassadensystemen und Isolierarbeiten ist erforderlich."
+      },
+      "painter": {
+        "title": "Professioneller Maler",
+        "department": "Malerei",
+        "location": "Winterthur, Schweiz",
+        "type": "Vollzeit",
+        "description": "Wir suchen einen geschickten Maler mit Erfahrung in Innen- und Außenmalereiprojekten."
+      }
+    }
+  },
+  "jobApplication": {
+    "title": "Bewerbung für Position",
+    "titleWithPosition": "Bewerbung für {position}",
+    "subtitle": "Werden Sie Teil von POSKA MANOLITO AG und bauen Sie Ihre Karriere mit uns auf",
+    "form": {
+      "formTitle": "Bewerbungsformular",
+      "fields": {
+        "fullName": "Vollständiger Name",
+        "email": "E-Mail-Adresse",
+        "phone": "Telefonnummer",
+        "position": "Beworbene Position",
+        "message": "Kurze Nachricht / Anschreiben",
+        "resume": "Lebenslauf / Lebenslauf hochladen"
+      },
+      "placeholders": {
+        "fullName": "Geben Sie Ihren vollständigen Namen ein",
+        "email": "ihre.email@beispiel.com",
+        "phone": "+41 XX XXX XX XX",
+        "position": "Geben Sie die Position ein, für die Sie sich bewerben",
+        "message": "Schreiben Sie hier eine kurze Nachricht oder ein Anschreiben..."
+      },
+      "uploadFile": "Datei auswählen",
+      "fileRequirements": "PDF oder DOC, max. 5MB",
+      "submitButton": "Bewerbung absenden",
+      "submitting": "Wird gesendet...",
+      "successMessage": "Ihre Bewerbung wurde erfolgreich gesendet.",
+      "errors": {
+        "fullNameRequired": "Vollständiger Name ist erforderlich",
+        "fullNameMinLength": "Vollständiger Name muss mindestens 2 Zeichen lang sein",
+        "emailRequired": "E-Mail-Adresse ist erforderlich",
+        "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+        "phoneRequired": "Telefonnummer ist erforderlich",
+        "positionRequired": "Position ist erforderlich",
+        "fileTypeInvalid": "Bitte laden Sie eine PDF- oder DOC-Datei hoch",
+        "fileSizeInvalid": "Die Dateigröße muss weniger als 5MB betragen",
+        "submitFailed": "Bewerbung konnte nicht übermittelt werden. Bitte versuchen Sie es erneut."
+      }
+    }
+  }
+}
