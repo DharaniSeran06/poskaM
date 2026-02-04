@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface JobApplicationFormProps {
   initialPosition?: string;
@@ -8,6 +8,7 @@ interface JobApplicationFormProps {
 
 const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ initialPosition = '' }) => {
   const t = useTranslations('jobApplication.form');
+  const locale = useLocale();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -110,6 +111,13 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ initialPosition
     }
 
     try {
+      // Validate file is required
+      if (!file) {
+        setErrors({ file: t('errors.fileRequired') || 'Resume file is required' });
+        setLoader(false);
+        return;
+      }
+
       // Prepare FormData for file upload
       const formDataToSend = new FormData();
       formDataToSend.append('fullName', formData.fullName);
@@ -117,11 +125,9 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ initialPosition
       formDataToSend.append('phone', formData.phone);
       formDataToSend.append('position', formData.position);
       formDataToSend.append('message', formData.message);
+      formDataToSend.append('language', locale); // Send current locale
       formDataToSend.append('website', formData.website); // Honeypot field
-
-      if (file) {
-        formDataToSend.append('resume', file);
-      }
+      formDataToSend.append('resume', file);
 
       // Send to API route
       const response = await fetch('/api/job-application', {

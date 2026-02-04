@@ -8,6 +8,7 @@ import contactPage from "./contactPageType";
 import footer from "./footerType";
 import homeStats from "./homeStatsType";
 import quoteRequest from "./quoteRequest";
+import jobApplication from "./jobApplicationType";
 
 const schemaConfig: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -19,6 +20,7 @@ const schemaConfig: { types: SchemaTypeDefinition[] } = {
     footer,
     homeStats,
     quoteRequest,
+    jobApplication,
   ],
 };
 
