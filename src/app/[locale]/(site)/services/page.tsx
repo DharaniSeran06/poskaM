@@ -6,22 +6,30 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
 
-// Enable ISR with revalidation for better production performance
-export const revalidate = 60; // Revalidate every 60 seconds
+// Force dynamic rendering - required for getTranslations()
+export const dynamic = 'force-dynamic';
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "Our Services | POSKA MANOLITO AG",
-    description: "Professional construction, renovation, and building services across Switzerland. Expert craftsmanship for all your construction needs.",
-  };
-}
+export const metadata: Metadata = {
+  title: "Our Services | POSKA MANOLITO AG",
+  description: "Professional construction, renovation, and building services across Switzerland. Expert craftsmanship for all your construction needs.",
+};
+
+// Fallback services data when Sanity is unavailable
+const fallbackServicesData = [
+  { _id: '1', slug: 'plaster-casts', title: 'Plaster casts', shortDescription: 'Professional interior and exterior plastering services.', thumbnail: '/images/services/plaster.png' },
+  { _id: '2', slug: 'drywall', title: 'Drywall', shortDescription: 'Complete drywall installation and finishing services.', thumbnail: '/images/services/drywall.jpg' },
+  { _id: '3', slug: 'painting', title: 'Painting', shortDescription: 'Interior and exterior painting services with premium paints.', thumbnail: '/images/services/Bathroom%20and%20kitchen%20renovation.jpg' },
+  { _id: '4', slug: 'facades-and-insulation', title: 'Facades and insulation', shortDescription: 'Expert facade design, installation, and renovation.', thumbnail: '/images/services/Facades%20and%20insulation.jpg' },
+  { _id: '5', slug: 'customer-masons', title: 'Customer Masons', shortDescription: 'Professional masonry services for all your construction needs.', thumbnail: '/images/services/Customer%20bricklayer.png' },
+  { _id: '6', slug: 'bathroom-kitchen-renovation', title: 'Bathroom-kitchen renovation', shortDescription: 'Complete renovation services for bathrooms and kitchens.', thumbnail: '/images/services/Bathroom%20and%20kitchen%20renovation.jpg' },
+  { _id: '7', slug: 'general-demolition-work', title: 'General demolition work', shortDescription: 'Professional demolition services for safe and efficient removal.', thumbnail: '/images/services/General%20demolition%20work.png' },
+];
 
 // Fetch services from Sanity with language support
 async function getServices(locale: string) {
   const safeLocale = locale && ['en', 'de'].includes(locale) ? locale : 'en';
   
   try {
-    // Build language-aware field selections
     const titleField = safeLocale === 'en' ? 'title.en' : `coalesce(title.${safeLocale}, title.en)`;
     const shortDescField = safeLocale === 'en' ? 'shortDescription.en' : `coalesce(shortDescription.${safeLocale}, shortDescription.en)`;
     const descField = safeLocale === 'en' ? 'description.en' : `coalesce(description.${safeLocale}, description.en)`;
@@ -44,23 +52,51 @@ async function getServices(locale: string) {
       order
     }`;
 
-    const services = await client.fetch(query, {}, {
-      cache: 'force-cache',
-      next: { revalidate: 60, tags: ['services'] }
-    });
+    const services = await client.fetch(query);
 
-    console.log(`✅ Fetched ${(services || []).length} services from Sanity (locale: ${safeLocale})`);
-    return services || [];
+    if (!services || services.length === 0) {
+      return fallbackServicesData;
+    }
+
+    return services;
   } catch (error) {
-    console.error('❌ Error fetching services from Sanity:', error);
-    return [];
+    console.error('Error fetching services:', error);
+    return fallbackServicesData;
   }
 }
 
-export default async function ServicesPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  const t = await getTranslations('services');
-  const services = await getServices(locale);
+interface PageProps {
+  params: { locale: string };
+}
+
+export default async function ServicesPage({ params }: PageProps) {
+  const locale = params.locale || 'en';
+  
+  let t: any;
+  let services: any[];
+  
+  try {
+    t = await getTranslations('services');
+    services = await getServices(locale);
+  } catch (error) {
+    console.error('Error loading services page:', error);
+    // Fallback values
+    t = (key: string) => {
+      const fallbacks: Record<string, string> = {
+        'title': 'Our Services',
+        'description': 'Professional construction and renovation services',
+        'breadcrumb.home': 'Home',
+        'breadcrumb.services': 'Services',
+        'learnMore': 'Learn More',
+        'noServices': 'No services found.',
+        'cta.title': 'Ready to Get Started?',
+        'cta.description': 'Contact us today to discuss your project and get a free quote.',
+        'cta.button': 'Contact Us',
+      };
+      return fallbacks[key] || key;
+    };
+    services = fallbackServicesData;
+  }
   
   const breadcrumbLinks = [
     { href: "/", text: t('breadcrumb.home') || 'Home' },

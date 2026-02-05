@@ -7,73 +7,17 @@ import ServiceGallery from "@/components/services/service-gallery";
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
-import { routing } from '@/i18n/routing';
 
-// Enable ISR with revalidation for better production performance
-export const revalidate = 60; // Revalidate every 60 seconds
+// Force dynamic rendering - required for getTranslations()
+export const dynamic = 'force-dynamic';
 
-// Generate static params for all services and locales
-export async function generateStaticParams() {
-  try {
-    const query = `*[
-      _type == "service" &&
-      !(_id in path("drafts.**")) &&
-      defined(slug.current)
-    ] {
-      "slug": slug.current
-    }`;
-
-    const services = await client.fetch(query, {}, {
-      cache: 'force-cache',
-      next: { revalidate: 3600 }
-    });
-
-    // Generate params for all combinations of locale and slug
-    const params: { locale: string; slug: string }[] = [];
-    
-    for (const locale of routing.locales) {
-      // Add Sanity services
-      for (const service of services || []) {
-        if (service?.slug) {
-          params.push({ locale, slug: service.slug });
-        }
-      }
-      // Add legacy service slugs as fallback
-      const legacySlugs = [
-        'plaster-casts',
-        'drywall',
-        'painting',
-        'facades-and-insulation',
-        'customer-masons',
-        'bathroom-kitchen-renovation',
-        'general-demolition-work'
-      ];
-      for (const slug of legacySlugs) {
-        params.push({ locale, slug });
-      }
-    }
-
-    console.log(`✅ Generated ${params.length} static params for services`);
-    return params;
-  } catch (error) {
-    console.error('❌ Error generating static params for services:', error);
-    // Return empty array to allow fallback rendering
-    return [];
-  }
-}
-
-// Fetch service by slug from Sanity with language support
+// Fetch service by slug from Sanity
 async function getServiceBySlug(slug: string, locale: string) {
-  // Validate inputs
-  if (!slug || typeof slug !== 'string') {
-    console.warn('⚠️ Invalid slug provided to getServiceBySlug');
-    return null;
-  }
-
-  const safeLocale = locale && ['en', 'de'].includes(locale) ? locale : 'en';
+  if (!slug) return null;
+  
+  const safeLocale = ['en', 'de'].includes(locale) ? locale : 'en';
 
   try {
-    // Build language-aware field selections
     const titleField = safeLocale === 'en' ? 'title.en' : `coalesce(title.${safeLocale}, title.en)`;
     const descField = safeLocale === 'en' ? 'description.en' : `coalesce(description.${safeLocale}, description.en)`;
     const shortDescField = safeLocale === 'en' ? 'shortDescription.en' : `coalesce(shortDescription.${safeLocale}, shortDescription.en)`;
@@ -99,20 +43,15 @@ async function getServiceBySlug(slug: string, locale: string) {
       "metaDescription": ${metaDescField}
     }`;
 
-    const service = await client.fetch(query, { slug }, {
-      cache: 'force-cache',
-      next: { revalidate: 60, tags: ['service', `service-${slug}`] }
-    });
-
-    console.log(`✅ Fetched service from Sanity (locale: ${safeLocale}):`, service ? service.title : 'Not found');
+    const service = await client.fetch(query, { slug });
     return service || null;
   } catch (error) {
-    console.error('❌ Error fetching service from Sanity:', error);
+    console.error('Error fetching service:', error);
     return null;
   }
 }
 
-// Legacy service data mapping (fallback for old slugs)
+// Legacy service data (fallback)
 const servicesData: Record<string, {
   title: string;
   titleKey: string;
@@ -126,7 +65,7 @@ const servicesData: Record<string, {
   "plaster-casts": {
     title: "Plaster casts",
     titleKey: "plasterCasts",
-    description: "Professional interior and exterior plastering services. Smooth finishes, textured surfaces, and decorative plasterwork to enhance your space. Our expert team delivers precision plaster casting work for both residential and commercial projects, ensuring durable and aesthetically pleasing results.",
+    description: "Professional interior and exterior plastering services. Smooth finishes, textured surfaces, and decorative plasterwork to enhance your space.",
     heroImage: "/images/services/plaster.png",
     beforeImage: "/images/leranmore services/plaster/01.jpg",
     afterImage: "/images/leranmore services/plaster/after.jpg",
@@ -138,12 +77,12 @@ const servicesData: Record<string, {
       "/images/leranmore services/plaster/05.jpg",
       "/images/leranmore services/plaster/06.jpg",
     ],
-    metaDescription: "Professional plaster casting services with Swiss precision. Expert interior and exterior plastering for residential and commercial projects."
+    metaDescription: "Professional plaster casting services with Swiss precision."
   },
   "drywall": {
     title: "Drywall",
     titleKey: "drywall",
-    description: "Complete drywall installation and finishing services. Professional drywalling solutions for interior spaces, including framing, installation, taping, and finishing. We provide smooth, seamless walls and ceilings that meet the highest quality standards.",
+    description: "Complete drywall installation and finishing services. Professional drywalling solutions for interior spaces.",
     heroImage: "/images/services/drywall.jpg",
     beforeImage: "/images/leranmore services/drywalling learn more/img1.jpg",
     afterImage: "/images/leranmore services/drywalling learn more/img6.jpg",
@@ -155,12 +94,12 @@ const servicesData: Record<string, {
       "/images/leranmore services/drywalling learn more/img5.jpg",
       "/images/leranmore services/drywalling learn more/img6.jpg",
     ],
-    metaDescription: "Professional drywall installation and finishing services. Expert drywalling solutions for interior spaces with Swiss precision."
+    metaDescription: "Professional drywall installation and finishing services."
   },
   "painting": {
     title: "Painting",
     titleKey: "painting",
-    description: "Interior and exterior painting services with premium paints and finishes. Professional preparation and application for lasting results. Our skilled painters deliver flawless finishes that protect and beautify your property, using only the highest quality materials and techniques.",
+    description: "Interior and exterior painting services with premium paints and finishes.",
     heroImage: "/images/services/Bathroom%20and%20kitchen%20renovation.jpg",
     beforeImage: "/images/leranmore services/bathroom/before.jpg",
     afterImage: "/images/leranmore services/bathroom/after.jpg",
@@ -170,12 +109,12 @@ const servicesData: Record<string, {
       "/images/leranmore services/bathroom/gallery/img-03.jpg",
       "/images/leranmore services/bathroom/gallery/img-04.jpg",
     ],
-    metaDescription: "Professional interior and exterior painting services with premium paints. Expert preparation and application for lasting results."
+    metaDescription: "Professional interior and exterior painting services."
   },
   "facades-and-insulation": {
     title: "Facades and insulation",
     titleKey: "facadesAndInsulation",
-    description: "Expert facade design, installation, and renovation. Modern materials and techniques to protect and beautify your building exterior. Comprehensive insulation solutions that improve energy efficiency while enhancing the aesthetic appeal of your property.",
+    description: "Expert facade design, installation, and renovation with comprehensive insulation solutions.",
     heroImage: "/images/services/Facades%20and%20insulation.jpg",
     beforeImage: "/images/leranmore services/facades before nad after/before.jpg",
     afterImage: "/images/leranmore services/facades before nad after/after.jpg",
@@ -187,12 +126,12 @@ const servicesData: Record<string, {
       "/images/leranmore services/facades before nad after/facades/img-05.jpg",
       "/images/leranmore services/facades before nad after/facades/img-06.jpg",
     ],
-    metaDescription: "Expert facade design, installation, and renovation with modern insulation solutions. Improve energy efficiency and building aesthetics."
+    metaDescription: "Expert facade design and insulation solutions."
   },
   "customer-masons": {
     title: "Customer Masons",
     titleKey: "customerMasons",
-    description: "Professional masonry services for all your construction needs. Expert bricklaying and stonework by skilled masons. We deliver precision masonry work for foundations, walls, facades, and decorative elements, combining traditional craftsmanship with modern techniques.",
+    description: "Professional masonry services for all your construction needs.",
     heroImage: "/images/services/Customer%20bricklayer.png",
     beforeImage: "/images/leranmore services/bricklayering/img-01.jpg",
     afterImage: "/images/leranmore services/bricklayering/img-06.jpg",
@@ -204,12 +143,12 @@ const servicesData: Record<string, {
       "/images/leranmore services/bricklayering/img-05.jpg",
       "/images/leranmore services/bricklayering/img-06.jpg",
     ],
-    metaDescription: "Professional masonry and bricklaying services. Expert masons delivering precision stonework and brick construction."
+    metaDescription: "Professional masonry and bricklaying services."
   },
   "bathroom-kitchen-renovation": {
     title: "Bathroom-kitchen renovation",
     titleKey: "bathroomKitchenRenovation",
-    description: "Complete renovation services for bathrooms and kitchens. From planning to execution, we transform your space efficiently. Our renovation experts handle everything from plumbing and electrical work to tiling, cabinetry, and finishing touches, ensuring your renovated space meets your exact specifications.",
+    description: "Complete renovation services for bathrooms and kitchens.",
     heroImage: "/images/services/Bathroom%20and%20kitchen%20renovation.jpg",
     beforeImage: "/images/leranmore services/bathroom/before.jpg",
     afterImage: "/images/leranmore services/bathroom/after.jpg",
@@ -221,12 +160,12 @@ const servicesData: Record<string, {
       "/images/leranmore services/bathroom/gallery/img-05.jpg",
       "/images/leranmore services/bathroom/gallery/img-06.jpg",
     ],
-    metaDescription: "Complete bathroom and kitchen renovation services. Expert planning and execution to transform your space efficiently."
+    metaDescription: "Complete bathroom and kitchen renovation services."
   },
   "general-demolition-work": {
     title: "General demolition work",
     titleKey: "generalDemolitionWork",
-    description: "Professional demolition services for safe and efficient removal of structures. Expert demolition work for renovations, rebuilds, and site preparation. We handle all aspects of demolition with precision, safety, and environmental responsibility, ensuring proper disposal and site cleanup.",
+    description: "Professional demolition services for safe and efficient removal of structures.",
     heroImage: "/images/services/General%20demolition%20work.png",
     beforeImage: "/images/leranmore services/general/before-01.jpg",
     afterImage: "/images/leranmore services/general/after-01.jpg",
@@ -238,41 +177,57 @@ const servicesData: Record<string, {
       "/images/leranmore services/general/gallery/img-05.jpg",
       "/images/leranmore services/general/gallery/img-06.jpg",
     ],
-    metaDescription: "Professional demolition services for safe and efficient structure removal. Expert demolition work for renovations and site preparation."
+    metaDescription: "Professional demolition services."
   },
 };
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string; locale: string }> }): Promise<Metadata> {
-  const { slug, locale } = await params;
+interface PageProps {
+  params: { slug: string; locale: string };
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug, locale } = params;
   const service = await getServiceBySlug(slug, locale);
   
-  if (!service) {
-    // Fallback to legacy data
-    const legacyService = servicesData[slug];
-    if (legacyService) {
-      return {
-        title: `${legacyService.title} | POSKA MANOLITO AG`,
-        description: legacyService.metaDescription,
-      };
-    }
+  if (service) {
     return {
-      title: "Service Not Found | POSKA MANOLITO AG",
+      title: `${service.title} | POSKA MANOLITO AG`,
+      description: service.metaDescription || service.description,
     };
   }
-
+  
+  const legacyService = servicesData[slug];
+  if (legacyService) {
+    return {
+      title: `${legacyService.title} | POSKA MANOLITO AG`,
+      description: legacyService.metaDescription,
+    };
+  }
+  
   return {
-    title: `${service.title} | POSKA MANOLITO AG`,
-    description: service.metaDescription || service.description || `Service: ${service.title}`,
+    title: "Service Not Found | POSKA MANOLITO AG",
   };
 }
 
-export default async function ServicePage({ params }: { params: Promise<{ slug: string; locale: string }> }) {
-  const { slug, locale } = await params;
-  const service = await getServiceBySlug(slug, locale);
-  const t = await getTranslations('services');
-  const tNav = await getTranslations('navbar');
+export default async function ServicePage({ params }: PageProps) {
+  const { slug, locale } = params;
+  
+  let service: any = null;
+  let t: any;
+  let tNav: any;
+  
+  try {
+    service = await getServiceBySlug(slug, locale);
+    t = await getTranslations('services');
+    tNav = await getTranslations('navbar');
+  } catch (error) {
+    console.error('Error loading service page:', error);
+    // Fallback translation function
+    t = (key: string) => key;
+    tNav = (key: string) => key;
+  }
 
-  // Fallback to legacy data if Sanity service not found
+  // Fallback to legacy data
   const legacyService = !service ? servicesData[slug] : null;
   
   if (!service && !legacyService) {
@@ -291,7 +246,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
   const serviceTitle = service 
     ? service.title 
-    : tNav(`submenu.${legacyService!.titleKey}`);
+    : (tNav(`submenu.${legacyService!.titleKey}`) || legacyService!.title);
 
   return (
     <main>
@@ -319,10 +274,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
               {serviceTitle}
             </h1>
             <p className="text-xl md:text-2xl text-white/95 leading-relaxed drop-shadow-md">
-              {service 
-                ? (service.shortDescription || service.description || t('heroDescription', { service: serviceTitle.toLowerCase() }))
-                : t('heroDescription', { service: serviceTitle.toLowerCase() })
-              }
+              {service?.shortDescription || service?.description || activeService.description}
             </p>
           </div>
         </div>
@@ -334,10 +286,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <div className="max-w-4xl mx-auto">
             <div className="prose prose-lg dark:prose-invert max-w-none" data-aos="fade-up">
               <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
-                {service 
-                  ? (service.description || service.shortDescription || '')
-                  : (legacyService ? t(`descriptions.${legacyService.titleKey}`) : '')
-                }
+                {service?.description || activeService.description}
               </p>
             </div>
 
@@ -346,17 +295,17 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
               <div className="my-16" data-aos="fade-up" data-aos-delay="100">
                 <div className="text-center mb-8">
                   <h2 className="text-2xl md:text-3xl font-bold text-midnight_text dark:text-white mb-2">
-                    {t('transformationShowcase')}
+                    {t('transformationShowcase') || 'Transformation Showcase'}
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400">
-                    {t('transformationDescription')}
+                    {t('transformationDescription') || 'See the before and after'}
                   </p>
                 </div>
                 <BeforeAfterSlider
                   beforeImage={activeService.beforeImage}
                   afterImage={activeService.afterImage}
-                  beforeLabel={t('before')}
-                  afterLabel={t('after')}
+                  beforeLabel={t('before') || 'Before'}
+                  afterLabel={t('after') || 'After'}
                   className="w-full"
                 />
               </div>
@@ -368,7 +317,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                 href="/contact"
                 className="inline-flex items-center px-8 py-4 bg-[#016aac] text-white rounded-lg hover:bg-[#015a94] transition-all duration-300 font-semibold text-lg shadow-md hover:scale-105"
               >
-                {t('getQuote')}
+                {t('getQuote') || 'Get a Quote'}
                 <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -378,16 +327,16 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </section>
 
-      {/* Related Images Section */}
+      {/* Gallery Section */}
       {activeService.galleryImages && activeService.galleryImages.length > 0 && (
         <section className="py-16 lg:py-24 bg-section dark:bg-darklight">
           <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
             <div className="text-center mb-12" data-aos="fade-up">
               <h2 className="text-3xl md:text-4xl font-bold text-midnight_text dark:text-white mb-4">
-                {t('ourWork')}
+                {t('ourWork') || 'Our Work'}
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400">
-                {t('ourWorkDescription', { service: serviceTitle.toLowerCase() })}
+                {t('ourWorkDescription', { service: serviceTitle.toLowerCase() }) || `Examples of our ${serviceTitle.toLowerCase()} projects`}
               </p>
             </div>
 
@@ -405,16 +354,16 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4 text-center">
           <div className="max-w-2xl mx-auto" data-aos="fade-up">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              {t('readyToStart')}
+              {t('readyToStart') || 'Ready to Start Your Project?'}
             </h2>
             <p className="text-xl text-white/90 mb-8">
-              {t('readyToStartDescription', { service: serviceTitle.toLowerCase() })}
+              {t('readyToStartDescription', { service: serviceTitle.toLowerCase() }) || `Contact us for your ${serviceTitle.toLowerCase()} needs`}
             </p>
             <Link
               href="/contact"
               className="inline-flex items-center px-8 py-4 bg-white text-[#016aac] rounded-lg hover:bg-gray-100 transition-all duration-300 font-semibold text-lg shadow-lg hover:scale-105"
             >
-              {t('contactUs')}
+              {t('contactUs') || 'Contact Us'}
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>

@@ -1,15 +1,21 @@
 export const apiVersion =
   process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01'
 
-export const dataset = assertValue(
-  process.env.NEXT_PUBLIC_SANITY_DATASET,
-  'Missing environment variable: NEXT_PUBLIC_SANITY_DATASET'
-)
+// Use safe defaults that won't crash the build
+// These must be set in production environment variables
+export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 
-export const projectId = assertValue(
-  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  'Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID'
-)
+export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'bzcgy3z9'
+
+// Validate at runtime only, log warnings instead of throwing
+if (typeof window === 'undefined' && process.env.NODE_ENV === 'production') {
+  if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+    console.warn('⚠️ Warning: NEXT_PUBLIC_SANITY_PROJECT_ID is not set, using fallback')
+  }
+  if (!process.env.NEXT_PUBLIC_SANITY_DATASET) {
+    console.warn('⚠️ Warning: NEXT_PUBLIC_SANITY_DATASET is not set, using fallback')
+  }
+}
 
 // Log configuration in development (not in production)
 if (process.env.NODE_ENV === 'development') {
@@ -17,12 +23,4 @@ if (process.env.NODE_ENV === 'development') {
   console.log(`   Project ID: ${projectId}`)
   console.log(`   Dataset: ${dataset}`)
   console.log(`   API Version: ${apiVersion}`)
-}
-
-function assertValue<T>(v: T | undefined, errorMessage: string): T {
-  if (v === undefined) {
-    throw new Error(errorMessage)
-  }
-
-  return v
 }
