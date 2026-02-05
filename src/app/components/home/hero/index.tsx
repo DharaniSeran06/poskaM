@@ -1,22 +1,30 @@
 "use client";
-import { useEffect } from "react";
-import Image from "next/image";
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
+
+/**
+ * Hero component for the homepage
+ * IMPORTANT: All image paths MUST be absolute (start with /) to work with locale-based routing
+ * Relative paths like "images/..." break because /en/page + images/x.jpg = /en/images/x.jpg (wrong!)
+ */
+
+// Absolute paths from /public directory - MUST start with /
+const HERO_BG_IMAGE = "/images/services/plaster.png";
+const HERO_CARD_IMAGE = "/images/services/drywall.jpg";
 
 const Hero = () => {
   const t = useTranslations('home.hero');
   
   return (
     <section className="relative pt-24 pb-20 lg:pt-32 lg:pb-32 overflow-hidden">
-      {/* Background Image */}
+      {/* Background Image - absolute path required for locale routing */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/services/Service performance.png"
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={HERO_BG_IMAGE}
           alt="Construction Services"
-          fill
-          className="object-cover"
-          priority
+          className="w-full h-full object-cover"
+          loading="eager"
         />
         {/* Subtle blue overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#016aac]/80 via-[#016aac]/70 to-[#016aac]/80"></div>
@@ -87,12 +95,14 @@ const Hero = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-white/20 rounded-2xl transform rotate-6 backdrop-blur-sm"></div>
               <div className="relative bg-white/95 dark:bg-darklight/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl">
-                <div className="aspect-square relative rounded-xl overflow-hidden">
-                  <Image
-                    src="/images/old-buildings-port-evening.jpg.jpeg"
+                <div className="aspect-square relative rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+                  {/* Card image - absolute path required for locale routing */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={HERO_CARD_IMAGE}
                     alt="Construction Work"
-                    fill
-                    className="object-cover rounded-xl"
+                    className="w-full h-full object-cover rounded-xl"
+                    loading="lazy"
                   />
                 </div>
               </div>

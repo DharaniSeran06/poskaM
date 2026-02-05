@@ -86,6 +86,7 @@ const Header: React.FC = () => {
           label: item.label === 'Home' ? t('home') :
                  item.label === 'Services' ? t('services') :
                  item.label === 'Company' ? t('company') :
+                 item.label === 'References' ? t('projects') :
                  item.label === 'Projects' ? t('projects') :
                  item.label === 'Contact' ? t('contact') : item.label,
           // Services submenu items come from Sanity and are already translated

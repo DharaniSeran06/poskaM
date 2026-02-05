@@ -6,8 +6,10 @@
     "dev": "next dev",
     "build": "node -e \"const fs = require('fs'); const path = require('path'); const dir = '.next'; if (fs.existsSync(dir)) { fs.rmSync(dir, { recursive: true, force: true }); }\" && next build",
     "build:clean": "node -e \"const fs = require('fs'); const path = require('path'); const dir = '.next'; if (fs.existsSync(dir)) { fs.rmSync(dir, { recursive: true, force: true }); }\" && next build",
+    "build:analyze": "ANALYZE=true npm run build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "perf:lighthouse": "echo 'Run Lighthouse audit: npm run build && npm run start, then open Chrome DevTools > Lighthouse'"
   },
   "dependencies": {
     "@iconify/icons-ion": "^1.2.10",

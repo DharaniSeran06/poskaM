@@ -4,6 +4,8 @@ import React, {
   createContext,
   useState,
   useEffect,
+  useCallback,
+  useMemo,
   ReactNode,
   Dispatch,
   SetStateAction,
@@ -160,20 +162,29 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
 
   /* -------- UPDATE FILTER -------- */
 
-  const updateFilter = (key: keyof Filters, value: string) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  };
+  // Memoize updateFilter to prevent unnecessary re-renders
+  const updateFilter = useCallback((key: keyof Filters, value: string) => {
+    setFilters((prev) => {
+      // Only update if value actually changed
+      if (prev[key] === value) return prev;
+      return { ...prev, [key]: value };
+    });
+  }, []);
+
+  // Memoize context value to prevent unnecessary re-renders
+  const contextValue = useMemo(
+    () => ({
+      properties,
+      setProperties,
+      filters,
+      setFilters,
+      updateFilter,
+    }),
+    [properties, filters, updateFilter]
+  );
 
   return (
-    <PropertyContext.Provider
-      value={{
-        properties,
-        setProperties,
-        filters,
-        setFilters,
-        updateFilter,
-      }}
-    >
+    <PropertyContext.Provider value={contextValue}>
       {children}
     </PropertyContext.Provider>
   );

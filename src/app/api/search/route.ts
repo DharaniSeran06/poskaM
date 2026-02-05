@@ -16,7 +16,7 @@ export const GET = async (request: Request) => {
 
     const results: any[] = [];
 
-    // Search Projects
+    // Search References
     const titleField = locale === 'en' ? 'property_title.en' : `coalesce(property_title.${locale}, property_title.en)`;
     const locationField = locale === 'en' ? 'location.en' : `coalesce(location.${locale}, location.en)`;
     const categoryField = locale === 'en' ? 'category.en' : `coalesce(category.${locale}, category.en)`;
@@ -57,7 +57,7 @@ export const GET = async (request: Request) => {
       results.push({
         type: 'project',
         id: project._id,
-        title: project.property_title || 'Untitled Project',
+        title: project.property_title || 'Untitled Reference',
         description: project.location || project.category || undefined,
         image: project.image,
         slug: project.slug,
@@ -115,7 +115,7 @@ export const GET = async (request: Request) => {
     const staticPages = [
       { title: 'Home', href: '/', description: 'Welcome to POSKA MANOLITO AG' },
       { title: 'About Us', href: '/about', description: 'Learn about our company' },
-      { title: 'Projects', href: '/projects', description: 'View our completed projects' },
+      { title: 'References', href: '/projects', description: 'View our completed references' },
       { title: 'Services', href: '/services', description: 'Explore our services' },
       { title: 'Contact', href: '/contact', description: 'Get in touch with us' },
     ];

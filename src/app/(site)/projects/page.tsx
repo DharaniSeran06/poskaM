@@ -8,38 +8,41 @@ import { allProjects } from "@/app/data/projects";
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: "Our Projects | POSKA MANOLITO AG",
-  description: "Explore our portfolio of completed construction, renovation, and building projects. Showcasing our expertise and commitment to quality across Switzerland.",
+  title: "Our References | POSKA MANOLITO AG",
+  description: "Explore our portfolio of completed construction, renovation, and building references. Showcasing our expertise and commitment to quality across Switzerland.",
 };
 
 export default function ProjectsPage() {
   const breadcrumbLinks = [
     { href: "/", text: "Home" },
-    { href: "/projects", text: "Projects" },
+    { href: "/projects", text: "References" },
   ];
 
   return (
     <main>
       {/* Hero Section */}
       <HeroSub
-        title="Our Projects"
-        description="Showcasing our expertise through completed projects. Each project reflects our commitment to quality and excellence."
+        title="Our References"
+        description="Showcasing our expertise through completed references. Each reference reflects our commitment to quality and excellence."
         breadcrumbLinks={breadcrumbLinks}
       />
 
-      {/* Projects Grid Section */}
+      {/* References Grid Section */}
       <section className="py-16 lg:py-24 bg-white dark:bg-darkmode">
         <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {allProjects.map((project, index) => (
               <div
                 key={project.id}
-                className="group bg-white dark:bg-darklight rounded-xl overflow-hidden border border-gray-200 dark:border-dark_border shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+                className="group bg-white/95 dark:bg-darklight/95 backdrop-blur-sm rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 relative"
                 data-aos="fade-up"
                 data-aos-delay={index * 100}
               >
+                {/* Semi-transparent gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-white/95 to-[#016aac]/5 dark:from-darklight/90 dark:via-darklight/95 dark:to-[#016aac]/10 rounded-xl pointer-events-none z-0"></div>
+                
                 {/* Project Image */}
-                <div className="relative h-56 overflow-hidden bg-gray-100 dark:bg-gray-800">
+                <div className="relative h-56 overflow-hidden bg-gray-100 dark:bg-gray-800 z-0">
                   <Image
                     src={project.image}
                     alt={project.title}
@@ -49,7 +52,7 @@ export default function ProjectsPage() {
                 </div>
 
                 {/* Project Content */}
-                <div className="p-6 space-y-4">
+                <div className="p-6 space-y-4 relative z-10">
                   {/* Property ID */}
                   <div>
                     <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">

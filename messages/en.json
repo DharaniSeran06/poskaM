@@ -9,7 +9,7 @@
       "rating": "4.9/5",
       "fromReviews": "from 658 reviews",
       "yearsExperience": "Years Experience",
-      "projectsCompleted": "Projects Completed"
+      "projectsCompleted": "References Completed"
     },
     "services": {
       "title": "Our Services",
@@ -40,10 +40,10 @@
     },
     "about": {
       "title": "About POSKA MANOLITO AG",
-      "description1": "With over 15 years of experience in the construction industry, POSKA MANOLITO AG has established itself as a trusted partner for construction, plastering, facades, painting, and renovation projects throughout Switzerland.",
+      "description1": "With over 15 years of experience in the construction industry, POSKA MANOLITO AG has established itself as a trusted partner for construction, plastering, facades, painting, and renovation references throughout Switzerland.",
       "description2": "Our commitment to excellence, attention to detail, and Swiss precision sets us apart. We combine traditional craftsmanship with modern techniques to deliver results that exceed expectations.",
-      "description3": "We pride ourselves on reliability, professionalism, and building lasting relationships with our clients. Every project is approached with the same dedication to quality and customer satisfaction.",
-      "projectsCompleted": "Projects Completed",
+      "description3": "We pride ourselves on reliability, professionalism, and building lasting relationships with our clients. Every reference is approached with the same dedication to quality and customer satisfaction.",
+      "projectsCompleted": "References Completed",
       "clientSatisfaction": "Client Satisfaction",
       "learnMore": "Learn More About Us",
       "watchStory": "Watch Our Story",
@@ -55,11 +55,11 @@
     },
     "whyChooseUs": {
       "title": "Why Choose Us",
-      "description": "We combine experience, expertise, and dedication to deliver exceptional results for every project.",
+      "description": "We combine experience, expertise, and dedication to deliver exceptional results for every reference.",
       "features": {
         "experience": {
           "title": "Great Experience",
-          "description": "With over 15 years of experience in construction, plastering, facades, painting, and renovation, we bring Swiss precision and reliability to every project."
+          "description": "With over 15 years of experience in construction, plastering, facades, painting, and renovation, we bring Swiss precision and reliability to every reference."
         },
         "trust": {
           "title": "Trust & Reliability",
@@ -68,10 +68,10 @@
       }
     },
     "projects": {
-      "title": "Our Projects",
-      "description": "A preview of our completed projects. Each project reflects our commitment to quality and excellence.",
+      "title": "Our References",
+      "description": "A preview of our completed references. Each reference reflects our commitment to quality and excellence.",
       "viewDetails": "View Details",
-      "viewAllProjects": "View All Projects",
+      "viewAllProjects": "View All References",
       "items": {
         "project1": {
           "title": "Modern Residential Complex",
@@ -93,26 +93,27 @@
     "testimonials": {
       "title": "What Our Clients Say",
       "description": "Trusted by clients across Switzerland for quality construction and renovation services.",
+      "noTestimonials": "No testimonials available at the moment.",
       "items": {
         "testimonial1": {
           "name": "Stephanie Sue",
           "designation": "Property Owner",
-          "content": "POSKA MANOLITO AG delivered exceptional results on our renovation project. Their attention to detail and professional approach made the entire process smooth and stress-free. The quality of work exceeded our expectations."
+          "content": "POSKA MANOLITO AG delivered exceptional results on our renovation reference. Their attention to detail and professional approach made the entire process smooth and stress-free. The quality of work exceeded our expectations."
         },
         "testimonial2": {
           "name": "Michael Schneider",
           "designation": "Building Manager",
-          "content": "We've worked with POSKA MANOLITO AG on multiple projects, and they consistently deliver high-quality work. Their team is reliable, professional, and always completes projects on time and within budget."
+          "content": "We've worked with POSKA MANOLITO AG on multiple references, and they consistently deliver high-quality work. Their team is reliable, professional, and always completes references on time and within budget."
         },
         "testimonial3": {
           "name": "Anna Müller",
           "designation": "Homeowner",
-          "content": "The facade renovation work done by POSKA MANOLITO AG transformed our building. The craftsmanship is outstanding, and the team was courteous and respectful throughout the project. Highly recommended!"
+          "content": "The facade renovation work done by POSKA MANOLITO AG transformed our building. The craftsmanship is outstanding, and the team was courteous and respectful throughout the reference. Highly recommended!"
         },
         "testimonial4": {
           "name": "Thomas Weber",
           "designation": "Commercial Developer",
-          "content": "Professional, efficient, and results-driven. POSKA MANOLITO AG handled our construction project with expertise and precision. Their communication was excellent, and the final result speaks for itself."
+          "content": "Professional, efficient, and results-driven. POSKA MANOLITO AG handled our construction reference with expertise and precision. Their communication was excellent, and the final result speaks for itself."
         }
       }
     }
@@ -121,7 +122,7 @@
     "home": "Home",
     "services": "Services",
     "company": "Company",
-    "projects": "Projects",
+    "projects": "References",
     "contact": "Contact",
     "getQuote": "Get a Quote",
     "menu": "Menu",
@@ -138,7 +139,7 @@
     }
   },
   "footer": {
-    "description": "Professional construction services with Swiss precision. Specializing in construction, plastering, facades, painting, and renovation projects across Switzerland.",
+    "description": "Professional construction services with Swiss precision. Specializing in construction, plastering, facades, painting, and renovation references across Switzerland.",
     "quickLinks": "Quick Links",
     "services": "Services",
     "contactUs": "Contact Us",
@@ -146,7 +147,7 @@
       "home": "Home",
       "aboutUs": "About Us",
       "services": "Services",
-      "projects": "Projects",
+      "projects": "References",
       "contact": "Contact"
     },
     "serviceLinks": {
@@ -164,7 +165,7 @@
   },
   "contact": {
     "title": "Contact Us",
-    "description": "Get in touch with POSKA MANOLITO AG for professional construction, renovation, and building services. We're here to help bring your project to life.",
+    "description": "Get in touch with POSKA MANOLITO AG for professional construction, renovation, and building services. We're here to help bring your reference to life.",
     "breadcrumb": {
       "home": "Home",
       "contact": "Contact"
@@ -178,14 +179,14 @@
     },
     "form": {
       "getFreeQuote": "Get a Free Quote",
-      "formDescription": "Fill out the form below and we'll get back to you within 24 hours with a detailed quote for your project.",
+      "formDescription": "Fill out the form below and we'll get back to you within 24 hours with a detailed quote for your reference.",
       "fullName": "Full Name *",
       "emailAddress": "Email Address *",
       "phoneNumber": "Phone Number *",
       "serviceNeeded": "Service Needed *",
       "selectService": "Select a service",
-      "projectDetails": "Project Details *",
-      "projectDetailsPlaceholder": "Tell us about your project...",
+      "projectDetails": "Reference Details *",
+      "projectDetailsPlaceholder": "Tell us about your reference...",
       "sending": "Sending...",
       "sendMessage": "Send Message",
       "thankYou": "Thank you! Your message has been sent successfully. We'll contact you soon.",
@@ -201,11 +202,11 @@
     }
   },
   "projects": {
-    "title": "Our Projects",
-    "description": "Showcasing our expertise through completed projects. Each project reflects our commitment to quality and excellence.",
+    "title": "Our References",
+    "description": "Showcasing our expertise through completed references. Each reference reflects our commitment to quality and excellence.",
     "breadcrumb": {
       "home": "Home",
-      "projects": "Projects"
+      "projects": "References"
     },
     "propertyId": "Property ID:",
     "object": "Object:",
@@ -213,7 +214,7 @@
     "architectureAndPlanning": "Architecture and planning:",
     "learnMore": "LEARN MORE",
     "cta": {
-      "title": "Ready to Start Your Project?",
+      "title": "Ready to Start Your Reference?",
       "description": "Let's discuss how we can bring your vision to life with our professional construction services.",
       "button": "Get a Free Quote"
     }
@@ -224,7 +225,7 @@
     "heroDescription": "Building excellence with Swiss precision and reliability since 2009",
     "companyHistory": "Company History",
     "howWeBecame": "How we became number one",
-    "historyText1": "With over 15 years of experience in the construction industry, POSKA MANOLITO AG has established itself as a trusted partner for construction, plastering, facades, painting, and renovation projects throughout Switzerland. Our commitment to excellence, attention to detail, and Swiss precision sets us apart. We combine traditional craftsmanship with modern techniques to deliver results that exceed expectations.",
+    "historyText1": "With over 15 years of experience in the construction industry, POSKA MANOLITO AG has established itself as a trusted partner for construction, plastering, facades, painting, and renovation references throughout Switzerland. Our commitment to excellence, attention to detail, and Swiss precision sets us apart. We combine traditional craftsmanship with modern techniques to deliver results that exceed expectations.",
     "historyText2": "Ermond Poshka realized his dream of owning his own company and founded the sole proprietorship \"POSKA Plastering Business\" in Zurich. He gradually expanded his services, which his customers greatly appreciated.",
     "moreDetails": "More Details",
     "managingDirector": "Managing Director",
@@ -232,20 +233,20 @@
     "bestConstructionCompany": "Best Construction Company",
     "yearsExperience": "Years Experience",
     "whoWeAre": "Who We Are",
-    "whoWeAreText1": "With over 15 years of experience in the construction industry, POSKA MANOLITO AG has established itself as a trusted partner for construction, plastering, facades, painting, and renovation projects throughout Switzerland.",
+    "whoWeAreText1": "With over 15 years of experience in the construction industry, POSKA MANOLITO AG has established itself as a trusted partner for construction, plastering, facades, painting, and renovation references throughout Switzerland.",
     "whoWeAreText2": "Our commitment to excellence, attention to detail, and Swiss precision sets us apart. We combine traditional craftsmanship with modern techniques to deliver results that exceed expectations.",
-    "whoWeAreText3": "We pride ourselves on reliability, professionalism, and building lasting relationships with our clients. Every project is approached with the same dedication to quality and customer satisfaction.",
+    "whoWeAreText3": "We pride ourselves on reliability, professionalism, and building lasting relationships with our clients. Every reference is approached with the same dedication to quality and customer satisfaction.",
     "ourMission": "Our Mission",
-    "missionText": "To deliver exceptional construction services that exceed client expectations through Swiss precision, quality craftsmanship, and unwavering commitment to excellence in every project we undertake.",
+    "missionText": "To deliver exceptional construction services that exceed client expectations through Swiss precision, quality craftsmanship, and unwavering commitment to excellence in every reference we undertake.",
     "ourVision": "Our Vision",
     "visionText": "To be the most trusted and respected construction company in Switzerland, recognized for our reliability, innovation, and dedication to transforming our clients' visions into reality.",
     "expertWorkers": "Expert Workers",
-    "projectsCompleted": "Projects Completed",
+    "projectsCompleted": "References Completed",
     "clientSatisfaction": "Client Satisfaction",
     "whyChooseUsTitle": "Why Choose Us",
     "whyChooseUsDescription": "What sets POSKA MANOLITO AG apart in the construction industry",
     "qualityMaterials": "Quality Materials",
-    "qualityMaterialsText": "We use only the highest quality materials from trusted suppliers, ensuring durability, longevity, and superior results for every project.",
+    "qualityMaterialsText": "We use only the highest quality materials from trusted suppliers, ensuring durability, longevity, and superior results for every reference.",
     "skilledWorkers": "Skilled Workers",
     "skilledWorkersText": "Our team consists of highly trained, certified professionals with extensive experience in construction, plastering, facades, painting, and renovation.",
     "onTimeDelivery": "On-Time Delivery",
@@ -261,10 +262,10 @@
     "reliability": "Reliability",
     "reliabilityText": "Dependable service delivery, meeting deadlines, and honoring our commitments consistently.",
     "transparency": "Transparency",
-    "transparencyText": "Clear communication, detailed project updates, and upfront pricing with no hidden costs.",
+    "transparencyText": "Clear communication, detailed reference updates, and upfront pricing with no hidden costs.",
     "excellence": "Excellence",
     "excellenceText": "Uncompromising quality standards and continuous improvement in every aspect of our work.",
-    "ctaTitle": "Ready to Start Your Project?",
+    "ctaTitle": "Ready to Start Your Reference?",
     "ctaDescription": "Contact us today for a free consultation and quote. Let's bring your construction vision to life.",
     "ctaButton": "Get a Quote",
     "ermondPoshka": {
@@ -309,19 +310,19 @@
     "after": "After",
     "getQuote": "Get a Quote",
     "ourWork": "Our Work",
-    "ourWorkDescription": "See examples of our {service} projects",
-    "readyToStart": "Ready to Start Your Project?",
+    "ourWorkDescription": "See examples of our {service} references",
+    "readyToStart": "Ready to Start Your Reference?",
     "readyToStartDescription": "Contact us today for a free consultation and quote on your {service} needs.",
     "contactUs": "Contact Us",
     "learnMore": "Learn More",
     "noServices": "No services found. Please check back later.",
     "cta": {
       "title": "Ready to Get Started?",
-      "description": "Contact us today to discuss your project and get a free quote.",
+      "description": "Contact us today to discuss your reference and get a free quote.",
       "button": "Contact Us"
     },
     "descriptions": {
-      "plasterCasts": "Professional interior and exterior plastering services. Smooth finishes, textured surfaces, and decorative plasterwork to enhance your space. Our expert team delivers precision plaster casting work for both residential and commercial projects, ensuring durable and aesthetically pleasing results.",
+      "plasterCasts": "Professional interior and exterior plastering services. Smooth finishes, textured surfaces, and decorative plasterwork to enhance your space. Our expert team delivers precision plaster casting work for both residential and commercial references, ensuring durable and aesthetically pleasing results.",
       "drywall": "Complete drywall installation and finishing services. Professional drywalling solutions for interior spaces, including framing, installation, taping, and finishing. We provide smooth, seamless walls and ceilings that meet the highest quality standards.",
       "painting": "Interior and exterior painting services with premium paints and finishes. Professional preparation and application for lasting results. Our skilled painters deliver flawless finishes that protect and beautify your property, using only the highest quality materials and techniques.",
       "facadesAndInsulation": "Expert facade design, installation, and renovation. Modern materials and techniques to protect and beautify your building exterior. Comprehensive insulation solutions that improve energy efficiency while enhancing the aesthetic appeal of your property.",
@@ -335,12 +336,12 @@
     "object": "Object:",
     "works": "Works:",
     "architectureAndPlanning": "Architecture and planning:",
-    "projectGallery": "Project Gallery",
-    "galleryDescription": "Visual documentation of our work on this project",
-    "projectDetails": "Project Details",
-    "projectDetailsText": "This project showcases our commitment to quality craftsmanship and attention to detail. Our team worked diligently to ensure every aspect of the project met the highest standards, from initial planning through final completion. The result is a testament to our expertise in {category} and our dedication to delivering exceptional results for our clients.",
-    "interestedInSimilar": "Interested in a Similar Project?",
-    "interestedDescription": "Contact us today to discuss your project requirements and get a free consultation.",
+    "projectGallery": "Reference Gallery",
+    "galleryDescription": "Visual documentation of our work on this reference",
+    "projectDetails": "Reference Details",
+    "projectDetailsText": "This reference showcases our commitment to quality craftsmanship and attention to detail. Our team worked diligently to ensure every aspect of the reference met the highest standards, from initial planning through final completion. The result is a testament to our expertise in {category} and our dedication to delivering exceptional results for our clients.",
+    "interestedInSimilar": "Interested in a Similar Reference?",
+    "interestedDescription": "Contact us today to discuss your reference requirements and get a free consultation.",
     "getQuote": "Get a Quote",
     "contactUs": "Contact Us"
   },
@@ -390,7 +391,7 @@
         "department": "Painting",
         "location": "Winterthur, Switzerland",
         "type": "Full-time",
-        "description": "We are looking for a skilled painter with experience in both interior and exterior painting projects."
+        "description": "We are looking for a skilled painter with experience in both interior and exterior painting references."
       }
     }
   },
@@ -434,15 +435,15 @@
     }
   },
   "search": {
-    "placeholder": "Search projects, services, and more...",
+    "placeholder": "Search references, services, and more...",
     "searching": "Searching...",
     "resultsFound": "{count} result{count, plural, =1 {} other {s}} found",
-    "projects": "Projects",
+    "projects": "References",
     "services": "Services",
     "pages": "Pages",
     "noResults": "No results found",
     "noResultsMessage": "Try a different keyword or check your spelling.",
     "startSearching": "Start searching",
-    "startSearchingMessage": "Type in the search box above to find projects, services, and pages."
+    "startSearchingMessage": "Type in the search box above to find references, services, and pages."
   }
 }

@@ -8,6 +8,7 @@ import About from '../components/home/about';
 // Lazy load heavy components below the fold
 const WhyChooseUs = dynamicImport(() => import('../components/home/why-choose-us'), {
   loading: () => <div className="min-h-[400px] bg-gray-50 dark:bg-darklight animate-pulse" />,
+  ssr: false, // Disable SSR for non-critical components
 });
 
 const Projects = dynamicImport(() => import('../components/home/projects'), {
@@ -16,6 +17,7 @@ const Projects = dynamicImport(() => import('../components/home/projects'), {
 
 const TestimonialsWrapper = dynamicImport(() => import('../components/home/testimonial/TestimonialsWrapper'), {
   loading: () => <div className="min-h-[500px] bg-gray-50 dark:bg-darklight animate-pulse" />,
+  ssr: false, // Disable SSR for non-critical components
 });
 
 const CompanyInfoWrapper = dynamicImport(() => import('../components/home/info/CompanyInfoWrapper'), {
@@ -39,13 +41,27 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   
   return (
     <main>
+      {/* Above the fold - render immediately */}
       <Hero />
       <Services locale={locale} />
       <About />
-      <WhyChooseUs />
-      <Projects locale={locale} />
-      <TestimonialsWrapper locale={locale} />
-      <CompanyInfoWrapper />
+      
+      {/* Below the fold - lazy loaded with Suspense boundaries */}
+      <Suspense fallback={<div className="min-h-[400px] bg-gray-50 dark:bg-darklight animate-pulse" />}>
+        <WhyChooseUs />
+      </Suspense>
+      
+      <Suspense fallback={<div className="min-h-[600px] bg-gray-50 dark:bg-darklight animate-pulse" />}>
+        <Projects locale={locale} />
+      </Suspense>
+      
+      <Suspense fallback={<div className="min-h-[500px] bg-gray-50 dark:bg-darklight animate-pulse" />}>
+        <TestimonialsWrapper locale={locale} />
+      </Suspense>
+      
+      <Suspense fallback={<div className="min-h-[300px] bg-gray-50 dark:bg-darklight animate-pulse" />}>
+        <CompanyInfoWrapper />
+      </Suspense>
     </main>
-  )
+  );
 }

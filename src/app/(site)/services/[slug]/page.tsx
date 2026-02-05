@@ -52,7 +52,7 @@ const servicesData: Record<string, {
   "painting": {
     title: "Painting",
     description: "Interior and exterior painting services with premium paints and finishes. Professional preparation and application for lasting results. Our skilled painters deliver flawless finishes that protect and beautify your property, using only the highest quality materials and techniques.",
-    heroImage: "/images/services/Bathroom and kitchen renovation.jpg",
+    heroImage: "/images/services/Bathroom%20and%20kitchen%20renovation.jpg",
     beforeImage: "/images/leranmore services/bathroom/before.jpg",
     afterImage: "/images/leranmore services/bathroom/after.jpg",
     galleryImages: [
@@ -66,7 +66,7 @@ const servicesData: Record<string, {
   "facades-and-insulation": {
     title: "Facades and insulation",
     description: "Expert facade design, installation, and renovation. Modern materials and techniques to protect and beautify your building exterior. Comprehensive insulation solutions that improve energy efficiency while enhancing the aesthetic appeal of your property.",
-    heroImage: "/images/services/Facades and insulation.jpg",
+    heroImage: "/images/services/Facades%20and%20insulation.jpg",
     beforeImage: "/images/leranmore services/facades before nad after/before.jpg",
     afterImage: "/images/leranmore services/facades before nad after/after.jpg",
     galleryImages: [
@@ -82,7 +82,7 @@ const servicesData: Record<string, {
   "customer-masons": {
     title: "Customer Masons",
     description: "Professional masonry services for all your construction needs. Expert bricklaying and stonework by skilled masons. We deliver precision masonry work for foundations, walls, facades, and decorative elements, combining traditional craftsmanship with modern techniques.",
-    heroImage: "/images/services/Customer bricklayer.png",
+    heroImage: "/images/services/Customer%20bricklayer.png",
     beforeImage: "/images/leranmore services/bricklayering/img-01.jpg",
     afterImage: "/images/leranmore services/bricklayering/img-06.jpg",
     galleryImages: [
@@ -98,7 +98,7 @@ const servicesData: Record<string, {
   "bathroom-kitchen-renovation": {
     title: "Bathroom-kitchen renovation",
     description: "Complete renovation services for bathrooms and kitchens. From planning to execution, we transform your space efficiently. Our renovation experts handle everything from plumbing and electrical work to tiling, cabinetry, and finishing touches, ensuring your renovated space meets your exact specifications.",
-    heroImage: "/images/services/Bathroom and kitchen renovation.jpg",
+    heroImage: "/images/services/Bathroom%20and%20kitchen%20renovation.jpg",
     beforeImage: "/images/leranmore services/bathroom/before.jpg",
     afterImage: "/images/leranmore services/bathroom/after.jpg",
     galleryImages: [
@@ -114,7 +114,7 @@ const servicesData: Record<string, {
   "general-demolition-work": {
     title: "General demolition work",
     description: "Professional demolition services for safe and efficient removal of structures. Expert demolition work for renovations, rebuilds, and site preparation. We handle all aspects of demolition with precision, safety, and environmental responsibility, ensuring proper disposal and site cleanup.",
-    heroImage: "/images/services/General demolition work.png",
+    heroImage: "/images/services/General%20demolition%20work.png",
     beforeImage: "/images/leranmore services/general/before-01.jpg",
     afterImage: "/images/leranmore services/general/after-01.jpg",
     galleryImages: [
@@ -164,6 +164,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
             fill
             className="object-cover"
             priority
+            unoptimized
           />
           <div className="absolute inset-0 bg-gradient-to-br from-[#016aac]/85 via-[#016aac]/75 to-[#016aac]/85"></div>
         </div>
@@ -253,6 +254,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                     alt={`${service.title} project ${index + 1}`}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    unoptimized
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>

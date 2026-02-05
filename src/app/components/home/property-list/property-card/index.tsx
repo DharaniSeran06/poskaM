@@ -14,10 +14,12 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, viewMode }) => {
   return (
     <div
       key={property.id}
-      className={`bg-white shadow-property dark:bg-darklight rounded-lg overflow-hidden`}
+      className={`bg-white/95 dark:bg-darklight/95 backdrop-blur-sm shadow-property rounded-lg overflow-hidden relative`}
       data-aos="fade-up"
     >
-      <Link href={`/properties/properties-list/${property.slug}`} className={`group ${viewMode=="list" && 'flex' }`}>
+      {/* Semi-transparent gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-white/95 to-[#016aac]/5 dark:from-darklight/90 dark:via-darklight/95 dark:to-[#016aac]/10 rounded-lg pointer-events-none z-0"></div>
+      <Link href={`/properties/properties-list/${property.slug}`} className={`group relative z-10 ${viewMode=="list" && 'flex' }`}>
         <div className={`relative ${viewMode=="list" && 'w-[30%]'}`}>
           <div className={`imageContainer h-[250px] w-full ${viewMode =="list" && 'h-full md:h-52'}`}>
             <Image

@@ -4,7 +4,7 @@ import { Link } from '@/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { client } from '@/sanity/lib/client';
 
-// Fetch featured projects from Sanity with language support
+// Fetch featured references from Sanity with language support
 async function getFeaturedProjects(locale: string) {
   try {
     // Build language-aware field selections
@@ -30,16 +30,17 @@ async function getFeaturedProjects(locale: string) {
       "slug": slug.current
     }`;
 
+    // Use caching for better performance - revalidate every hour
     const projects = await client.fetch(query, {}, {
-      cache: 'no-store',
-      next: { revalidate: 0 }
+      cache: 'force-cache',
+      next: { revalidate: 3600, tags: ['projects', 'home-projects'] }
     });
 
-    console.log(`✅ Home: Fetched ${projects.length} featured projects from Sanity (locale: ${locale})`);
-    console.log('📋 Home Projects data:', projects);
+    console.log(`✅ Home: Fetched ${projects.length} featured references from Sanity (locale: ${locale})`);
+    console.log('📋 Home References data:', projects);
     return projects || [];
   } catch (error) {
-    console.error('❌ Home: Error fetching projects from Sanity:', error);
+    console.error('❌ Home: Error fetching references from Sanity:', error);
     return [];
   }
 }
@@ -71,15 +72,18 @@ export default async function Projects({ locale }: { locale: string }) {
             {projects.map((project: any, index: number) => (
               <div
                 key={project._id || project.slug}
-                className="group bg-white dark:bg-darklight rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+                className="group bg-white/95 dark:bg-darklight/95 backdrop-blur-sm rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 relative"
                 data-aos="fade-up"
                 data-aos-delay={index * 100}
               >
-                <div className="relative h-64 overflow-hidden bg-gray-100 dark:bg-gray-800">
+                {/* Semi-transparent gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-white/95 to-[#016aac]/5 dark:from-darklight/90 dark:via-darklight/95 dark:to-[#016aac]/10 rounded-xl pointer-events-none z-0"></div>
+                
+                <div className="relative h-64 overflow-hidden bg-gray-100 dark:bg-gray-800 z-0">
                   {project.image ? (
                     <Image
                       src={project.image}
-                      alt={project.title || 'Project image'}
+                      alt={project.title || 'Reference image'}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
@@ -97,9 +101,9 @@ export default async function Projects({ locale }: { locale: string }) {
                     </div>
                   )}
                 </div>
-                <div className="p-6">
+                <div className="p-6 relative z-10">
                   <h3 className="text-2xl font-bold text-midnight_text dark:text-white mb-3 group-hover:text-[#016aac] transition-colors">
-                    {project.title || 'Untitled Project'}
+                    {project.title || 'Untitled Reference'}
                   </h3>
                   {project.description && (
                     <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4 line-clamp-3">

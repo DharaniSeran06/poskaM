@@ -9,7 +9,7 @@ import { client } from '@/sanity/lib/client';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0; // Always fetch fresh data
 
-// Fetch project by slug from Sanity with language support
+// Fetch reference by slug from Sanity with language support
 async function getProjectBySlug(slug: string, locale: string) {
   try {
     // Build language-aware field selections
@@ -91,9 +91,9 @@ async function getProjectBySlug(slug: string, locale: string) {
       }
     }
 
-    console.log(`✅ Fetched project from Sanity (locale: ${locale}):`, project ? project.property_title : 'Not found');
+    console.log(`✅ Fetched reference from Sanity (locale: ${locale}):`, project ? project.property_title : 'Not found');
     if (project && project.gallery) {
-      console.log(`📸 Project gallery: ${project.gallery.length} images`);
+      console.log(`📸 Reference gallery: ${project.gallery.length} images`);
     }
     return project;
   } catch (error) {
@@ -128,276 +128,258 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   }
 
   return (
-    <main>
-      {/* Hero Section */}
-      <section className="relative pt-24 pb-20 lg:pt-32 lg:pb-28 overflow-hidden min-h-[600px] lg:min-h-[700px] flex items-center">
-        <div className="absolute inset-0 z-0">
+    <main className="bg-white dark:bg-darkmode">
+      {/* Minimal Hero Section - Swiss Style */}
+      <section className="relative min-h-[85vh] lg:min-h-[90vh]">
+        {/* Hero Image */}
+        <div className="absolute inset-0">
           {project.image ? (
             <Image
               src={project.image}
-              alt={project.property_title || 'Project image'}
+              alt={project.property_title || 'Reference image'}
               fill
-              className="object-cover scale-105 transition-transform duration-[20s] ease-out"
+              className="object-cover"
               priority
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900"></div>
+            <div className="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-900"></div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/75"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+          {/* Subtle overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
         </div>
 
-        <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md relative z-10 px-4">
-          <div className="max-w-4xl" data-aos="fade-up" data-aos-duration="800" data-aos-easing="ease-out">
+        {/* Hero Content - Bottom aligned, minimal */}
+        <div className="absolute bottom-0 left-0 right-0 z-10">
+          <div className="container mx-auto lg:max-w-screen-xl px-6 lg:px-8 pb-16 lg:pb-24">
+            {/* Property ID Badge */}
             {project.propertyId && (
-              <div className="mb-6" data-aos="fade-up" data-aos-delay="100" data-aos-duration="600">
-                <p className="text-sm font-semibold text-white/80 uppercase tracking-[0.15em] mb-3 letter-spacing-wider">
-                  {t('propertyId')}
-                </p>
-                <p className="text-lg font-bold text-white inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-                  {project.propertyId}
-                </p>
+              <div className="mb-6" data-aos="fade-up" data-aos-duration="600">
+                <span className="inline-flex items-center gap-2 text-xs font-medium text-white/70 uppercase tracking-[0.2em]">
+                  <span className="w-8 h-px bg-[#016aac]"></span>
+                  {t('propertyId')} {project.propertyId}
+                </span>
               </div>
             )}
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight drop-shadow-2xl tracking-tight" data-aos="fade-up" data-aos-delay="150" data-aos-duration="700">
-              {project.property_title || 'Project'}
+            
+            {/* Main Title - Bold Architectural Typography */}
+            <h1 
+              className="text-4xl md:text-6xl lg:text-8xl font-bold text-white leading-[0.9] tracking-[-0.03em] max-w-5xl"
+              data-aos="fade-up" 
+              data-aos-duration="800"
+              data-aos-delay="100"
+            >
+              {project.property_title || 'Reference'}
             </h1>
+            
+            {/* Architecture Planning Subtitle */}
             {project.architecturePlanning && project.architecturePlanning.title && (
-              <div className="mt-6" data-aos="fade-up" data-aos-delay="200" data-aos-duration="600">
-                <p className="text-xl md:text-2xl lg:text-3xl text-white/95 leading-relaxed drop-shadow-lg font-light">
+              <div className="mt-8" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+                {project.architecturePlanning.url && project.architecturePlanning.url !== '#' ? (
+                  <a
+                    href={project.architecturePlanning.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 text-lg md:text-xl text-white/80 hover:text-white transition-colors duration-300 group"
+                  >
+                    <span className="font-light tracking-wide">{project.architecturePlanning.title}</span>
+                    <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                  </a>
+                ) : (
+                  <p className="text-lg md:text-xl text-white/80 font-light tracking-wide">
+                    {project.architecturePlanning.title}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 right-8 z-10 hidden lg:block" data-aos="fade-up" data-aos-delay="400">
+          <div className="flex flex-col items-center gap-2 text-white/50">
+            <span className="text-[10px] uppercase tracking-[0.3em] rotate-90 origin-center translate-y-4">Scroll</span>
+            <div className="w-px h-12 bg-gradient-to-b from-white/50 to-transparent"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Project Metadata Section - Clean Grid */}
+      <section className="py-20 lg:py-32 border-b border-neutral-100 dark:border-neutral-800">
+        <div className="container mx-auto lg:max-w-screen-xl px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="mb-16 lg:mb-24" data-aos="fade-up">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-px bg-[#016aac]"></div>
+              <span className="text-xs font-medium text-neutral-400 uppercase tracking-[0.2em]">
+                {t('object')}
+              </span>
+            </div>
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white tracking-[-0.02em] leading-tight max-w-4xl">
+              {project.property_title || 'Untitled Reference'}
+            </h2>
+          </div>
+
+          {/* Metadata Grid - Swiss Style Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-neutral-200 dark:bg-neutral-700" data-aos="fade-up" data-aos-delay="100">
+            {/* Property ID Card */}
+            {project.propertyId && (
+              <div className="bg-white dark:bg-darkmode p-8 lg:p-12 group hover:bg-neutral-50 dark:hover:bg-darklight transition-colors duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full border border-[#016aac]/20 flex items-center justify-center flex-shrink-0 group-hover:border-[#016aac]/40 transition-colors">
+                    <svg className="w-5 h-5 text-[#016aac]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-medium text-neutral-400 uppercase tracking-[0.2em] mb-2">
+                      {t('propertyId')}
+                    </p>
+                    <p className="text-2xl lg:text-3xl font-semibold text-[#016aac] tracking-tight">
+                      {project.propertyId}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Category Card */}
+            {project.category && (
+              <div className="bg-white dark:bg-darkmode p-8 lg:p-12 group hover:bg-neutral-50 dark:hover:bg-darklight transition-colors duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full border border-[#016aac]/20 flex items-center justify-center flex-shrink-0 group-hover:border-[#016aac]/40 transition-colors">
+                    <svg className="w-5 h-5 text-[#016aac]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-medium text-neutral-400 uppercase tracking-[0.2em] mb-2">
+                      Category
+                    </p>
+                    <p className="text-xl lg:text-2xl font-medium text-neutral-800 dark:text-white">
+                      {project.category}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Location Card */}
+            {project.location && (
+              <div className="bg-white dark:bg-darkmode p-8 lg:p-12 group hover:bg-neutral-50 dark:hover:bg-darklight transition-colors duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full border border-[#016aac]/20 flex items-center justify-center flex-shrink-0 group-hover:border-[#016aac]/40 transition-colors">
+                    <svg className="w-5 h-5 text-[#016aac]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-medium text-neutral-400 uppercase tracking-[0.2em] mb-2">
+                      Location
+                    </p>
+                    <p className="text-xl lg:text-2xl font-medium text-neutral-800 dark:text-white">
+                      {project.location}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Works Section - Clean List */}
+      {project.works && project.works.length > 0 && (
+        <section className="py-20 lg:py-32 border-b border-neutral-100 dark:border-neutral-800">
+          <div className="container mx-auto lg:max-w-screen-xl px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+              {/* Section Label */}
+              <div className="lg:col-span-4" data-aos="fade-up">
+                <div className="lg:sticky lg:top-32">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-px bg-[#016aac]"></div>
+                    <span className="text-xs font-medium text-neutral-400 uppercase tracking-[0.2em]">
+                      {t('works')}
+                    </span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold text-neutral-900 dark:text-white tracking-tight">
+                    Scope of Work
+                  </h3>
+                </div>
+              </div>
+
+              {/* Works List */}
+              <div className="lg:col-span-8">
+                <ul className="divide-y divide-neutral-100 dark:divide-neutral-800">
+                  {project.works.map((work: string, workIndex: number) => (
+                    <li 
+                      key={workIndex}
+                      className="py-6 lg:py-8 group"
+                      data-aos="fade-up"
+                      data-aos-delay={workIndex * 50}
+                    >
+                      <div className="flex items-start gap-6">
+                        <span className="text-sm font-medium text-[#016aac] tabular-nums mt-1">
+                          {String(workIndex + 1).padStart(2, '0')}
+                        </span>
+                        <span className="text-lg lg:text-xl text-neutral-700 dark:text-neutral-200 leading-relaxed group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">
+                          {work}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Architecture & Planning Section */}
+      {project.architecturePlanning && project.architecturePlanning.title && (
+        <section className="py-20 lg:py-32 border-b border-neutral-100 dark:border-neutral-800">
+          <div className="container mx-auto lg:max-w-screen-xl px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+              {/* Section Label */}
+              <div className="lg:col-span-4" data-aos="fade-up">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-px bg-[#016aac]"></div>
+                  <span className="text-xs font-medium text-neutral-400 uppercase tracking-[0.2em]">
+                    {t('architectureAndPlanning')}
+                  </span>
+                </div>
+                <h3 className="text-2xl md:text-3xl font-semibold text-neutral-900 dark:text-white tracking-tight">
+                  Design Partner
+                </h3>
+              </div>
+
+              {/* Architecture Info */}
+              <div className="lg:col-span-8" data-aos="fade-up" data-aos-delay="100">
+                <div className="p-8 lg:p-12 bg-neutral-50 dark:bg-darklight rounded-sm border-l-2 border-[#016aac]">
                   {project.architecturePlanning.url && project.architecturePlanning.url !== '#' ? (
                     <a
                       href={project.architecturePlanning.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="hover:text-white transition-all duration-300 hover:underline underline-offset-4 decoration-2"
+                      className="group inline-flex items-start gap-4"
                     >
-                      {project.architecturePlanning.title}
-                    </a>
-                  ) : (
-                    project.architecturePlanning.title
-                  )}
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Project Overview Section */}
-      <section className="py-24 lg:py-36 bg-white dark:bg-darkmode">
-        <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20">
-              {/* Left Column */}
-              <div className="space-y-12 lg:space-y-16">
-                {project.propertyId && (
-                  <div 
-                    className="group transition-all duration-300 ease-out hover:opacity-80"
-                    data-aos="fade-up"
-                    data-aos-duration="600"
-                    data-aos-easing="ease-out"
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-1 h-6 bg-[#016aac] rounded-full"></div>
-                      <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em] letter-spacing-wider">
-                        {t('propertyId')}
-                      </p>
-                    </div>
-                    <p className="text-3xl lg:text-4xl font-bold text-[#016aac] tracking-tight leading-tight pl-4">
-                      {project.propertyId}
-                    </p>
-                  </div>
-                )}
-
-                <div 
-                  className="group transition-all duration-300 ease-out hover:opacity-80"
-                  data-aos="fade-up"
-                  data-aos-delay="100"
-                  data-aos-duration="600"
-                  data-aos-easing="ease-out"
-                >
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-1 h-6 bg-[#016aac] rounded-full"></div>
-                    <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em] letter-spacing-wider">
-                      {t('object')}
-                    </p>
-                  </div>
-                  <p className="text-3xl lg:text-5xl font-bold text-midnight_text dark:text-white leading-tight tracking-tight pl-4">
-                    {project.property_title || 'Untitled Project'}
-                  </p>
-                </div>
-              </div>
-
-              {/* Right Column */}
-              <div className="space-y-12 lg:space-y-16">
-                {project.works && project.works.length > 0 && (
-                  <div 
-                    className="group transition-all duration-300 ease-out"
-                    data-aos="fade-up"
-                    data-aos-delay="150"
-                    data-aos-duration="600"
-                    data-aos-easing="ease-out"
-                  >
-                    <div className="flex items-center gap-3 mb-8">
-                      <div className="w-1 h-6 bg-[#016aac] rounded-full"></div>
-                      <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em] letter-spacing-wider">
-                        {t('works')}
-                      </p>
-                    </div>
-                    <ul className="space-y-6 pl-4">
-                      {project.works.map((work: string, workIndex: number) => (
-                        <li 
-                          key={workIndex} 
-                          className="flex items-start group/item transition-all duration-300 ease-out hover:translate-y-[-2px] hover:opacity-90"
-                          data-aos="fade-up"
-                          data-aos-delay={200 + workIndex * 80}
-                          data-aos-duration="500"
-                          data-aos-easing="ease-out"
-                        >
-                          <div className="flex items-center gap-4 w-full">
-                            <div className="w-2 h-2 rounded-full bg-[#016aac] flex-shrink-0 mt-2"></div>
-                            <span className="text-lg lg:text-xl text-gray-800 dark:text-gray-200 leading-relaxed font-light">
-                              {work}
-                            </span>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {project.architecturePlanning && project.architecturePlanning.title && (
-                  <div 
-                    className="group transition-all duration-300 ease-out"
-                    data-aos="fade-up"
-                    data-aos-delay="200"
-                    data-aos-duration="600"
-                    data-aos-easing="ease-out"
-                  >
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-1 h-6 bg-[#016aac] rounded-full"></div>
-                      <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em] letter-spacing-wider">
-                        {t('architectureAndPlanning')}
-                      </p>
-                    </div>
-                    <div className="pl-4">
-                      {project.architecturePlanning.url && project.architecturePlanning.url !== '#' ? (
-                        <a
-                          href={project.architecturePlanning.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xl lg:text-2xl text-[#016aac] hover:text-[#015a94] leading-relaxed transition-all duration-300 ease-out inline-flex items-center gap-3 group/link hover:opacity-80"
-                        >
-                          <span className="font-light">{project.architecturePlanning.title}</span>
-                          <svg className="w-5 h-5 transition-transform duration-300 ease-out group-hover/link:translate-x-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                          </svg>
-                        </a>
-                      ) : (
-                        <p className="text-xl lg:text-2xl text-gray-800 dark:text-gray-200 leading-relaxed font-light">
+                      <div className="flex-1">
+                        <p className="text-2xl lg:text-3xl font-medium text-neutral-900 dark:text-white group-hover:text-[#016aac] transition-colors duration-300">
                           {project.architecturePlanning.title}
                         </p>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Project Gallery Section */}
-      {project.gallery && project.gallery.length > 0 && (
-        <section className="py-20 lg:py-32 bg-white dark:bg-darkmode">
-          <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
-            <div className="max-w-7xl mx-auto" data-aos="fade-up" data-aos-duration="700">
-              <div className="text-center mb-12 lg:mb-16" data-aos="fade-up" data-aos-delay="100">
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-midnight_text dark:text-white mb-6 tracking-tight">
-                  {t('projectGallery')}
-                </h2>
-                {t('galleryDescription') && (
-                  <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-                    {t('galleryDescription')}
-                  </p>
-                )}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                {project.gallery.map((galleryItem: any, index: number) => (
-                  <div
-                    key={index}
-                    className="group relative aspect-square overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 shadow-xl hover:shadow-2xl transition-all duration-500 cursor-pointer hover:-translate-y-2"
-                    data-aos="fade-up"
-                    data-aos-delay={100 + index * 100}
-                    data-aos-duration="600"
-                  >
-                    {galleryItem.image ? (
-                      <>
-                        <Image
-                          src={galleryItem.image}
-                          alt={galleryItem.alt || galleryItem.caption || `Gallery image ${index + 1}`}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        {(galleryItem.caption || galleryItem.alt) && (
-                          <div className="absolute inset-0 flex items-end opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            <div className="p-6 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                              <p className="text-white text-base font-semibold drop-shadow-lg">
-                                {galleryItem.caption || galleryItem.alt}
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-600">
-                        <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+                        <p className="mt-3 text-sm text-neutral-500 uppercase tracking-[0.15em] flex items-center gap-2">
+                          View website
+                          <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 17L17 7M17 7H7M17 7V17" />
+                          </svg>
+                        </p>
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Additional Details Section */}
-      {project.architecturePlanning && project.architecturePlanning.title && (
-        <section className="py-20 lg:py-32 bg-gradient-to-b from-gray-50/50 to-white dark:from-darklight/30 dark:to-darkmode">
-          <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
-            <div className="max-w-5xl mx-auto" data-aos="fade-up" data-aos-duration="700">
-              <h2 className="text-4xl md:text-5xl font-bold text-midnight_text dark:text-white mb-8 tracking-tight" data-aos="fade-up" data-aos-delay="100">
-                {t('projectDetails')}
-              </h2>
-              <div className="prose prose-lg dark:prose-invert max-w-none" data-aos="fade-up" data-aos-delay="150">
-                <div className="bg-white dark:bg-darklight rounded-2xl p-8 lg:p-10 shadow-lg border border-gray-100 dark:border-dark_border/50">
-                  {project.architecturePlanning.url && project.architecturePlanning.url !== '#' ? (
-                    <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-                      <a
-                        href={project.architecturePlanning.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#016aac] hover:text-[#015a94] hover:underline transition-all duration-300 inline-flex items-center gap-3 group/link"
-                      >
-                        <span>{project.architecturePlanning.title}</span>
-                        <svg className="w-6 h-6 transition-transform duration-300 group-hover/link:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                      </a>
-                    </p>
+                    </a>
                   ) : (
-                    <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+                    <p className="text-2xl lg:text-3xl font-medium text-neutral-900 dark:text-white">
                       {project.architecturePlanning.title}
-                    </p>
-                  )}
-                  {project.category && (
-                    <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-                      {t('projectDetailsText', { category: project.category.toLowerCase() })}
                     </p>
                   )}
                 </div>
@@ -407,34 +389,109 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </section>
       )}
 
-      {/* Call-to-Action Section */}
-      <section className="py-20 lg:py-32 bg-gradient-to-br from-[#016aac] via-[#015a94] to-[#016aac] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5"></div>
-        <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4 text-center relative z-10">
-          <div className="max-w-3xl mx-auto" data-aos="fade-up" data-aos-duration="700">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 tracking-tight leading-tight" data-aos="fade-up" data-aos-delay="100">
-              {t('interestedInSimilar')}
+      {/* Reference Gallery Section - Masonry-like Grid */}
+      {project.gallery && project.gallery.length > 0 && (
+        <section className="py-20 lg:py-32">
+          <div className="container mx-auto lg:max-w-screen-xl px-6 lg:px-8">
+            {/* Gallery Header */}
+            <div className="flex items-center justify-between mb-12 lg:mb-16" data-aos="fade-up">
+              <div>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-px bg-[#016aac]"></div>
+                  <span className="text-xs font-medium text-neutral-400 uppercase tracking-[0.2em]">
+                    {t('projectGallery')}
+                  </span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white tracking-tight">
+                  {t('galleryDescription')}
+                </h2>
+              </div>
+              <span className="hidden md:block text-5xl lg:text-6xl font-bold text-neutral-100 dark:text-neutral-800">
+                {String(project.gallery.length).padStart(2, '0')}
+              </span>
+            </div>
+
+            {/* Gallery Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
+              {project.gallery.map((galleryItem: any, index: number) => (
+                <div
+                  key={index}
+                  className={`relative overflow-hidden group ${
+                    index === 0 ? 'md:col-span-2 md:row-span-2' : ''
+                  }`}
+                  data-aos="fade-up"
+                  data-aos-delay={Math.min(index * 50, 200)}
+                >
+                  <div className={`relative ${index === 0 ? 'aspect-[4/3]' : 'aspect-square'} bg-neutral-100 dark:bg-neutral-800`}>
+                    <Image
+                      src={galleryItem.image || ''}
+                      alt={galleryItem.alt || galleryItem.caption || `${t('projectGallery')} - Image ${index + 1}`}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      sizes={index === 0 ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
+                    />
+                    {/* Subtle overlay on hover */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+                    {/* Image number */}
+                    <div className="absolute bottom-4 left-4 text-xs font-medium text-white/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      {String(index + 1).padStart(2, '0')}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Call-to-Action Section - Minimal, Elegant */}
+      <section className="py-24 lg:py-40 bg-neutral-900 dark:bg-neutral-950 relative overflow-hidden">
+        {/* Subtle accent line */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#016aac] to-transparent"></div>
+        
+        <div className="container mx-auto lg:max-w-screen-xl px-6 lg:px-8 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="mb-8" data-aos="fade-up">
+              <span className="inline-flex items-center gap-3 text-xs font-medium text-neutral-500 uppercase tracking-[0.2em]">
+                <span className="w-8 h-px bg-[#016aac]"></span>
+                {t('interestedInSimilar')}
+                <span className="w-8 h-px bg-[#016aac]"></span>
+              </span>
+            </div>
+            
+            <h2 
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 tracking-[-0.02em] leading-tight"
+              data-aos="fade-up" 
+              data-aos-delay="100"
+            >
+              Ready to Start<br />Your Project?
             </h2>
-            <p className="text-xl lg:text-2xl text-white/95 mb-12 leading-relaxed font-light" data-aos="fade-up" data-aos-delay="150">
+            
+            <p 
+              className="text-lg lg:text-xl text-neutral-400 mb-12 max-w-2xl mx-auto leading-relaxed"
+              data-aos="fade-up" 
+              data-aos-delay="150"
+            >
               {t('interestedDescription')}
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center" data-aos="fade-up" data-aos-delay="200">
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="200">
               <Link
                 href="/contact"
-                className="group inline-flex items-center justify-center px-10 py-5 bg-white text-[#016aac] rounded-xl hover:bg-gray-50 transition-all duration-300 font-semibold text-lg shadow-2xl hover:shadow-3xl hover:scale-105 hover:-translate-y-1"
+                className="group inline-flex items-center justify-center px-8 py-4 bg-[#016aac] text-white rounded-sm hover:bg-[#015a94] transition-all duration-300 font-medium text-sm uppercase tracking-[0.1em]"
               >
                 <span>{t('getQuote')}</span>
-                <svg className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                <svg className="w-4 h-4 ml-3 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
               <Link
                 href="/contact"
-                className="group inline-flex items-center justify-center px-10 py-5 bg-transparent border-2 border-white/90 text-white rounded-xl hover:bg-white/10 hover:border-white transition-all duration-300 font-semibold text-lg backdrop-blur-sm"
+                className="group inline-flex items-center justify-center px-8 py-4 bg-transparent border border-neutral-700 text-white rounded-sm hover:border-neutral-500 hover:bg-white/5 transition-all duration-300 font-medium text-sm uppercase tracking-[0.1em]"
               >
                 <span>{t('contactUs')}</span>
-                <svg className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <svg className="w-4 h-4 ml-3 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </Link>
             </div>

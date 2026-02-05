@@ -1,5 +1,5 @@
 /**
- * Custom Next.js image loader for Sanity images
+ * Custom Next.js image loader for Sanity images and local images
  * This uses Sanity's built-in image optimization to prevent Next.js timeout issues
  * 
  * Sanity CDN supports URL parameters for optimization:
@@ -28,6 +28,17 @@ export default function sanityImageLoader({ src, width, quality }: { src: string
     }
   }
   
-  // Fallback for non-Sanity images - use Next.js default optimization
+  // Handle local images from /public directory
+  // Encode path segments to handle spaces and special characters (but not slashes)
+  if (src.startsWith('/')) {
+    // Split the path to encode each segment properly (preserve slashes)
+    const segments = src.split('/');
+    const encodedPath = segments.map(segment => 
+      segment ? encodeURIComponent(segment) : segment
+    ).join('/');
+    return encodedPath;
+  }
+  
+  // For relative paths or other sources, return as-is
   return src;
 }

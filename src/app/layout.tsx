@@ -2,10 +2,15 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import Aoscompo from "@/utils/aos";
+
+// Optimized font loading with display swap and preload
 const montserrat = Montserrat({ 
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-montserrat",
+  display: "swap", // Prevents invisible text during font load
+  preload: true, // Preloads font for faster rendering
+  fallback: ["system-ui", "arial"], // Fallback fonts
 });
 import NextTopLoader from 'nextjs-toploader';
 import { AppContextProvider } from "../context-api/PropertyContext";

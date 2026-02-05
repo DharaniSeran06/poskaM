@@ -31,7 +31,7 @@ async function buildHeaderData(locale: string) {
         { label: "Vacancies", href: "/vacancies" },
       ],
     },
-    { label: "Projects", href: "/projects" },
+        { label: "References", href: "/projects" },
     { label: "Contact", href: "/contact" },
   ];
 
@@ -59,7 +59,7 @@ export const GET = async (request: Request) => {
         { label: "Home", href: "/" },
         { label: "Services", href: "#", submenu: [] },
         { label: "Company", href: "#", submenu: [{ label: "About Us", href: "/about" }] },
-        { label: "Projects", href: "/projects" },
+        { label: "References", href: "/projects" },
         { label: "Contact", href: "/contact" },
       ]
     });

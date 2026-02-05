@@ -12,11 +12,11 @@ type TabContent = {
 };
 
 // Define possible tab labels
-type TabLabel = 'Project Complex' | 'Project Park' | 'Project Gallery' | 'Project Villa';
+type TabLabel = 'Reference Complex' | 'Reference Park' | 'Reference Gallery' | 'Reference Villa';
 
 // Define the content object with explicit types
 const content: Record<TabLabel, TabContent> = {
-    'Project Complex': {
+    'Reference Complex': {
         title: 'Values of smart living in Vista Residence, NY',
         description: 'Sometimes by accident, sometimes chunks as necessary making this the first true generator on the Internet.',
         features: [
@@ -29,19 +29,19 @@ const content: Record<TabLabel, TabContent> = {
         ],
         image: '/images/tabbar/tab-1.jpg'
     },
-    'Project Park': {
-        title: 'Project Park Overview',
+    'Reference Park': {
+        title: 'Reference Park Overview',
         description: 'Sometimes by accident, sometimes chunks as necessary making this the first true generator on the Internet.',
         features: ['Gardens', 'Playgrounds', 'Walking Trails'],
         image: '/images/tabbar/tab-2.jpg'
     },
-    'Project Gallery': {
+    'Reference Gallery': {
         title: 'Explore the Gallery',
         description: 'Sometimes by accident, sometimes chunks as necessary making this the first true generator on the Internet.',
         features: ['Art Exhibitions', 'Cultural Events'],
         image: '/images/tabbar/tab-3.jpg'
     },
-    'Project Villa': {
+    'Reference Villa': {
         title: 'Luxury Villas',
         description: 'Sometimes by accident, sometimes chunks as necessary making this the first true generator on the Internet.',
         features: ['Private Pools', 'Gourmet Kitchens', 'Spacious Living Areas'],
@@ -51,10 +51,10 @@ const content: Record<TabLabel, TabContent> = {
 
 // Define the tabs
 const tabs: { label: TabLabel, icon: string }[] = [
-    { label: 'Project Complex', icon: 'mdi:home' },
-    { label: 'Project Park', icon: 'mdi:store' },
-    { label: 'Project Gallery', icon: 'mdi:building' },
-    { label: 'Project Villa', icon: 'mdi:warehouse' }
+    { label: 'Reference Complex', icon: 'mdi:home' },
+    { label: 'Reference Park', icon: 'mdi:store' },
+    { label: 'Reference Gallery', icon: 'mdi:building' },
+    { label: 'Reference Villa', icon: 'mdi:warehouse' }
 ];
 
 // Utility function to chunk an array into smaller arrays of a specified size
@@ -67,7 +67,7 @@ const chunkArray = <T,>(array: T[], chunkSize: number): T[][] => {
 };
 
 export default function Tabbar() {
-    const [activeTab, setActiveTab] = useState<TabLabel>('Project Complex');
+    const [activeTab, setActiveTab] = useState<TabLabel>('Reference Complex');
 
     const handleTabChange = (tab: TabLabel) => {
         setActiveTab(tab);

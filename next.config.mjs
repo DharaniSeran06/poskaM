@@ -1,6 +1,13 @@
 import createNextIntlPlugin from 'next-intl/plugin';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
-const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const withNextIntl = createNextIntlPlugin(
+  resolve(__dirname, 'src/i18n/request.ts')
+);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -40,7 +47,25 @@ const nextConfig = {
   },
 
   /**
-   * 🧠 Cache headers for image optimization
+   * 🔄 Redirects: Old /projects routes to /reference
+   */
+  async redirects() {
+    return [
+      {
+        source: '/projects',
+        destination: '/reference',
+        permanent: true,
+      },
+      {
+        source: '/projects/:path*',
+        destination: '/reference/:path*',
+        permanent: true,
+      },
+    ];
+  },
+
+  /**
+   * 🧠 Cache headers for static assets and API routes
    */
   async headers() {
     return [
@@ -53,8 +78,50 @@ const nextConfig = {
           },
         ],
       },
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/images/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/fonts/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
     ];
   },
+
+  /**
+   * 🚀 Compression and performance optimizations
+   */
+  compress: true,
+  
+  /**
+   * 📦 Bundle optimization
+   */
+  swcMinify: true,
+  
+  /**
+   * 🔍 Production source maps (disable for better performance)
+   */
+  productionBrowserSourceMaps: false,
 
   /**
    * ⚙️ Webpack tweaks

@@ -11,12 +11,12 @@ export const revalidate = 0; // Always fetch fresh data
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Our Projects | POSKA MANOLITO AG",
-    description: "Explore our portfolio of completed construction, renovation, and building projects. Showcasing our expertise and commitment to quality across Switzerland.",
+    title: "Our References | POSKA MANOLITO AG",
+    description: "Explore our portfolio of completed construction, renovation, and building references. Showcasing our expertise and commitment to quality across Switzerland.",
   };
 }
 
-// Fetch projects from Sanity with language support
+// Fetch references from Sanity with language support
 async function getProjects(locale: string) {
   try {
     // Build language-aware field selections
@@ -124,10 +124,10 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
       {/* Projects Grid Section */}
       <section className="py-16 lg:py-24 bg-white dark:bg-darkmode">
         <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
-          {projects.length === 0 ? (
+            {projects.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-lg text-gray-600 dark:text-gray-400">
-                {t('noProjects') || 'No projects found. Please check back later.'}
+                {t('noProjects') || 'No references found. Please check back later.'}
               </p>
             </div>
           ) : (
@@ -135,12 +135,15 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
               {projects.map((project: any, index: number) => (
                 <div
                   key={project._id || project.slug}
-                  className="group bg-white dark:bg-darklight rounded-xl overflow-hidden border border-gray-200 dark:border-dark_border shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+                  className="group bg-white/95 dark:bg-darklight/95 backdrop-blur-sm rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 relative"
                   data-aos="fade-up"
                   data-aos-delay={index * 100}
                 >
+                  {/* Semi-transparent gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-white/95 to-[#016aac]/5 dark:from-darklight/90 dark:via-darklight/95 dark:to-[#016aac]/10 rounded-xl pointer-events-none z-0"></div>
+                  
                   {/* Project Image */}
-                  <div className="relative h-56 overflow-hidden bg-gray-100 dark:bg-gray-800">
+                  <div className="relative h-56 overflow-hidden bg-gray-100 dark:bg-gray-800 z-0">
                     {project.image ? (
                       <Image
                         src={project.image}
@@ -155,8 +158,8 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
                     )}
                   </div>
 
-                  {/* Project Content */}
-                  <div className="p-6 space-y-4">
+                  {/* Reference Content */}
+                  <div className="p-6 space-y-4 relative z-10">
                     {/* Property ID */}
                     {project.propertyId && (
                       <div>
@@ -175,7 +178,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
                         {t('object')}
                       </p>
                       <p className="text-base font-semibold text-midnight_text dark:text-white">
-                        {project.property_title || 'Untitled Project'}
+                        {project.property_title || 'Untitled Reference'}
                       </p>
                     </div>
 

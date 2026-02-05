@@ -71,10 +71,11 @@ export default function WhyChooseUs() {
             {/* Background Image with Overlay */}
             <div className="absolute inset-0 rounded-2xl overflow-hidden">
               <Image
-                src="/images/services/Service performance.png"
+                src="/images/services/Service%20performance.png"
                 alt="Construction Services"
                 fill
                 className="object-cover"
+                unoptimized
               />
               {/* White vertical lines overlay pattern */}
               <div 
