@@ -1,16 +1,25 @@
 import React from "react";
 import Image from "next/image";
+import { headers } from "next/headers";
 import HeroSub from "@/components/shared/hero-sub";
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
 
-// Force fully dynamic rendering - prevents static generation
+// ===========================================
+// ROUTE SEGMENT CONFIG - FORCE DYNAMIC
+// ===========================================
+// These exports prevent ANY static generation
 export const dynamic = 'force-dynamic';
-export const fetchCache = 'force-no-store';
+export const dynamicParams = true;
 export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+export const runtime = 'nodejs';
 
-// Fallback services data when Sanity is unavailable
+// ===========================================
+// FALLBACK DATA
+// ===========================================
+
 const fallbackServicesData = [
   { _id: '1', slug: 'plaster-casts', title: 'Plaster casts', shortDescription: 'Professional interior and exterior plastering services.', thumbnail: '/images/services/plaster.png' },
   { _id: '2', slug: 'drywall', title: 'Drywall', shortDescription: 'Complete drywall installation and finishing services.', thumbnail: '/images/services/drywall.jpg' },
@@ -21,7 +30,10 @@ const fallbackServicesData = [
   { _id: '7', slug: 'general-demolition-work', title: 'General demolition work', shortDescription: 'Professional demolition services for safe and efficient removal.', thumbnail: '/images/services/General%20demolition%20work.png' },
 ];
 
-// Fetch services from Sanity with language support
+// ===========================================
+// DATA FETCHING
+// ===========================================
+
 async function getServices(locale: string) {
   const safeLocale = locale && ['en', 'de'].includes(locale) ? locale : 'en';
   
@@ -48,7 +60,10 @@ async function getServices(locale: string) {
       order
     }`;
 
-    const services = await client.fetch(query);
+    const services = await client.fetch(query, {}, {
+      cache: 'no-store',
+      next: { revalidate: 0 }
+    });
 
     if (!services || services.length === 0) {
       return fallbackServicesData;
@@ -56,27 +71,39 @@ async function getServices(locale: string) {
 
     return services;
   } catch (error) {
-    console.error('Error fetching services:', error);
+    console.error('[Services List] Sanity fetch error:', error);
     return fallbackServicesData;
   }
 }
 
-interface PageProps {
-  params: Promise<{ locale: string }>;
-}
+// ===========================================
+// PAGE COMPONENT
+// ===========================================
 
-export default async function ServicesPage({ params }: PageProps) {
-  const { locale: rawLocale } = await params;
-  const locale = rawLocale || 'en';
+type PageProps = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function ServicesListPage({ params }: PageProps) {
+  // Force dynamic by reading headers (ensures runtime execution)
+  const headersList = await headers();
+  const _host = headersList.get('host');
   
-  let t: any;
+  // Await params (Next.js 15 requirement)
+  const resolvedParams = await params;
+  const locale = resolvedParams.locale || 'en';
+  
+  // Fetch data
+  let t: (key: string) => string;
   let services: any[];
   
   try {
-    t = await getTranslations('services');
-    services = await getServices(locale);
+    [t, services] = await Promise.all([
+      getTranslations('services'),
+      getServices(locale)
+    ]);
   } catch (error) {
-    console.error('Error loading services page:', error);
+    console.error('[Services List] Error loading page:', error);
     t = (key: string) => {
       const fallbacks: Record<string, string> = {
         'title': 'Our Services',
@@ -101,7 +128,6 @@ export default async function ServicesPage({ params }: PageProps) {
 
   return (
     <>
-      {/* Dynamic metadata via head */}
       <title>Our Services | POSKA MANOLITO AG</title>
       <meta name="description" content="Professional construction, renovation, and building services across Switzerland. Expert craftsmanship for all your construction needs." />
       

@@ -1,18 +1,27 @@
 import React from "react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import BeforeAfterSlider from "@/components/shared/before-after-slider";
 import ServiceGallery from "@/components/services/service-gallery";
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
 
-// Force fully dynamic rendering - prevents static generation
+// ===========================================
+// ROUTE SEGMENT CONFIG - FORCE DYNAMIC
+// ===========================================
+// These exports prevent ANY static generation
 export const dynamic = 'force-dynamic';
-export const fetchCache = 'force-no-store';
+export const dynamicParams = true;
 export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+export const runtime = 'nodejs';
 
-// Fetch service by slug from Sanity
+// ===========================================
+// DATA FETCHING
+// ===========================================
+
 async function getServiceBySlug(slug: string, locale: string) {
   if (!slug) return null;
   
@@ -44,15 +53,21 @@ async function getServiceBySlug(slug: string, locale: string) {
       "metaDescription": ${metaDescField}
     }`;
 
-    const service = await client.fetch(query, { slug });
+    const service = await client.fetch(query, { slug }, { 
+      cache: 'no-store',
+      next: { revalidate: 0 }
+    });
     return service || null;
   } catch (error) {
-    console.error('Error fetching service:', error);
+    console.error('[Services Detail] Sanity fetch error:', error);
     return null;
   }
 }
 
-// Legacy service data (fallback)
+// ===========================================
+// FALLBACK DATA
+// ===========================================
+
 const servicesData: Record<string, {
   title: string;
   titleKey: string;
@@ -182,36 +197,48 @@ const servicesData: Record<string, {
   },
 };
 
-interface PageProps {
-  params: Promise<{ slug: string; locale: string }>;
-}
+// ===========================================
+// PAGE COMPONENT
+// ===========================================
 
-export default async function ServicePage({ params }: PageProps) {
-  const { slug, locale } = await params;
+type PageProps = {
+  params: Promise<{ slug: string; locale: string }>;
+};
+
+export default async function ServiceDetailPage({ params }: PageProps) {
+  // Force dynamic by reading headers (ensures runtime execution)
+  const headersList = await headers();
+  const _host = headersList.get('host');
   
+  // Await params (Next.js 15 requirement)
+  const resolvedParams = await params;
+  const { slug, locale } = resolvedParams;
+  
+  // Fetch data
   let service: any = null;
-  let t: any;
-  let tNav: any;
-  let pageTitle = "Service | POSKA MANOLITO AG";
+  let t: (key: string) => string;
+  let tNav: (key: string) => string;
   
   try {
-    service = await getServiceBySlug(slug, locale);
-    t = await getTranslations('services');
-    tNav = await getTranslations('navbar');
+    [service, t, tNav] = await Promise.all([
+      getServiceBySlug(slug, locale),
+      getTranslations('services'),
+      getTranslations('navbar')
+    ]);
   } catch (error) {
-    console.error('Error loading service page:', error);
+    console.error('[Services Detail] Error loading page:', error);
     t = (key: string) => key;
     tNav = (key: string) => key;
   }
 
-  // Fallback to legacy data
+  // Fallback to static data
   const legacyService = !service ? servicesData[slug] : null;
   
   if (!service && !legacyService) {
     notFound();
   }
 
-  // Use Sanity service if available, otherwise use legacy
+  // Merge service data
   const activeService = service || {
     title: legacyService!.title,
     description: legacyService!.description,
@@ -224,13 +251,10 @@ export default async function ServicePage({ params }: PageProps) {
   const serviceTitle = service 
     ? service.title 
     : (tNav(`submenu.${legacyService!.titleKey}`) || legacyService!.title);
-  
-  pageTitle = `${serviceTitle} | POSKA MANOLITO AG`;
 
   return (
     <>
-      {/* Dynamic metadata via head */}
-      <title>{pageTitle}</title>
+      <title>{`${serviceTitle} | POSKA MANOLITO AG`}</title>
       <meta name="description" content={service?.metaDescription || legacyService?.metaDescription || activeService.description} />
       
       <main>
