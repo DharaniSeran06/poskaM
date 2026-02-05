@@ -1,7 +1,7 @@
+import { unstable_noStore as noStore } from 'next/cache';
 import React from "react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { headers } from "next/headers";
 import BeforeAfterSlider from "@/components/shared/before-after-slider";
 import ServiceGallery from "@/components/services/service-gallery";
 import { getTranslations } from 'next-intl/server';
@@ -9,14 +9,10 @@ import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
 
 // ===========================================
-// ROUTE SEGMENT CONFIG - FORCE DYNAMIC
+// ROUTE SEGMENT CONFIG
 // ===========================================
-// These exports prevent ANY static generation
+// Force dynamic rendering - prevents static generation completely
 export const dynamic = 'force-dynamic';
-export const dynamicParams = true;
-export const revalidate = 0;
-export const fetchCache = 'force-no-store';
-export const runtime = 'nodejs';
 
 // ===========================================
 // DATA FETCHING
@@ -53,10 +49,7 @@ async function getServiceBySlug(slug: string, locale: string) {
       "metaDescription": ${metaDescField}
     }`;
 
-    const service = await client.fetch(query, { slug }, { 
-      cache: 'no-store',
-      next: { revalidate: 0 }
-    });
+    const service = await client.fetch(query, { slug });
     return service || null;
   } catch (error) {
     console.error('[Services Detail] Sanity fetch error:', error);
@@ -206,15 +199,14 @@ type PageProps = {
 };
 
 export default async function ServiceDetailPage({ params }: PageProps) {
-  // Force dynamic by reading headers (ensures runtime execution)
-  const headersList = await headers();
-  const _host = headersList.get('host');
+  // ⚠️ CRITICAL: Call noStore() FIRST - opts out of static rendering immediately
+  noStore();
   
-  // Await params (Next.js 15 requirement)
+  // Await params (Next.js 15 async params)
   const resolvedParams = await params;
   const { slug, locale } = resolvedParams;
   
-  // Fetch data
+  // Fetch data in parallel
   let service: any = null;
   let t: (key: string) => string;
   let tNav: (key: string) => string;
@@ -227,11 +219,12 @@ export default async function ServiceDetailPage({ params }: PageProps) {
     ]);
   } catch (error) {
     console.error('[Services Detail] Error loading page:', error);
+    // Fallback translations
     t = (key: string) => key;
     tNav = (key: string) => key;
   }
 
-  // Fallback to static data
+  // Fallback to static data if Sanity returns nothing
   const legacyService = !service ? servicesData[slug] : null;
   
   if (!service && !legacyService) {

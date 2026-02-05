@@ -10,6 +10,7 @@ const LanguageSwitcher = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [isPending, startTransition] = useTransition();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -17,22 +18,37 @@ const LanguageSwitcher = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+        closeDropdown();
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isOpen]);
+
+  const closeDropdown = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsOpen(false);
+      setIsClosing(false);
+    }, 180);
+  };
+
+  const toggleDropdown = () => {
+    if (isOpen) {
+      closeDropdown();
+    } else {
+      setIsOpen(true);
+    }
+  };
 
   const switchLanguage = (newLocale: string) => {
-    // Remove current locale from pathname
     const pathWithoutLocale = pathname.replace(`/${locale}`, '') || '/';
-    setIsOpen(false);
+    closeDropdown();
     
-    // Use startTransition for instant UI update without blocking
     startTransition(() => {
-      // Use router.replace for instant navigation without adding to history
       router.replace(pathWithoutLocale as any, { locale: newLocale as any });
     });
   };
@@ -45,17 +61,24 @@ const LanguageSwitcher = () => {
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex h-8 w-8 items-center justify-center text-body-color duration-300 dark:text-white hover:text-[#016aac] dark:hover:text-[#016aac] transition-colors cursor-pointer"
+        onClick={toggleDropdown}
+        className={`
+          flex h-9 w-9 items-center justify-center rounded-lg
+          text-slate-600 dark:text-slate-300
+          hover:text-[#016aac] dark:hover:text-[#016aac]
+          hover:bg-slate-100/80 dark:hover:bg-slate-800/50
+          transition-all duration-250 ease-out cursor-pointer
+          ${isOpen ? 'text-[#016aac] bg-slate-100/80 dark:bg-slate-800/50' : ''}
+        `}
         aria-label="Change language"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
+          className="h-5 w-5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          strokeWidth={2}
+          strokeWidth={1.75}
         >
           <circle cx="12" cy="12" r="10" />
           <line x1="2" y1="12" x2="22" y2="12" />
@@ -65,44 +88,87 @@ const LanguageSwitcher = () => {
 
       {isOpen && (
         <div 
-          className="absolute right-0 mt-2 w-44 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-xl z-50 overflow-hidden py-2"
+          className={`
+            absolute right-0 mt-3 w-48
+            bg-white/[0.97] dark:bg-slate-900/[0.97]
+            backdrop-blur-xl backdrop-saturate-150
+            rounded-2xl
+            z-50 overflow-hidden
+            border-0
+            ${isClosing ? 'dropdown-exit' : 'dropdown-enter'}
+          `}
           style={{
-            boxShadow: '0 8px 32px rgba(1, 106, 172, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08)'
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 12px 24px -8px rgba(1, 106, 172, 0.1)',
           }}
         >
-          {/* Accent line at top */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#016aac] via-[#0184d6] to-[#016aac]"></div>
+          {/* Subtle top accent */}
+          <div className="absolute top-0 left-4 right-4 h-[2px] bg-gradient-to-r from-transparent via-[#016aac]/60 to-transparent rounded-full"></div>
           
-          {routing.locales.map((loc) => (
-            <button
-              key={loc}
-              onClick={() => switchLanguage(loc)}
-              className={`group w-full px-4 py-2.5 mx-1.5 text-left transition-all duration-200 rounded-lg cursor-pointer ${
-                locale === loc
-                  ? 'bg-[#016aac] text-white'
-                  : 'text-gray-700 dark:text-gray-100 hover:bg-[#016aac]/10 dark:hover:bg-[#016aac]/20 hover:text-[#016aac] dark:hover:text-[#0184d6]'
-              }`}
-              style={{ width: 'calc(100% - 12px)' }}
-            >
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2 font-medium text-[15px]">
-                  <span className={`
-                    w-1.5 h-1.5 rounded-full transition-all duration-200
-                    ${locale === loc 
-                      ? 'bg-white' 
-                      : 'bg-[#016aac]/50 group-hover:bg-[#016aac]'
-                    }
-                  `}></span>
-                  {languageNames[loc]}
-                </span>
-                <span className={`text-xs ${locale === loc ? 'text-white/70' : 'text-gray-400'}`}>
+          {/* Content */}
+          <div className="py-3 px-2">
+            {routing.locales.map((loc) => (
+              <button
+                key={loc}
+                onClick={() => switchLanguage(loc)}
+                className={`
+                  group w-full flex items-center justify-between
+                  px-4 py-3 mx-1 my-0.5
+                  rounded-xl
+                  transition-all duration-200 ease-out
+                  cursor-pointer
+                  font-medium text-[15px] tracking-tight
+                  ${locale === loc
+                    ? 'bg-[#016aac] text-white'
+                    : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-[#016aac] dark:hover:text-[#3b9edd]'
+                  }
+                `}
+                style={{ width: 'calc(100% - 8px)' }}
+              >
+                <span>{languageNames[loc]}</span>
+                <span className={`
+                  text-xs font-semibold tracking-wider px-2 py-0.5 rounded-md
+                  ${locale === loc 
+                    ? 'text-white/80 bg-white/20' 
+                    : 'text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800/60'
+                  }
+                `}>
                   {loc.toUpperCase()}
                 </span>
-              </div>
-            </button>
-          ))}
+              </button>
+            ))}
+          </div>
         </div>
       )}
+      
+      {/* Animations */}
+      <style jsx>{`
+        @keyframes dropdownEnter {
+          from {
+            opacity: 0;
+            transform: translateY(-8px) scale(0.96);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+        @keyframes dropdownExit {
+          from {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+          to {
+            opacity: 0;
+            transform: translateY(-6px) scale(0.97);
+          }
+        }
+        .dropdown-enter {
+          animation: dropdownEnter 0.22s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+        }
+        .dropdown-exit {
+          animation: dropdownExit 0.18s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+        }
+      `}</style>
     </div>
   );
 };

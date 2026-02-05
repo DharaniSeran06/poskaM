@@ -2,6 +2,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import Aoscompo from "@/utils/aos";
+import type { Metadata } from "next";
 
 // Optimized font loading with display swap and preload
 const montserrat = Montserrat({ 
@@ -12,10 +13,19 @@ const montserrat = Montserrat({
   preload: true, // Preloads font for faster rendering
   fallback: ["system-ui", "arial"], // Fallback fonts
 });
-// Removed NextTopLoader - it shows loading indicator during navigation
+
 import { AppContextProvider } from "@/context/PropertyContext";
 import ScrollToTop from "@/components/scroll-to-top";
 import SessionProviderWrapper from "@/providers/SessionProviderWrapper";
+
+// Metadata configuration - favicon.ico in app folder is auto-detected by Next.js
+export const metadata: Metadata = {
+  title: {
+    default: "POSKA MANOLITO AG",
+    template: "%s | POSKA MANOLITO AG",
+  },
+  description: "POSKA MANOLITO AG - Professional construction services with Swiss precision. Specializing in construction, plastering, facades, painting, and renovation.",
+};
 
 export default function RootLayout({
   children,
@@ -26,9 +36,6 @@ export default function RootLayout({
 }>) {
   return (
     <html suppressHydrationWarning>
-      <head>
-        <meta name="description" content="POSKA MANOLITO AG - Professional construction services with Swiss precision. Specializing in construction, plastering, facades, painting, and renovation." />
-      </head>
       <body className={`${montserrat.className} ${montserrat.variable}`}>
       <AppContextProvider>
       <SessionProviderWrapper session={session || null}>

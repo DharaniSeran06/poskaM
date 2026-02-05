@@ -19,7 +19,6 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
     };
 
     if (submenuOpen) {
-      // Add small delay to prevent immediate close on open click
       const timer = setTimeout(() => {
         document.addEventListener('mousedown', handleClickOutside);
       }, 10);
@@ -36,7 +35,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
     setTimeout(() => {
       setSubmenuOpen(false);
       setIsClosing(false);
-    }, 200);
+    }, 180);
   };
 
   // Toggle dropdown on click
@@ -50,7 +49,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
     }
   };
 
-  // Handle main link click - opens dropdown if has submenu
+  // Handle main link click
   const handleLinkClick = (e: React.MouseEvent) => {
     if (item.submenu && item.submenu.length > 0) {
       e.preventDefault();
@@ -69,7 +68,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
         <button
           onClick={handleToggleDropdown}
           className={`
-            text-base flex items-center gap-1 py-3 font-medium
+            text-base flex items-center gap-1.5 py-3 font-medium
             text-midnight_text hover:text-[#016aac] 
             dark:text-white dark:hover:text-[#016aac] 
             cursor-pointer transition-all duration-300
@@ -80,10 +79,10 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
           {item.submenu && (
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
-              width="1.2em" 
-              height="1.2em" 
+              width="1.1em" 
+              height="1.1em" 
               viewBox="0 0 24 24"
-              className={`transition-transform duration-300 ${submenuOpen ? 'rotate-180' : ''}`}
+              className={`transition-transform duration-300 ease-out ${submenuOpen ? 'rotate-180' : ''}`}
             >
               <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m7 10l5 5l5-5" />
             </svg>
@@ -95,7 +94,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
             href={item.href} 
             onClick={handleLinkClick}
             className={`
-              text-base flex items-center gap-1 py-3 font-medium
+              text-base flex items-center gap-1.5 py-3 font-medium
               text-midnight_text hover:text-[#016aac] 
               dark:text-white dark:hover:text-[#016aac] 
               transition-all duration-300
@@ -110,8 +109,8 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
               onClick={handleToggleDropdown}
               className={`
                 p-1 ml-0.5 rounded-md
-                text-midnight_text hover:text-[#016aac] hover:bg-[#016aac]/10
-                dark:text-white dark:hover:text-[#016aac] dark:hover:bg-[#016aac]/20
+                text-midnight_text hover:text-[#016aac]
+                dark:text-white dark:hover:text-[#016aac]
                 transition-all duration-300 cursor-pointer
                 ${isActive ? '!text-[#016aac]' : ''}
               `}
@@ -119,10 +118,10 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
             >
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                width="1.2em" 
-                height="1.2em" 
+                width="1.1em" 
+                height="1.1em" 
                 viewBox="0 0 24 24"
-                className={`transition-transform duration-300 ${submenuOpen ? 'rotate-180' : ''}`}
+                className={`transition-transform duration-300 ease-out ${submenuOpen ? 'rotate-180' : ''}`}
               >
                 <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m7 10l5 5l5-5" />
               </svg>
@@ -131,27 +130,28 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
         </div>
       )}
 
-      {/* Dropdown Menu */}
+      {/* Premium Dropdown Menu */}
       {submenuOpen && (
         <div 
           className={`
-            absolute py-3 top-full left-0 mt-2 w-72 
-            bg-white/90 dark:bg-gray-900/90
-            backdrop-blur-md
-            rounded-xl
+            absolute top-full left-0 mt-3 w-72
+            bg-white/[0.97] dark:bg-slate-900/[0.97]
+            backdrop-blur-xl backdrop-saturate-150
+            rounded-2xl
             z-50
             overflow-hidden
-            ${isClosing ? 'animate-fadeOutUp' : 'animate-fadeInDown'}
+            border-0
+            ${isClosing ? 'dropdown-exit' : 'dropdown-enter'}
           `}
           style={{
-            boxShadow: '0 8px 32px rgba(1, 106, 172, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 12px 24px -8px rgba(1, 106, 172, 0.1)',
           }}
         >
-          {/* Accent line at top */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#016aac] via-[#0184d6] to-[#016aac]"></div>
+          {/* Subtle top accent */}
+          <div className="absolute top-0 left-4 right-4 h-[2px] bg-gradient-to-r from-transparent via-[#016aac]/60 to-transparent rounded-full"></div>
           
-          {/* Content */}
-          <div className="relative z-10 pt-1">
+          {/* Content Container */}
+          <div className="py-3 px-2">
             {item.submenu?.map((subItem, index) => {
               const isSubActive = path === subItem.href;
               return (
@@ -160,51 +160,35 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
                   href={subItem.href}
                   onClick={() => closeDropdown()}
                   className={`
-                    group relative flex items-center justify-between px-5 py-3 mx-2 my-0.5
-                    rounded-lg
+                    group flex items-center justify-between
+                    px-4 py-3.5 mx-1 my-0.5
+                    rounded-xl
                     transition-all duration-200 ease-out
                     cursor-pointer
-                    font-medium text-[15px]
+                    font-medium text-[15px] leading-relaxed tracking-tight
                     ${isSubActive 
-                      ? 'text-white bg-[#016aac]' 
-                      : 'text-gray-700 dark:text-gray-100 hover:bg-[#016aac]/10 dark:hover:bg-[#016aac]/20 hover:text-[#016aac] dark:hover:text-[#0184d6]'
+                      ? 'bg-[#016aac] text-white' 
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-[#016aac] dark:hover:text-[#3b9edd]'
                     }
                   `}
                 >
-                  <span className="flex items-center gap-3">
-                    <span className={`
-                      w-1.5 h-1.5 rounded-full transition-all duration-200
-                      ${isSubActive 
-                        ? 'bg-white' 
-                        : 'bg-[#016aac]/50 group-hover:bg-[#016aac]'
-                      }
-                    `}></span>
-                    {subItem.label}
-                  </span>
+                  <span>{subItem.label}</span>
                   
-                  {/* Active checkmark or hover arrow */}
-                  {isSubActive ? (
-                    <svg 
-                      className="w-4 h-4 text-white flex-shrink-0" 
-                      fill="currentColor" 
-                      viewBox="0 0 20 20"
-                    >
-                      <path 
-                        fillRule="evenodd" 
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
-                        clipRule="evenodd" 
-                      />
-                    </svg>
-                  ) : (
-                    <svg 
-                      className="w-4 h-4 text-[#016aac] opacity-0 group-hover:opacity-100 transition-all duration-200 transform group-hover:translate-x-0.5 flex-shrink-0" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  )}
+                  {/* Hover arrow indicator */}
+                  <svg 
+                    className={`
+                      w-4 h-4 flex-shrink-0 transition-all duration-200
+                      ${isSubActive 
+                        ? 'text-white/90 opacity-100' 
+                        : 'text-[#016aac] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0'
+                      }
+                    `}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </Link>
               );
             })}
@@ -212,33 +196,33 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
         </div>
       )}
       
-      {/* CSS Animations */}
+      {/* Animations */}
       <style jsx>{`
-        @keyframes fadeInDown {
+        @keyframes dropdownEnter {
           from {
             opacity: 0;
-            transform: translateY(-10px) scale(0.98);
+            transform: translateY(-8px) scale(0.96);
           }
           to {
             opacity: 1;
             transform: translateY(0) scale(1);
           }
         }
-        @keyframes fadeOutUp {
+        @keyframes dropdownExit {
           from {
             opacity: 1;
             transform: translateY(0) scale(1);
           }
           to {
             opacity: 0;
-            transform: translateY(-10px) scale(0.98);
+            transform: translateY(-6px) scale(0.97);
           }
         }
-        .animate-fadeInDown {
-          animation: fadeInDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .dropdown-enter {
+          animation: dropdownEnter 0.22s cubic-bezier(0.32, 0.72, 0, 1) forwards;
         }
-        .animate-fadeOutUp {
-          animation: fadeOutUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .dropdown-exit {
+          animation: dropdownExit 0.18s cubic-bezier(0.32, 0.72, 0, 1) forwards;
         }
       `}</style>
     </div>

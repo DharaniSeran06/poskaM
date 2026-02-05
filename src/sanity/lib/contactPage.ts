@@ -71,8 +71,18 @@ export async function getContactPageData(locale: string): Promise<ContactPageDat
     });
 
     if (!data) {
-      console.warn('⚠️ Contact Page: No published contact page found in Sanity');
+      console.warn('[Contact] No published contact page found in Sanity');
       return null;
+    }
+    
+    // Sanitize googleMapsEmbed - remove any problematic characters
+    let sanitizedEmbed = data.googleMapsEmbed;
+    if (sanitizedEmbed && typeof sanitizedEmbed === 'string') {
+      // Keep only the src URL if it's an iframe
+      const srcMatch = sanitizedEmbed.match(/src="([^"]+)"/);
+      if (srcMatch) {
+        sanitizedEmbed = srcMatch[1];
+      }
     }
 
     // Normalize and validate data for safe rendering
@@ -83,7 +93,7 @@ export async function getContactPageData(locale: string): Promise<ContactPageDat
       phoneNumber: data.phoneNumber || '',
       emailAddress: data.emailAddress || '',
       formSuccessMessage: data.formSuccessMessage || 'Thank you! Your message has been sent successfully.',
-      ...(data.googleMapsEmbed && { googleMapsEmbed: data.googleMapsEmbed }),
+      ...(sanitizedEmbed && { googleMapsEmbed: sanitizedEmbed }),
       ...(data.googleMapsCoordinates && { googleMapsCoordinates: data.googleMapsCoordinates }),
       ...(data.businessHours && {
         businessHours: {
@@ -95,10 +105,10 @@ export async function getContactPageData(locale: string): Promise<ContactPageDat
       ...(data.metaDescription && { metaDescription: data.metaDescription }),
     };
 
-    console.log(`✅ Contact Page: Fetched contact page data from Sanity (locale: ${locale})`);
+    console.log(`[Contact] Fetched contact page data (locale: ${locale})`);
     return normalized;
   } catch (error) {
-    console.error('❌ Contact Page: Error fetching contact page data from Sanity:', error);
+    console.error('[Contact] Error fetching contact page data:', error);
     return null;
   }
 }

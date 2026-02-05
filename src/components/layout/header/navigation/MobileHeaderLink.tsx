@@ -36,7 +36,7 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
     setTimeout(() => {
       setSubmenuOpen(false);
       setIsClosing(false);
-    }, 200);
+    }, 180);
   };
 
   // Toggle dropdown
@@ -72,19 +72,19 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
   const isActive = path === item.href || path.startsWith(`/${item.label.toLowerCase()}`);
 
   return (
-    <div ref={dropdownRef} className="relative w-full mb-1">
+    <div ref={dropdownRef} className="relative w-full mb-1.5">
       {/* Main Button */}
-      <div className="flex items-center w-full">
+      <div className="flex items-center w-full gap-1">
         <button
           onClick={handleMainClick}
           className={`
-            flex-1 flex items-center py-3 px-4 rounded-xl
-            text-left font-medium
-            transition-all duration-300 ease-out
+            flex-1 flex items-center py-3.5 px-5 rounded-xl
+            text-left font-medium text-[15px] tracking-tight
+            transition-all duration-250 ease-out
             cursor-pointer
             ${isActive 
-              ? 'bg-[#016aac] text-white shadow-md shadow-[#016aac]/25' 
-              : 'text-gray-800 dark:text-gray-100 hover:bg-[#016aac]/8 dark:hover:bg-[#016aac]/15 hover:text-[#016aac] dark:hover:text-[#016aac]'
+              ? 'bg-[#016aac] text-white' 
+              : 'text-slate-700 dark:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-slate-800/50 hover:text-[#016aac] dark:hover:text-[#3b9edd]'
             }
           `}
         >
@@ -96,12 +96,12 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
           <button
             onClick={handleToggle}
             className={`
-              p-3 ml-1 rounded-xl
-              transition-all duration-300 ease-out
+              p-3 rounded-xl
+              transition-all duration-250 ease-out
               cursor-pointer
               ${isActive 
                 ? 'bg-[#016aac] text-white' 
-                : 'text-gray-600 dark:text-gray-300 hover:bg-[#016aac]/10 dark:hover:bg-[#016aac]/20 hover:text-[#016aac]'
+                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/50 hover:text-[#016aac]'
               }
             `}
             aria-label="Toggle submenu"
@@ -111,7 +111,7 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
               width="1.25em" 
               height="1.25em" 
               viewBox="0 0 24 24"
-              className={`transition-transform duration-300 ${submenuOpen ? 'rotate-180' : ''}`}
+              className={`transition-transform duration-300 ease-out ${submenuOpen ? 'rotate-180' : ''}`}
             >
               <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m7 10l5 5l5-5" />
             </svg>
@@ -119,25 +119,27 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
         )}
       </div>
 
-      {/* Dropdown Submenu */}
+      {/* Premium Dropdown Submenu */}
       {submenuOpen && item.submenu && (
         <div 
           className={`
-            relative bg-white/90 dark:bg-gray-900/90 
-            backdrop-blur-md py-2 px-2 w-full 
-            rounded-xl mt-2 
+            relative w-full mt-2
+            bg-white/[0.97] dark:bg-slate-900/[0.97]
+            backdrop-blur-xl backdrop-saturate-150
+            rounded-2xl
             overflow-hidden
-            ${isClosing ? 'animate-fadeOutUp' : 'animate-fadeInDown'}
+            border-0
+            ${isClosing ? 'dropdown-exit' : 'dropdown-enter'}
           `}
           style={{
-            boxShadow: '0 8px 32px rgba(1, 106, 172, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08)'
+            boxShadow: '0 20px 40px -12px rgba(0, 0, 0, 0.12), 0 8px 20px -8px rgba(1, 106, 172, 0.08)',
           }}
         >
-          {/* Accent line at top */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#016aac] via-[#0184d6] to-[#016aac]"></div>
+          {/* Subtle top accent */}
+          <div className="absolute top-0 left-4 right-4 h-[2px] bg-gradient-to-r from-transparent via-[#016aac]/60 to-transparent rounded-full"></div>
           
           {/* Submenu Items */}
-          <div className="relative z-10 pt-1">
+          <div className="py-3 px-2">
             {item.submenu.map((subItem, index) => {
               const isSubActive = subItem.href === path;
               return (
@@ -146,52 +148,36 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
                   href={subItem.href}
                   onClick={() => closeDropdown()}
                   className={`
-                    group relative flex items-center justify-between py-3 px-4 my-0.5
-                    rounded-lg 
+                    group flex items-center justify-between
+                    py-3.5 px-4 mx-1 my-0.5
+                    rounded-xl
                     transition-all duration-200 ease-out
                     cursor-pointer
-                    font-medium text-[15px]
+                    font-medium text-[15px] leading-relaxed tracking-tight
+                    active:scale-[0.98]
                     ${isSubActive 
-                      ? 'text-white bg-[#016aac]' 
-                      : 'text-gray-700 dark:text-gray-100 hover:text-[#016aac] dark:hover:text-[#0184d6] hover:bg-[#016aac]/10 dark:hover:bg-[#016aac]/20 active:scale-[0.98]'
+                      ? 'bg-[#016aac] text-white' 
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-[#016aac] dark:hover:text-[#3b9edd]'
                     }
                   `}
                 >
-                  <span className="flex items-center gap-3">
-                    {/* Indicator dot */}
-                    <span className={`
-                      w-1.5 h-1.5 rounded-full transition-all duration-200
-                      ${isSubActive 
-                        ? 'bg-white' 
-                        : 'bg-[#016aac]/50 group-hover:bg-[#016aac]'
-                      }
-                    `}></span>
-                    {subItem.label}
-                  </span>
+                  <span>{subItem.label}</span>
                   
-                  {/* Active checkmark or hover arrow */}
-                  {isSubActive ? (
-                    <svg 
-                      className="w-4 h-4 text-white flex-shrink-0" 
-                      fill="currentColor" 
-                      viewBox="0 0 20 20"
-                    >
-                      <path 
-                        fillRule="evenodd" 
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
-                        clipRule="evenodd" 
-                      />
-                    </svg>
-                  ) : (
-                    <svg 
-                      className="w-4 h-4 text-[#016aac] opacity-0 group-hover:opacity-100 transition-all duration-200 flex-shrink-0" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  )}
+                  {/* Hover arrow indicator */}
+                  <svg 
+                    className={`
+                      w-4 h-4 flex-shrink-0 transition-all duration-200
+                      ${isSubActive 
+                        ? 'text-white/90 opacity-100' 
+                        : 'text-[#016aac] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0'
+                      }
+                    `}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </Link>
               );
             })}
@@ -199,33 +185,33 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
         </div>
       )}
       
-      {/* CSS Animations */}
+      {/* Animations */}
       <style jsx>{`
-        @keyframes fadeInDown {
+        @keyframes dropdownEnter {
           from {
             opacity: 0;
-            transform: translateY(-8px);
+            transform: translateY(-6px);
           }
           to {
             opacity: 1;
             transform: translateY(0);
           }
         }
-        @keyframes fadeOutUp {
+        @keyframes dropdownExit {
           from {
             opacity: 1;
             transform: translateY(0);
           }
           to {
             opacity: 0;
-            transform: translateY(-8px);
+            transform: translateY(-4px);
           }
         }
-        .animate-fadeInDown {
-          animation: fadeInDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .dropdown-enter {
+          animation: dropdownEnter 0.22s cubic-bezier(0.32, 0.72, 0, 1) forwards;
         }
-        .animate-fadeOutUp {
-          animation: fadeOutUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .dropdown-exit {
+          animation: dropdownExit 0.18s cubic-bezier(0.32, 0.72, 0, 1) forwards;
         }
       `}</style>
     </div>

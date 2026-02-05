@@ -1,5 +1,5 @@
 import React from "react";
-import { Metadata } from "next";
+import { headers } from "next/headers";
 import { getTranslations } from 'next-intl/server';
 import HeroSub from "@/components/shared/hero-sub";
 import ContactInfo from "@/components/contact/contact-info";
@@ -7,35 +7,55 @@ import ContactForm from "@/components/contact/form";
 import Location from "@/components/contact/office-location";
 import { getContactPageData } from "@/sanity/lib/contactPage";
 
-// Use ISR for instant navigation - contact data rarely changes
-export const revalidate = 3600; // Revalidate every hour
+// Force dynamic to avoid static generation issues with embedded HTML
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params;
-  const contactData = await getContactPageData(locale);
+type PageProps = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function ContactPage({ params }: PageProps) {
+  // Force runtime execution
+  const headersList = await headers();
+  const _host = headersList.get('host');
   
-  return {
-    title: contactData?.title || "Contact | POSKA MANOLITO AG",
-    description: contactData?.metaDescription || contactData?.description || "Get in touch with POSKA MANOLITO AG for professional construction, renovation, and building services.",
-  };
-}
-
-export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const t = await getTranslations('contact');
-  const contactData = await getContactPageData(locale);
+  
+  let t: (key: string) => string;
+  let contactData = null;
+  
+  try {
+    [t, contactData] = await Promise.all([
+      getTranslations('contact'),
+      getContactPageData(locale)
+    ]);
+  } catch (error) {
+    console.error('[Contact] Error loading page data:', error);
+    t = (key: string) => {
+      const fallbacks: Record<string, string> = {
+        'title': 'Contact Us',
+        'description': 'Get in touch with us',
+        'breadcrumb.home': 'Home',
+        'breadcrumb.contact': 'Contact',
+      };
+      return fallbacks[key] || key;
+    };
+  }
   
   const breadcrumbLinks = [
     { href: "/", text: t('breadcrumb.home') },
     { href: "/contact", text: t('breadcrumb.contact') },
   ];
 
-  // Fallback to translations if Sanity data is not available
   const pageTitle = contactData?.title || t('title');
   const pageDescription = contactData?.description || t('description');
   
   return (
     <>
+      <title>{`${pageTitle} | POSKA MANOLITO AG`}</title>
+      <meta name="description" content={contactData?.metaDescription || pageDescription} />
+      
       <HeroSub
         title={pageTitle}
         description={pageDescription}

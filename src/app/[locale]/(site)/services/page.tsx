@@ -1,20 +1,16 @@
+import { unstable_noStore as noStore } from 'next/cache';
 import React from "react";
 import Image from "next/image";
-import { headers } from "next/headers";
 import HeroSub from "@/components/shared/hero-sub";
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
 
 // ===========================================
-// ROUTE SEGMENT CONFIG - FORCE DYNAMIC
+// ROUTE SEGMENT CONFIG
 // ===========================================
-// These exports prevent ANY static generation
+// Force dynamic rendering - prevents static generation completely
 export const dynamic = 'force-dynamic';
-export const dynamicParams = true;
-export const revalidate = 0;
-export const fetchCache = 'force-no-store';
-export const runtime = 'nodejs';
 
 // ===========================================
 // FALLBACK DATA
@@ -85,11 +81,10 @@ type PageProps = {
 };
 
 export default async function ServicesListPage({ params }: PageProps) {
-  // Force dynamic by reading headers (ensures runtime execution)
-  const headersList = await headers();
-  const _host = headersList.get('host');
+  // ⚠️ CRITICAL: Call noStore() FIRST - opts out of static rendering immediately
+  noStore();
   
-  // Await params (Next.js 15 requirement)
+  // Await params (Next.js 15 async params)
   const resolvedParams = await params;
   const locale = resolvedParams.locale || 'en';
   
