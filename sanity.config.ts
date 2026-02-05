@@ -3,10 +3,13 @@
 /**
  * Sanity Studio Configuration
  * 
- * This configuration is used for the Sanity Studio mounted on:
- * /src/app/studio/[[...tool]]/page.tsx
+ * This configuration is for the embedded Sanity Studio at /studio
+ * Located at: src/app/studio/[[...tool]]/page.tsx
  * 
- * The studio uses the same env.ts for consistent configuration.
+ * IMPORTANT:
+ * - Uses hardcoded values from env.ts (no runtime failures)
+ * - Studio is self-contained within your Next.js app
+ * - No dependency on hosted *.sanity.studio
  */
 
 import { visionTool } from '@sanity/vision'
@@ -18,14 +21,19 @@ import { schema } from './src/sanity/schemaTypes'
 import { structure } from './src/sanity/structure'
 
 export default defineConfig({
+  // Studio will be accessible at /studio
   basePath: '/studio',
+  
+  // Project configuration (hardcoded fallbacks ensure this never fails)
   projectId,
   dataset,
+  
+  // Content schema
   schema,
+  
+  // Studio plugins
   plugins: [
     structureTool({ structure }),
-    // Vision is for querying with GROQ from inside the Studio
-    // https://www.sanity.io/docs/the-vision-plugin
     visionTool({ defaultApiVersion: apiVersion }),
   ],
 })
