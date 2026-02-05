@@ -1,5 +1,4 @@
 import React from "react";
-import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import BeforeAfterSlider from "@/components/shared/before-after-slider";
@@ -8,8 +7,10 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
 
-// Force dynamic rendering - required for getTranslations()
+// Force fully dynamic rendering - prevents static generation
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
 
 // Fetch service by slug from Sanity
 async function getServiceBySlug(slug: string, locale: string) {
@@ -182,39 +183,16 @@ const servicesData: Record<string, {
 };
 
 interface PageProps {
-  params: { slug: string; locale: string };
-}
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug, locale } = params;
-  const service = await getServiceBySlug(slug, locale);
-  
-  if (service) {
-    return {
-      title: `${service.title} | POSKA MANOLITO AG`,
-      description: service.metaDescription || service.description,
-    };
-  }
-  
-  const legacyService = servicesData[slug];
-  if (legacyService) {
-    return {
-      title: `${legacyService.title} | POSKA MANOLITO AG`,
-      description: legacyService.metaDescription,
-    };
-  }
-  
-  return {
-    title: "Service Not Found | POSKA MANOLITO AG",
-  };
+  params: Promise<{ slug: string; locale: string }>;
 }
 
 export default async function ServicePage({ params }: PageProps) {
-  const { slug, locale } = params;
+  const { slug, locale } = await params;
   
   let service: any = null;
   let t: any;
   let tNav: any;
+  let pageTitle = "Service | POSKA MANOLITO AG";
   
   try {
     service = await getServiceBySlug(slug, locale);
@@ -222,7 +200,6 @@ export default async function ServicePage({ params }: PageProps) {
     tNav = await getTranslations('navbar');
   } catch (error) {
     console.error('Error loading service page:', error);
-    // Fallback translation function
     t = (key: string) => key;
     tNav = (key: string) => key;
   }
@@ -247,130 +224,138 @@ export default async function ServicePage({ params }: PageProps) {
   const serviceTitle = service 
     ? service.title 
     : (tNav(`submenu.${legacyService!.titleKey}`) || legacyService!.title);
+  
+  pageTitle = `${serviceTitle} | POSKA MANOLITO AG`;
 
   return (
-    <main>
-      {/* Hero Section */}
-      <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden min-h-[500px] flex items-center">
-        <div className="absolute inset-0 z-0">
-          {activeService.heroImage ? (
-            <Image
-              src={activeService.heroImage}
-              alt={serviceTitle}
-              fill
-              className="object-cover"
-              priority
-              unoptimized
-            />
-          ) : (
-            <div className="w-full h-full bg-gray-800"></div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#016aac]/85 via-[#016aac]/75 to-[#016aac]/85"></div>
-        </div>
-
-        <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md relative z-10 px-4">
-          <div className="max-w-3xl" data-aos="fade-up">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-lg">
-              {serviceTitle}
-            </h1>
-            <p className="text-xl md:text-2xl text-white/95 leading-relaxed drop-shadow-md">
-              {service?.shortDescription || service?.description || activeService.description}
-            </p>
+    <>
+      {/* Dynamic metadata via head */}
+      <title>{pageTitle}</title>
+      <meta name="description" content={service?.metaDescription || legacyService?.metaDescription || activeService.description} />
+      
+      <main>
+        {/* Hero Section */}
+        <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden min-h-[500px] flex items-center">
+          <div className="absolute inset-0 z-0">
+            {activeService.heroImage ? (
+              <Image
+                src={activeService.heroImage}
+                alt={serviceTitle}
+                fill
+                className="object-cover"
+                priority
+                unoptimized
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-800"></div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#016aac]/85 via-[#016aac]/75 to-[#016aac]/85"></div>
           </div>
-        </div>
-      </section>
 
-      {/* Content Section */}
-      <section className="py-16 lg:py-24 bg-white dark:bg-darkmode">
-        <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="prose prose-lg dark:prose-invert max-w-none" data-aos="fade-up">
-              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
-                {service?.description || activeService.description}
+          <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md relative z-10 px-4">
+            <div className="max-w-3xl" data-aos="fade-up">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-lg">
+                {serviceTitle}
+              </h1>
+              <p className="text-xl md:text-2xl text-white/95 leading-relaxed drop-shadow-md">
+                {service?.shortDescription || service?.description || activeService.description}
               </p>
             </div>
+          </div>
+        </section>
 
-            {/* Before/After Slider */}
-            {activeService.beforeImage && activeService.afterImage && (
-              <div className="my-16" data-aos="fade-up" data-aos-delay="100">
-                <div className="text-center mb-8">
-                  <h2 className="text-2xl md:text-3xl font-bold text-midnight_text dark:text-white mb-2">
-                    {t('transformationShowcase') || 'Transformation Showcase'}
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    {t('transformationDescription') || 'See the before and after'}
-                  </p>
-                </div>
-                <BeforeAfterSlider
-                  beforeImage={activeService.beforeImage}
-                  afterImage={activeService.afterImage}
-                  beforeLabel={t('before') || 'Before'}
-                  afterLabel={t('after') || 'After'}
-                  className="w-full"
-                />
+        {/* Content Section */}
+        <section className="py-16 lg:py-24 bg-white dark:bg-darkmode">
+          <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="prose prose-lg dark:prose-invert max-w-none" data-aos="fade-up">
+                <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
+                  {service?.description || activeService.description}
+                </p>
               </div>
-            )}
 
-            {/* CTA Button */}
-            <div className="mt-12" data-aos="fade-up" data-aos-delay="200">
+              {/* Before/After Slider */}
+              {activeService.beforeImage && activeService.afterImage && (
+                <div className="my-16" data-aos="fade-up" data-aos-delay="100">
+                  <div className="text-center mb-8">
+                    <h2 className="text-2xl md:text-3xl font-bold text-midnight_text dark:text-white mb-2">
+                      {t('transformationShowcase') || 'Transformation Showcase'}
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400">
+                      {t('transformationDescription') || 'See the before and after'}
+                    </p>
+                  </div>
+                  <BeforeAfterSlider
+                    beforeImage={activeService.beforeImage}
+                    afterImage={activeService.afterImage}
+                    beforeLabel={t('before') || 'Before'}
+                    afterLabel={t('after') || 'After'}
+                    className="w-full"
+                  />
+                </div>
+              )}
+
+              {/* CTA Button */}
+              <div className="mt-12" data-aos="fade-up" data-aos-delay="200">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center px-8 py-4 bg-[#016aac] text-white rounded-lg hover:bg-[#015a94] transition-all duration-300 font-semibold text-lg shadow-md hover:scale-105"
+                >
+                  {t('getQuote') || 'Get a Quote'}
+                  <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Gallery Section */}
+        {activeService.galleryImages && activeService.galleryImages.length > 0 && (
+          <section className="py-16 lg:py-24 bg-section dark:bg-darklight">
+            <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
+              <div className="text-center mb-12" data-aos="fade-up">
+                <h2 className="text-3xl md:text-4xl font-bold text-midnight_text dark:text-white mb-4">
+                  {t('ourWork') || 'Our Work'}
+                </h2>
+                <p className="text-lg text-gray-600 dark:text-gray-400">
+                  {`Examples of our ${serviceTitle.toLowerCase()} projects`}
+                </p>
+              </div>
+
+              <ServiceGallery 
+                images={activeService.galleryImages} 
+                serviceTitle={serviceTitle}
+                autoPlay={false}
+              />
+            </div>
+          </section>
+        )}
+
+        {/* Contact CTA Section */}
+        <section className="py-16 lg:py-24 bg-[#016aac]">
+          <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4 text-center">
+            <div className="max-w-2xl mx-auto" data-aos="fade-up">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                {t('readyToStart') || 'Ready to Start Your Project?'}
+              </h2>
+              <p className="text-xl text-white/90 mb-8">
+                {`Contact us for your ${serviceTitle.toLowerCase()} needs`}
+              </p>
               <Link
                 href="/contact"
-                className="inline-flex items-center px-8 py-4 bg-[#016aac] text-white rounded-lg hover:bg-[#015a94] transition-all duration-300 font-semibold text-lg shadow-md hover:scale-105"
+                className="inline-flex items-center px-8 py-4 bg-white text-[#016aac] rounded-lg hover:bg-gray-100 transition-all duration-300 font-semibold text-lg shadow-lg hover:scale-105"
               >
-                {t('getQuote') || 'Get a Quote'}
+                {t('contactUs') || 'Contact Us'}
                 <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Gallery Section */}
-      {activeService.galleryImages && activeService.galleryImages.length > 0 && (
-        <section className="py-16 lg:py-24 bg-section dark:bg-darklight">
-          <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
-            <div className="text-center mb-12" data-aos="fade-up">
-              <h2 className="text-3xl md:text-4xl font-bold text-midnight_text dark:text-white mb-4">
-                {t('ourWork') || 'Our Work'}
-              </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400">
-                {t('ourWorkDescription', { service: serviceTitle.toLowerCase() }) || `Examples of our ${serviceTitle.toLowerCase()} projects`}
-              </p>
-            </div>
-
-            <ServiceGallery 
-              images={activeService.galleryImages} 
-              serviceTitle={serviceTitle}
-              autoPlay={false}
-            />
-          </div>
         </section>
-      )}
-
-      {/* Contact CTA Section */}
-      <section className="py-16 lg:py-24 bg-[#016aac]">
-        <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4 text-center">
-          <div className="max-w-2xl mx-auto" data-aos="fade-up">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              {t('readyToStart') || 'Ready to Start Your Project?'}
-            </h2>
-            <p className="text-xl text-white/90 mb-8">
-              {t('readyToStartDescription', { service: serviceTitle.toLowerCase() }) || `Contact us for your ${serviceTitle.toLowerCase()} needs`}
-            </p>
-            <Link
-              href="/contact"
-              className="inline-flex items-center px-8 py-4 bg-white text-[#016aac] rounded-lg hover:bg-gray-100 transition-all duration-300 font-semibold text-lg shadow-lg hover:scale-105"
-            >
-              {t('contactUs') || 'Contact Us'}
-              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </section>
-    </main>
+      </main>
+    </>
   );
 }
