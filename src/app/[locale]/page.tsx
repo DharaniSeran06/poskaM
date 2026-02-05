@@ -1,31 +1,16 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Metadata } from "next";
-import dynamicImport from 'next/dynamic';
-import Hero from '../components/home/hero';
-import Services from '../components/home/services';
-import About from '../components/home/about';
+import Hero from '@/components/home/hero';
+import Services from '@/components/home/services';
+import About from '@/components/home/about';
+import WhyChooseUs from '@/components/home/why-choose-us';
+import Projects from '@/components/home/projects';
+import TestimonialsWrapper from '@/components/home/testimonial/TestimonialsWrapper';
+import CompanyInfoWrapper from '@/components/home/info/CompanyInfoWrapper';
 
-// Lazy load heavy components below the fold
-const WhyChooseUs = dynamicImport(() => import('../components/home/why-choose-us'), {
-  loading: () => <div className="min-h-[400px] bg-gray-50 dark:bg-darklight animate-pulse" />,
-});
-
-const Projects = dynamicImport(() => import('../components/home/projects'), {
-  loading: () => <div className="min-h-[600px] bg-gray-50 dark:bg-darklight animate-pulse" />,
-});
-
-const TestimonialsWrapper = dynamicImport(() => import('../components/home/testimonial/TestimonialsWrapper'), {
-  loading: () => <div className="min-h-[500px] bg-gray-50 dark:bg-darklight animate-pulse" />,
-});
-
-const CompanyInfoWrapper = dynamicImport(() => import('../components/home/info/CompanyInfoWrapper'), {
-  loading: () => <div className="min-h-[300px] bg-gray-50 dark:bg-darklight animate-pulse" />,
-});
-
-// Use ISR for better performance - revalidate every 1 hour
-// This allows static generation with periodic updates
-export const revalidate = 3600; // 1 hour in seconds
-// Removed 'force-dynamic' to enable static generation and ISR
+// Static generation with ISR - pages are pre-rendered and cached
+// Revalidate every 1 hour for fresh content without loading delays
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

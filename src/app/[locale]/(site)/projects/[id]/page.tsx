@@ -5,18 +5,62 @@ import { notFound } from "next/navigation";
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
+import { routing } from '@/i18n/routing';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; // Always fetch fresh data
+// Enable ISR with revalidation for better production performance
+export const revalidate = 60; // Revalidate every 60 seconds
+
+// Generate static params for all projects and locales
+export async function generateStaticParams() {
+  try {
+    const query = `*[
+      _type == "project" &&
+      !(_id in path("drafts.**")) &&
+      defined(slug.current)
+    ] {
+      "slug": slug.current
+    }`;
+
+    const projects = await client.fetch(query, {}, {
+      cache: 'force-cache',
+      next: { revalidate: 3600 }
+    });
+
+    // Generate params for all combinations of locale and slug
+    const params: { locale: string; id: string }[] = [];
+    
+    for (const locale of routing.locales) {
+      for (const project of projects || []) {
+        if (project?.slug) {
+          params.push({ locale, id: project.slug });
+        }
+      }
+    }
+
+    console.log(`✅ Generated ${params.length} static params for projects`);
+    return params;
+  } catch (error) {
+    console.error('❌ Error generating static params for projects:', error);
+    return [];
+  }
+}
 
 // Fetch reference by slug from Sanity with language support
 async function getProjectBySlug(slug: string, locale: string) {
+  // Validate inputs
+  if (!slug || typeof slug !== 'string') {
+    console.warn('⚠️ Invalid slug provided to getProjectBySlug');
+    return null;
+  }
+
+  const safeLocale = locale && ['en', 'de'].includes(locale) ? locale : 'en';
+
   try {
     // Build language-aware field selections
-    const titleField = locale === 'en' ? 'property_title.en' : `coalesce(property_title.${locale}, property_title.en)`;
-    const locationField = locale === 'en' ? 'location.en' : `coalesce(location.${locale}, location.en)`;
-    const categoryField = locale === 'en' ? 'category.en' : `coalesce(category.${locale}, category.en)`;
-    const worksField = locale === 'en' ? 'works.en' : `coalesce(works.${locale}, works.en)`;
+    const titleField = safeLocale === 'en' ? 'property_title.en' : `coalesce(property_title.${safeLocale}, property_title.en)`;
+    const locationField = safeLocale === 'en' ? 'location.en' : `coalesce(location.${safeLocale}, location.en)`;
+    const categoryField = safeLocale === 'en' ? 'category.en' : `coalesce(category.${safeLocale}, category.en)`;
+    const worksField = safeLocale === 'en' ? 'works.en' : `coalesce(works.${safeLocale}, works.en)`;
     
     // Architecture Planning: handle both new format (object with title/url) and old format (string)
     // Fetch the raw structure to handle backward compatibility
@@ -43,14 +87,14 @@ async function getProjectBySlug(slug: string, locale: string) {
     }`;
 
     const project = await client.fetch(query, { slug }, {
-      cache: 'no-store',
-      next: { revalidate: 0 }
+      cache: 'force-cache',
+      next: { revalidate: 60, tags: ['project', `project-${slug}`] }
     });
 
     // Normalize architecturePlanning for backward compatibility
     if (project && project.architecturePlanning) {
       const arch = project.architecturePlanning;
-      const localeData = arch[locale] || arch.en;
+      const localeData = arch[safeLocale] || arch.en;
       
       // New format: object with title and url
       if (localeData && typeof localeData === 'object' && 'title' in localeData) {
@@ -67,7 +111,7 @@ async function getProjectBySlug(slug: string, locale: string) {
         };
       }
       // Fallback: try English if current locale doesn't have data
-      else if (locale !== 'en' && arch.en) {
+      else if (safeLocale !== 'en' && arch.en) {
         if (typeof arch.en === 'object' && 'title' in arch.en) {
           project.architecturePlanning = {
             title: arch.en.title || '',
@@ -91,7 +135,7 @@ async function getProjectBySlug(slug: string, locale: string) {
       }
     }
 
-    console.log(`✅ Fetched reference from Sanity (locale: ${locale}):`, project ? project.property_title : 'Not found');
+    console.log(`✅ Fetched reference from Sanity (locale: ${safeLocale}):`, project ? project.property_title : 'Not found');
     if (project && project.gallery) {
       console.log(`📸 Reference gallery: ${project.gallery.length} images`);
     }

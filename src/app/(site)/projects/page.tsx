@@ -2,10 +2,10 @@ import React from "react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import HeroSub from "@/app/components/shared/hero-sub";
-import { allProjects } from "@/app/data/projects";
+import HeroSub from "@/components/shared/hero-sub";
+import { allProjects } from "@/data/projects";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Our References | POSKA MANOLITO AG",

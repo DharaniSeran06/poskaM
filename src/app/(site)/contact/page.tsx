@@ -1,16 +1,16 @@
 import React from "react";
 import { Metadata } from "next";
-import HeroSub from "@/app/components/shared/hero-sub";
-import ContactInfo from "@/app/components/contact/contact-info";
-import ContactForm from "@/app/components/contact/form";
-import Location from "@/app/components/contact/office-location";
+import HeroSub from "@/components/shared/hero-sub";
+import ContactInfo from "@/components/contact/contact-info";
+import ContactForm from "@/components/contact/form";
+import Location from "@/components/contact/office-location";
 import { getContactPageData } from "@/sanity/lib/contactPage";
 
 export const metadata: Metadata = {
   title: "Contact | POSKA MANOLITO AG",
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 const page = async () => {
   // Fetch contact data from Sanity (default to 'en' locale)

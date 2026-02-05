@@ -4,7 +4,8 @@ import Image from "next/image";
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 
-export const dynamic = 'force-dynamic';
+// Use ISR for instant navigation
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('company.ermondPoshka');

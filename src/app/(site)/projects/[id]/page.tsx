@@ -3,9 +3,17 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { allProjects } from "@/app/data/projects";
+import { allProjects } from "@/data/projects";
 
-export const dynamic = 'force-dynamic';
+// Enable ISR with revalidation for better production performance
+export const revalidate = 60; // Revalidate every 60 seconds
+
+// Generate static params for all projects
+export async function generateStaticParams() {
+  return allProjects.map((project) => ({
+    id: String(project.id),
+  }));
+}
 
 // Explicit type for page props with async params
 type PageProps = {

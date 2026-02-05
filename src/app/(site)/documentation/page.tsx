@@ -1,15 +1,15 @@
 
-import { Configuration } from "@/app/components/documentation/Configuration";
-import { DocNavigation } from "@/app/components/documentation/DocNavigation";
-import { Introduction } from "@/app/components/documentation/Introduction";
-import { PackageStructure } from "@/app/components/documentation/PackageStructure";
-import { QuickStart } from "@/app/components/documentation/QuickStart";
+import { Configuration } from "@/components/documentation/Configuration";
+import { DocNavigation } from "@/components/documentation/DocNavigation";
+import { Introduction } from "@/components/documentation/Introduction";
+import { PackageStructure } from "@/components/documentation/PackageStructure";
+import { QuickStart } from "@/components/documentation/QuickStart";
 import { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Documentation | Property-pro",
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export default function Page() {
     return (

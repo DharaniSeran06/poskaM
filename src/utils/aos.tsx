@@ -1,32 +1,31 @@
 'use client'
-import { useEffect, useState } from "react";
-import dynamic from 'next/dynamic';
+import { useEffect, useRef } from "react";
 
-// Lazy load AOS CSS to reduce initial bundle size
+// AOS wrapper component - loads AOS only once and doesn't re-render children
 const Aoscompo = ({children}:any) => {
-    const [aosLoaded, setAosLoaded] = useState(false);
+    const initialized = useRef(false);
 
     useEffect(() => {
+        // Only initialize AOS once
+        if (initialized.current) return;
+        initialized.current = true;
+        
         // Load AOS only after page is interactive
         if (typeof window !== 'undefined') {
             import('aos').then((AOS) => {
                 import('aos/dist/aos.css');
                 AOS.default.init({
                     duration: 800,
-                    once: false,
-                    offset: 100, // Trigger animations earlier
+                    once: true, // Only animate once for better performance
+                    offset: 100,
                     delay: 0,
+                    disable: 'mobile', // Disable on mobile for instant feel
                 });
-                setAosLoaded(true);
             });
         }
     }, []);
 
-    return (
-        <div>
-            {children}
-        </div>
-    );
+    return <>{children}</>;
 }
 
 export default Aoscompo;

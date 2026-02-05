@@ -1,13 +1,13 @@
 import React from "react";
 import { Metadata } from "next";
 import Image from "next/image";
-import HeroSub from "@/app/components/shared/hero-sub";
+import HeroSub from "@/components/shared/hero-sub";
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; // Always fetch fresh data
+// Enable ISR with revalidation for better production performance
+export const revalidate = 60; // Revalidate every 60 seconds
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -18,12 +18,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // Fetch references from Sanity with language support
 async function getProjects(locale: string) {
+  const safeLocale = locale && ['en', 'de'].includes(locale) ? locale : 'en';
+  
   try {
     // Build language-aware field selections
-    const titleField = locale === 'en' ? 'property_title.en' : `coalesce(property_title.${locale}, property_title.en)`;
-    const locationField = locale === 'en' ? 'location.en' : `coalesce(location.${locale}, location.en)`;
-    const categoryField = locale === 'en' ? 'category.en' : `coalesce(category.${locale}, category.en)`;
-    const worksField = locale === 'en' ? 'works.en' : `coalesce(works.${locale}, works.en)`;
+    const titleField = safeLocale === 'en' ? 'property_title.en' : `coalesce(property_title.${safeLocale}, property_title.en)`;
+    const locationField = safeLocale === 'en' ? 'location.en' : `coalesce(location.${safeLocale}, location.en)`;
+    const categoryField = safeLocale === 'en' ? 'category.en' : `coalesce(category.${safeLocale}, category.en)`;
+    const worksField = safeLocale === 'en' ? 'works.en' : `coalesce(works.${safeLocale}, works.en)`;
     
     const query = `*[
       _type == "project" &&
@@ -43,15 +45,15 @@ async function getProjects(locale: string) {
     }`;
 
     const projects = await client.fetch(query, {}, {
-      cache: 'no-store',
-      next: { revalidate: 0 }
+      cache: 'force-cache',
+      next: { revalidate: 60, tags: ['projects'] }
     });
 
     // Normalize architecturePlanning for backward compatibility
-    const normalizedProjects = projects.map((project: any) => {
+    const normalizedProjects = (projects || []).map((project: any) => {
       if (project.architecturePlanning) {
         const arch = project.architecturePlanning;
-        const localeData = arch[locale] || arch.en;
+        const localeData = arch[safeLocale] || arch.en;
         
         // New format: object with title and url
         if (localeData && typeof localeData === 'object' && 'title' in localeData) {
@@ -68,7 +70,7 @@ async function getProjects(locale: string) {
           };
         }
         // Fallback: try English if current locale doesn't have data
-        else if (locale !== 'en' && arch.en) {
+        else if (safeLocale !== 'en' && arch.en) {
           if (typeof arch.en === 'object' && 'title' in arch.en) {
             project.architecturePlanning = {
               title: arch.en.title || '',
@@ -94,7 +96,7 @@ async function getProjects(locale: string) {
       return project;
     });
 
-    console.log(`✅ Fetched ${normalizedProjects.length} projects from Sanity (locale: ${locale})`);
+    console.log(`✅ Fetched ${normalizedProjects.length} projects from Sanity (locale: ${safeLocale})`);
     return normalizedProjects || [];
   } catch (error) {
     console.error('❌ Error fetching projects from Sanity:', error);

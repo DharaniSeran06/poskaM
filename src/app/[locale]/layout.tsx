@@ -2,13 +2,22 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
-import Header from '../components/layout/header';
-import Footer from '../components/layout/footer';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 import { getFooterData } from '@/sanity/lib/footer';
+import { unstable_cache } from 'next/cache';
 
+// Generate static params for all locales at build time
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
+
+// Cache footer data for 1 hour to prevent refetching on every navigation
+const getCachedFooterData = unstable_cache(
+  async (locale: string) => getFooterData(locale),
+  ['footer-data'],
+  { revalidate: 3600, tags: ['footer'] }
+);
 
 export default async function LocaleLayout({
   children,
@@ -24,12 +33,11 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
-  const messages = await getMessages();
-
-  // Fetch footer data from Sanity
-  const footerData = await getFooterData(locale);
+  // Fetch messages and footer data in parallel for faster loading
+  const [messages, footerData] = await Promise.all([
+    getMessages(),
+    getCachedFooterData(locale)
+  ]);
 
   return (
     <NextIntlClientProvider messages={messages}>

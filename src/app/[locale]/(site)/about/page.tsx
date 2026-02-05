@@ -1,11 +1,12 @@
 import React from "react";
 import { Metadata } from "next";
 import Image from "next/image";
-import HeroSub from "@/app/components/shared/hero-sub";
+import HeroSub from "@/components/shared/hero-sub";
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 
-export const dynamic = 'force-dynamic';
+// Use ISR for instant navigation - pages are pre-rendered and cached
+export const revalidate = 3600; // Revalidate every hour
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

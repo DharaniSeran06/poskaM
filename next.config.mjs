@@ -24,6 +24,17 @@ const nextConfig = {
   },
 
   /**
+   * 🚀 Experimental features for instant navigation
+   */
+  experimental: {
+    // Enable Partial Prerendering for instant page loads (Next.js 15+)
+    // ppr: true, // Uncomment when stable
+    
+    // Optimize package imports for faster client-side navigation
+    optimizePackageImports: ['next-intl', 'next-themes', 'aos'],
+  },
+
+  /**
    * 🖼️ Image configuration (Sanity CDN optimized)
    */
   images: {
@@ -47,19 +58,32 @@ const nextConfig = {
   },
 
   /**
-   * 🔄 Redirects: Old /projects routes to /reference
+   * 🔄 Redirects (currently disabled - routes are at /projects)
+   * Uncomment if you want to redirect /reference to /projects instead
    */
   async redirects() {
     return [
+      // Redirect /reference to /projects (if someone uses old URL)
       {
-        source: '/projects',
-        destination: '/reference',
-        permanent: true,
+        source: '/reference',
+        destination: '/projects',
+        permanent: false,
       },
       {
-        source: '/projects/:path*',
-        destination: '/reference/:path*',
-        permanent: true,
+        source: '/reference/:path*',
+        destination: '/projects/:path*',
+        permanent: false,
+      },
+      // Handle locale-prefixed reference paths
+      {
+        source: '/:locale/reference',
+        destination: '/:locale/projects',
+        permanent: false,
+      },
+      {
+        source: '/:locale/reference/:path*',
+        destination: '/:locale/projects/:path*',
+        permanent: false,
       },
     ];
   },

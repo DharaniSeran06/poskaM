@@ -1,14 +1,14 @@
 import React from "react";
 import { Metadata } from "next";
 import { getTranslations } from 'next-intl/server';
-import HeroSub from "@/app/components/shared/hero-sub";
-import ContactInfo from "@/app/components/contact/contact-info";
-import ContactForm from "@/app/components/contact/form";
-import Location from "@/app/components/contact/office-location";
+import HeroSub from "@/components/shared/hero-sub";
+import ContactInfo from "@/components/contact/contact-info";
+import ContactForm from "@/components/contact/form";
+import Location from "@/components/contact/office-location";
 import { getContactPageData } from "@/sanity/lib/contactPage";
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; // Always fetch fresh data
+// Use ISR for instant navigation - contact data rarely changes
+export const revalidate = 3600; // Revalidate every hour
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;

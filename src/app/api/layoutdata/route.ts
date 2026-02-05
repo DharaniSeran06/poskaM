@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getServicesForMenu } from '@/sanity/lib/services';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; // Always fetch fresh data
+// Cache API response for instant navigation - header data rarely changes
+export const revalidate = 3600; // Cache for 1 hour
 
 /**
  * Build header navigation data with Services from Sanity

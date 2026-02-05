@@ -1,6 +1,6 @@
 
-import BlogCard from "@/app/components/shared/blog/blogCard";
-import HeroSub from "@/app/components/shared/hero-sub";
+import BlogCard from "@/components/shared/blog/blogCard";
+import HeroSub from "@/components/shared/hero-sub";
 import { getAllPosts } from "@/utils/markdown";
 import { Metadata } from "next";
 
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: "Blog | Property-pro",
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 const Blog = () => {
     const posts = getAllPosts(["title", "date", "excerpt", "coverImage", "slug"]);

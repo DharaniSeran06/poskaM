@@ -1,9 +1,9 @@
 import React from "react";
 import { Metadata } from "next";
 import Image from "next/image";
-import HeroSub from "@/app/components/shared/hero-sub";
+import HeroSub from "@/components/shared/hero-sub";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Ermond Poshka - Managing Director | POSKA MANOLITO AG",

@@ -1,13 +1,13 @@
 import React from "react";
 import { Metadata } from "next";
 import Image from "next/image";
-import HeroSub from "@/app/components/shared/hero-sub";
+import HeroSub from "@/components/shared/hero-sub";
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; // Always fetch fresh data
+// Enable ISR with revalidation for better production performance
+export const revalidate = 60; // Revalidate every 60 seconds
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -18,12 +18,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // Fetch services from Sanity with language support
 async function getServices(locale: string) {
+  const safeLocale = locale && ['en', 'de'].includes(locale) ? locale : 'en';
+  
   try {
     // Build language-aware field selections
-    const titleField = locale === 'en' ? 'title.en' : `coalesce(title.${locale}, title.en)`;
-    const shortDescField = locale === 'en' ? 'shortDescription.en' : `coalesce(shortDescription.${locale}, shortDescription.en)`;
-    const descField = locale === 'en' ? 'description.en' : `coalesce(description.${locale}, description.en)`;
-    const categoryField = locale === 'en' ? 'category.en' : `coalesce(category.${locale}, category.en)`;
+    const titleField = safeLocale === 'en' ? 'title.en' : `coalesce(title.${safeLocale}, title.en)`;
+    const shortDescField = safeLocale === 'en' ? 'shortDescription.en' : `coalesce(shortDescription.${safeLocale}, shortDescription.en)`;
+    const descField = safeLocale === 'en' ? 'description.en' : `coalesce(description.${safeLocale}, description.en)`;
+    const categoryField = safeLocale === 'en' ? 'category.en' : `coalesce(category.${safeLocale}, category.en)`;
 
     const query = `*[
       _type == "service" &&
@@ -43,11 +45,11 @@ async function getServices(locale: string) {
     }`;
 
     const services = await client.fetch(query, {}, {
-      cache: 'no-store',
-      next: { revalidate: 0 }
+      cache: 'force-cache',
+      next: { revalidate: 60, tags: ['services'] }
     });
 
-    console.log(`✅ Fetched ${services.length} services from Sanity (locale: ${locale})`);
+    console.log(`✅ Fetched ${(services || []).length} services from Sanity (locale: ${safeLocale})`);
     return services || [];
   } catch (error) {
     console.error('❌ Error fetching services from Sanity:', error);

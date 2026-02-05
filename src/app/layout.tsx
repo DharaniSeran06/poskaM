@@ -12,10 +12,10 @@ const montserrat = Montserrat({
   preload: true, // Preloads font for faster rendering
   fallback: ["system-ui", "arial"], // Fallback fonts
 });
-import NextTopLoader from 'nextjs-toploader';
-import { AppContextProvider } from "../context-api/PropertyContext";
-import ScrollToTop from "./components/scroll-to-top";
-import SessionProviderWrapper from "./provider/SessionProviderWrapper";
+// Removed NextTopLoader - it shows loading indicator during navigation
+import { AppContextProvider } from "@/context/PropertyContext";
+import ScrollToTop from "@/components/scroll-to-top";
+import SessionProviderWrapper from "@/providers/SessionProviderWrapper";
 
 export default function RootLayout({
   children,
@@ -36,9 +36,9 @@ export default function RootLayout({
           attribute="class"
           enableSystem={false}
           defaultTheme="light"
+          disableTransitionOnChange // Prevents flash on theme change
         >
           <Aoscompo>
-            <NextTopLoader />
             {children}
           </Aoscompo>
           <ScrollToTop />

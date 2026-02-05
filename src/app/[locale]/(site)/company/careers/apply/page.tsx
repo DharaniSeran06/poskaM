@@ -1,10 +1,11 @@
 import React from "react";
 import { Metadata } from "next";
 import { getTranslations } from 'next-intl/server';
-import HeroSub from "@/app/components/shared/hero-sub";
-import JobApplicationForm from "@/app/components/job-application/form";
+import HeroSub from "@/components/shared/hero-sub";
+import JobApplicationForm from "@/components/job-application/form";
 
-export const dynamic = 'force-dynamic';
+// Use ISR for instant navigation
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

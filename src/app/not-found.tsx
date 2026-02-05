@@ -1,6 +1,6 @@
 
 import { Metadata } from "next";
-import HeroSub from "./components/shared/hero-sub";
+import HeroSub from "@/components/shared/hero-sub";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "404 Page | Property-pro",
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 const ErrorPage = () => {
   const breadcrumbLinks = [

@@ -1,10 +1,11 @@
-import BlogCard from "@/app/components/shared/blog/blogCard";
-import HeroSub from "@/app/components/shared/hero-sub";
+import BlogCard from "@/components/shared/blog/blogCard";
+import HeroSub from "@/components/shared/hero-sub";
 import { getAllPosts } from "@/utils/markdown";
 import { Metadata } from "next";
 import { getTranslations } from 'next-intl/server';
 
-export const dynamic = 'force-dynamic';
+// Use ISR for instant navigation - blogs are markdown files, rarely change
+export const revalidate = 3600; // Revalidate every hour
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

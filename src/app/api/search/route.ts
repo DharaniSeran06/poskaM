@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { client } from '@/sanity/lib/client';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Search API needs fresh data
+export const revalidate = 60; // Cache for 1 minute
 
 export const GET = async (request: Request) => {
   try {

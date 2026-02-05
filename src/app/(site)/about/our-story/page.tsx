@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import HeroSub from "@/app/components/shared/hero-sub";
+import HeroSub from "@/components/shared/hero-sub";
 
 export default function OurStoryPage() {
   const videoRef = useRef<HTMLDivElement>(null);

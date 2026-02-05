@@ -1,5 +1,5 @@
 
-import { propertyData } from "@/app/types/property/propertyData";
+import { propertyData } from "@/types";
 import { NextResponse } from "next/server";
 
 const property: propertyData[] = [

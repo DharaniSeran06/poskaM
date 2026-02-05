@@ -1,12 +1,12 @@
 import React from 'react';
 import { Metadata } from "next";
-import AdvanceSearch from '@/app/components/property-list/search';
+import AdvanceSearch from '@/components/property-list/search';
 
 export const metadata: Metadata = {
   title: "Properties List",
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 const Page = async ({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) => {
   const resolvedSearchParams = await searchParams;

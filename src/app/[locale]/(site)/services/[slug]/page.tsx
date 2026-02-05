@@ -2,24 +2,83 @@ import React from "react";
 import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import BeforeAfterSlider from "@/app/components/shared/before-after-slider";
-import ServiceGallery from "@/app/components/services/service-gallery";
+import BeforeAfterSlider from "@/components/shared/before-after-slider";
+import ServiceGallery from "@/components/services/service-gallery";
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
+import { routing } from '@/i18n/routing';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; // Always fetch fresh data
+// Enable ISR with revalidation for better production performance
+export const revalidate = 60; // Revalidate every 60 seconds
+
+// Generate static params for all services and locales
+export async function generateStaticParams() {
+  try {
+    const query = `*[
+      _type == "service" &&
+      !(_id in path("drafts.**")) &&
+      defined(slug.current)
+    ] {
+      "slug": slug.current
+    }`;
+
+    const services = await client.fetch(query, {}, {
+      cache: 'force-cache',
+      next: { revalidate: 3600 }
+    });
+
+    // Generate params for all combinations of locale and slug
+    const params: { locale: string; slug: string }[] = [];
+    
+    for (const locale of routing.locales) {
+      // Add Sanity services
+      for (const service of services || []) {
+        if (service?.slug) {
+          params.push({ locale, slug: service.slug });
+        }
+      }
+      // Add legacy service slugs as fallback
+      const legacySlugs = [
+        'plaster-casts',
+        'drywall',
+        'painting',
+        'facades-and-insulation',
+        'customer-masons',
+        'bathroom-kitchen-renovation',
+        'general-demolition-work'
+      ];
+      for (const slug of legacySlugs) {
+        params.push({ locale, slug });
+      }
+    }
+
+    console.log(`✅ Generated ${params.length} static params for services`);
+    return params;
+  } catch (error) {
+    console.error('❌ Error generating static params for services:', error);
+    // Return empty array to allow fallback rendering
+    return [];
+  }
+}
 
 // Fetch service by slug from Sanity with language support
 async function getServiceBySlug(slug: string, locale: string) {
+  // Validate inputs
+  if (!slug || typeof slug !== 'string') {
+    console.warn('⚠️ Invalid slug provided to getServiceBySlug');
+    return null;
+  }
+
+  const safeLocale = locale && ['en', 'de'].includes(locale) ? locale : 'en';
+
   try {
     // Build language-aware field selections
-    const titleField = locale === 'en' ? 'title.en' : `coalesce(title.${locale}, title.en)`;
-    const descField = locale === 'en' ? 'description.en' : `coalesce(description.${locale}, description.en)`;
-    const shortDescField = locale === 'en' ? 'shortDescription.en' : `coalesce(shortDescription.${locale}, shortDescription.en)`;
-    const categoryField = locale === 'en' ? 'category.en' : `coalesce(category.${locale}, category.en)`;
-    const metaDescField = locale === 'en' ? 'metaDescription.en' : `coalesce(metaDescription.${locale}, metaDescription.en)`;
+    const titleField = safeLocale === 'en' ? 'title.en' : `coalesce(title.${safeLocale}, title.en)`;
+    const descField = safeLocale === 'en' ? 'description.en' : `coalesce(description.${safeLocale}, description.en)`;
+    const shortDescField = safeLocale === 'en' ? 'shortDescription.en' : `coalesce(shortDescription.${safeLocale}, shortDescription.en)`;
+    const categoryField = safeLocale === 'en' ? 'category.en' : `coalesce(category.${safeLocale}, category.en)`;
+    const metaDescField = safeLocale === 'en' ? 'metaDescription.en' : `coalesce(metaDescription.${safeLocale}, metaDescription.en)`;
 
     const query = `*[
       _type == "service" &&
@@ -41,12 +100,12 @@ async function getServiceBySlug(slug: string, locale: string) {
     }`;
 
     const service = await client.fetch(query, { slug }, {
-      cache: 'no-store',
-      next: { revalidate: 0 }
+      cache: 'force-cache',
+      next: { revalidate: 60, tags: ['service', `service-${slug}`] }
     });
 
-    console.log(`✅ Fetched service from Sanity (locale: ${locale}):`, service ? service.title : 'Not found');
-    return service;
+    console.log(`✅ Fetched service from Sanity (locale: ${safeLocale}):`, service ? service.title : 'Not found');
+    return service || null;
   } catch (error) {
     console.error('❌ Error fetching service from Sanity:', error);
     return null;

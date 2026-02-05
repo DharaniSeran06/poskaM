@@ -3,9 +3,25 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import BeforeAfterSlider from "@/app/components/shared/before-after-slider";
+import BeforeAfterSlider from "@/components/shared/before-after-slider";
 
-export const dynamic = 'force-dynamic';
+// Enable ISR with revalidation for better production performance
+export const revalidate = 60; // Revalidate every 60 seconds
+
+// Generate static params for all service slugs
+export async function generateStaticParams() {
+  const slugs = [
+    'plaster-casts',
+    'drywall',
+    'painting',
+    'facades-and-insulation',
+    'customer-masons',
+    'bathroom-kitchen-renovation',
+    'general-demolition-work'
+  ];
+  
+  return slugs.map((slug) => ({ slug }));
+}
 
 // Service data mapping
 const servicesData: Record<string, {

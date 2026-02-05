@@ -1,12 +1,12 @@
 import React from "react";
 import { Metadata } from "next";
-import HeroSub from "@/app/components/shared/hero-sub";
+import HeroSub from "@/components/shared/hero-sub";
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; // Always fetch fresh data
+// Use ISR for instant navigation - vacancies update occasionally
+export const revalidate = 1800; // Revalidate every 30 minutes for fresher job listings
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -39,8 +39,7 @@ async function getVacancies(locale: string) {
     }`;
 
     const vacancies = await client.fetch(query, {}, {
-      cache: 'no-store',
-      next: { revalidate: 0 }
+      next: { revalidate: 1800 } // Cache for 30 minutes
     });
 
     console.log(`✅ Vacancies: Fetched ${vacancies.length} vacancies from Sanity (locale: ${locale})`);

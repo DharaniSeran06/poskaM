@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
 
-import CompanyInfo from "@/app/components/home/info"
-import Availability from "@/app/components/property-details/availability"
-import Tabbar from "@/app/components/property-details/tabbar"
-import TextSection from "@/app/components/property-details/text-section"
-import DiscoverProperties from "@/app/components/home/property-option"
+import CompanyInfo from "@/components/home/info"
+import Availability from "@/components/property-details/availability"
+import Tabbar from "@/components/property-details/tabbar"
+import TextSection from "@/components/property-details/text-section"
+import DiscoverProperties from "@/components/home/property-option"
 
 import type { HomeStatsData } from "@/sanity/lib/homeStats"
 
