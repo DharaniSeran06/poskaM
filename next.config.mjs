@@ -114,11 +114,6 @@ const nextConfig = {
   compress: true,
   
   /**
-   * 📦 Bundle optimization
-   */
-  swcMinify: true,
-  
-  /**
    * 🔍 Production source maps (disable for better performance)
    */
   productionBrowserSourceMaps: false,
