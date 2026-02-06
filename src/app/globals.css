@@ -1,62 +1,37 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/**
- * ===========================================
- * CRITICAL: Mobile-First Hydration Safeguards
- * ===========================================
- * 
- * These styles ensure content is ALWAYS visible on first render,
- * especially on mobile Safari and Chrome where JS may be slower.
- * 
- * Priority: Content visibility > Animations
- */
 
-/* Ensure body and html are immediately visible */
 html, body {
     visibility: visible !important;
     opacity: 1 !important;
 }
 
-/* Prevent invisible text during font load */
 * {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-/**
- * AOS Fallback Styles - CRITICAL for mobile first render
- * 
- * These styles ensure content is ALWAYS visible, even if:
- * - AOS JS hasn't loaded yet
- * - AOS is slow to initialize on mobile
- * - JS is disabled
- * 
- * AOS will override these once it initializes properly.
- */
 [data-aos] {
-    /* Visible by default - AOS will handle animation after init */
+   
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
 }
 
-/* Once AOS is initialized, let it take over animations smoothly */
 .aos-init[data-aos] {
     opacity: initial;
     transform: initial;
     transition: transform 0.6s ease-out, opacity 0.6s ease-out;
 }
 
-/* AOS animated state */
 .aos-animate[data-aos] {
     opacity: 1;
     transform: translateZ(0);
 }
 
-/* Reduced motion preference - respect user settings */
 @media (prefers-reduced-motion: reduce) {
     [data-aos],
     .aos-init[data-aos],
@@ -72,24 +47,18 @@ html, body {
     }
 }
 
-/**
- * Mobile-specific hydration fixes
- * Targets iOS Safari and Chrome on Android
- */
+
 @media screen and (max-width: 768px) {
-    /* Ensure content renders immediately on mobile */
     [data-aos] {
         opacity: 1 !important;
         transform: none !important;
     }
     
-    /* Faster/simpler transitions on mobile for better performance */
     .aos-init[data-aos] {
         transition: opacity 0.4s ease-out !important;
         transform: none !important;
     }
     
-    /* Disable complex animations on mobile for better First Contentful Paint */
     .aos-init[data-aos="fade-up"],
     .aos-init[data-aos="fade-down"],
     .aos-init[data-aos="fade-left"],
@@ -105,7 +74,6 @@ html {
     font-family: var(--font-montserrat), 'Montserrat', sans-serif;
 }
 
-/* Smooth page transitions - only apply after hydration */
 @keyframes pageFadeIn {
     from {
         opacity: 0.95;
@@ -118,12 +86,10 @@ html {
 }
 
 main {
-    /* Start visible, subtle animation for polish */
     opacity: 1;
     animation: pageFadeIn 0.3s ease-out;
 }
 
-/* Disable animation on initial load for mobile performance */
 @media (prefers-reduced-motion: reduce) {
     main {
         animation: none;
@@ -139,14 +105,14 @@ main {
 
 .custom-select {
   appearance: none;
-  -webkit-appearance: none; /* for Safari */
-  -moz-appearance: none;    /* for Firefox */
+  -webkit-appearance: none;
+  -moz-appearance: none;    
 
   background-image: url('data:image/svg+xml;utf8,<svg fill="blue" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 1rem;
-  padding-right: 2.5rem; /* space for arrow */
+  padding-right: 2.5rem; 
 }
 
 
@@ -219,17 +185,14 @@ main {
         @apply lg:py-24 py-16;
     }
 
-    /* Default Button CSS Start */
     .btn {
         @apply relative border-0 z-[1] py-3 px-4 text-lg font-normal rounded-lg cursor-pointer no-underline bg-[#016aac] text-white before:content-[''] before:absolute before:-z-[1] after:content-[''] after:absolute after:-z-[1] hover:bg-[#015a94] transition-colors shadow-md
     }
 
-    /* White Button CSS Start */
     .btn_white {
         @apply relative z-[1] py-[0.85rem] px-[2.3rem] text-17 font-normal rounded-[0.3125rem] cursor-pointer no-underline border-transparent border-2 bg-white text-[#016aac] before:content-[''] before:absolute before:-z-[1] after:content-[''] after:absolute after:-z-[1] hover:bg-transparent hover:border-white hover:border-2 hover:text-white transition-all
     }
 
-    /* transparent Button CSS Start */
     .btn_trans {
         @apply relative z-[1] py-[0.8rem] px-[2.3rem] text-17 font-normal rounded-[0.3125rem] cursor-pointer no-underline border-2 border-solid border-white text-white before:content-[''] before:absolute before:-z-[1] after:content-[''] after:absolute after:-z-[1] hover:text-white hover:border-transparent hover:bg-white
     }
@@ -263,7 +226,6 @@ main {
     @apply mb-6 text-2xl font-bold dark:text-white sm:text-[28px] sm:leading-[40px];
 }
 
-/* Dropdown Animation */
 @keyframes fadeInDown {
     from {
         opacity: 0;
@@ -275,7 +237,6 @@ main {
     }
 }
 
-/* Card Zoom Animation */
 @keyframes cardZoom {
     0%, 100% {
         transform: scale(1);
@@ -285,7 +246,6 @@ main {
     }
 }
 
-/* Fade In Animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -295,7 +255,6 @@ main {
     }
 }
 
-/* Slide Up Animation */
 @keyframes slideUp {
     from {
         opacity: 0;
@@ -313,4 +272,195 @@ main {
 
 .dark .custom-input{
     background-color: red;
+} */
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================
+   🔧 MOBILE TOUCH & CLICK FIX (CRITICAL)
+========================= */
+html, body {
+    visibility: visible !important;
+    opacity: 1 !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+* {
+    pointer-events: auto;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* If any loader / overlay exists */
+.loading-overlay,
+.aos-overlay {
+    pointer-events: none !important;
+}
+
+/* =========================
+   🔧 AOS HARD FIX (MOBILE)
+========================= */
+[data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    pointer-events: auto !important;
+}
+
+.aos-init[data-aos],
+.aos-animate[data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    pointer-events: auto !important;
+}
+
+/* =========================
+   REDUCED MOTION SAFETY
+========================= */
+@media (prefers-reduced-motion: reduce) {
+    [data-aos],
+    .aos-init[data-aos],
+    .aos-animate[data-aos],
+    main {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+}
+
+/* =========================
+   MOBILE ONLY AOS FIX
+========================= */
+@media screen and (max-width: 768px) {
+    [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+        pointer-events: auto !important;
+    }
+}
+
+/* =========================
+   BASE STYLES
+========================= */
+html {
+    scroll-behavior: smooth;
+    font-family: var(--font-montserrat), 'Montserrat', sans-serif;
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* =========================
+   PAGE FADE (SAFE)
+========================= */
+@keyframes pageFadeIn {
+    from {
+        opacity: 0.98;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+main {
+    opacity: 1;
+    animation: pageFadeIn 0.25s ease-out;
+    pointer-events: auto;
+}
+
+/* =========================
+   RESET
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================
+   CUSTOM SELECT
+========================= */
+.custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="blue" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+}
+
+/* =========================
+   TAILWIND UTILITIES
+========================= */
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+/* =========================
+   COMPONENTS
+========================= */
+@layer components {
+    body {
+        @apply text-base font-normal font-sans;
+        -webkit-text-size-adjust: 100%;
+        font-family: var(--font-montserrat), 'Montserrat', sans-serif;
+    }
+
+    nav {
+        position: relative;
+        z-index: 9999;
+        pointer-events: auto;
+    }
+
+    section {
+        @apply lg:py-24 py-16;
+        position: relative;
+        z-index: 1;
+        pointer-events: auto;
+    }
+
+    textarea,
+    input,
+    select {
+        @apply block outline-none text-base font-normal m-0 rounded-[0.375rem] w-full;
+    }
+
+    h1 {
+        @apply md:text-[51px] text-[28px] font-bold;
+    }
+
+    h2 {
+        @apply md:text-[40px] text-2xl font-bold;
+    }
+
+    h3 {
+        @apply md:text-[28px] text-lg font-bold;
+    }
+
+    .btn {
+        @apply relative z-[2] py-3 px-4 rounded-lg cursor-pointer bg-[#016aac] text-white hover:bg-[#015a94] transition-colors;
+        pointer-events: auto;
+    }
+}
+
+/* =========================
+   BLOG FIX
+========================= */
+.blog-details * {
+    pointer-events: auto;
 }
