@@ -1,25 +1,41 @@
 import { NextResponse } from "next/server";
-import { client } from '@/sanity/lib/client';
+import { client } from "@/sanity/lib/client";
 
-// Search API needs fresh data
-export const revalidate = 60; // Cache for 1 minute
+// 🔥 REQUIRED: force runtime execution (fixes request.url error)
+export const dynamic = "force-dynamic";
+
+// Optional: cache response for 60 seconds
+export const revalidate = 60;
 
 export const GET = async (request: Request) => {
   try {
     const { searchParams } = new URL(request.url);
-    const query = searchParams.get('q') || '';
-    const locale = searchParams.get('locale') || 'en';
+    const query = searchParams.get("q") || "";
+    const locale = searchParams.get("locale") || "en";
 
     if (!query.trim()) {
       return NextResponse.json({ results: [] });
     }
 
     const results: any[] = [];
+    const searchPattern = `*${query}*`;
 
-    // Search References
-    const titleField = locale === 'en' ? 'property_title.en' : `coalesce(property_title.${locale}, property_title.en)`;
-    const locationField = locale === 'en' ? 'location.en' : `coalesce(location.${locale}, location.en)`;
-    const categoryField = locale === 'en' ? 'category.en' : `coalesce(category.${locale}, category.en)`;
+    /* -------------------- PROJECT SEARCH -------------------- */
+
+    const titleField =
+      locale === "en"
+        ? "property_title.en"
+        : `coalesce(property_title.${locale}, property_title.en)`;
+
+    const locationField =
+      locale === "en"
+        ? "location.en"
+        : `coalesce(location.${locale}, location.en)`;
+
+    const categoryField =
+      locale === "en"
+        ? "category.en"
+        : `coalesce(category.${locale}, category.en)`;
 
     const projectsQuery = `*[
       _type == "project" &&
@@ -44,32 +60,39 @@ export const GET = async (request: Request) => {
       "slug": slug.current
     }`;
 
-    const searchPattern = `*${query}*`;
-    
-    // Type assertion needed because query string uses template literals
-    // which prevents TypeScript from inferring parameter types
     const projects = await client.fetch<any[]>(
       projectsQuery,
       { query: searchPattern } as any
     );
 
-    projects.forEach((project: any) => {
+    projects.forEach((project) => {
       results.push({
-        type: 'project',
+        type: "project",
         id: project._id,
-        title: project.property_title || 'Untitled Reference',
-        description: project.location || project.category || undefined,
+        title: project.property_title || "Untitled Reference",
+        description: project.location || project.category,
         image: project.image,
         slug: project.slug,
         href: `/projects/${project.slug}`,
       });
     });
 
-    // Search Services
-    const serviceTitleField = locale === 'en' ? 'title.en' : `coalesce(title.${locale}, title.en)`;
-    const serviceShortDescField = locale === 'en' ? 'shortDescription.en' : `coalesce(shortDescription.${locale}, shortDescription.en)`;
-    const serviceDescField = locale === 'en' ? 'description.en' : `coalesce(description.${locale}, description.en)`;
-    const serviceCategoryField = locale === 'en' ? 'category.en' : `coalesce(category.${locale}, category.en)`;
+    /* -------------------- SERVICE SEARCH -------------------- */
+
+    const serviceTitleField =
+      locale === "en"
+        ? "title.en"
+        : `coalesce(title.${locale}, title.en)`;
+
+    const serviceShortDescField =
+      locale === "en"
+        ? "shortDescription.en"
+        : `coalesce(shortDescription.${locale}, shortDescription.en)`;
+
+    const serviceDescField =
+      locale === "en"
+        ? "description.en"
+        : `coalesce(description.${locale}, description.en)`;
 
     const servicesQuery = `*[
       _type == "service" &&
@@ -99,25 +122,28 @@ export const GET = async (request: Request) => {
       { query: searchPattern } as any
     );
 
-    services.forEach((service: any) => {
+    services.forEach((service) => {
       results.push({
-        type: 'service',
+        type: "service",
         id: service._id,
-        title: service.title || 'Untitled Service',
-        description: service.shortDescription || service.description?.substring(0, 150),
+        title: service.title || "Untitled Service",
+        description:
+          service.shortDescription ||
+          service.description?.substring(0, 150),
         image: service.thumbnail,
         slug: service.slug,
         href: `/services/${service.slug}`,
       });
     });
 
-    // Search Pages (static pages)
+    /* -------------------- STATIC PAGE SEARCH -------------------- */
+
     const staticPages = [
-      { title: 'Home', href: '/', description: 'Welcome to POSKA MANOLITO AG' },
-      { title: 'About Us', href: '/about', description: 'Learn about our company' },
-      { title: 'References', href: '/projects', description: 'View our completed references' },
-      { title: 'Services', href: '/services', description: 'Explore our services' },
-      { title: 'Contact', href: '/contact', description: 'Get in touch with us' },
+      { title: "Home", href: "/", description: "Welcome to POSKA MANOLITO AG" },
+      { title: "About Us", href: "/about", description: "Learn about our company" },
+      { title: "References", href: "/projects", description: "View our completed references" },
+      { title: "Services", href: "/services", description: "Explore our services" },
+      { title: "Contact", href: "/contact", description: "Get in touch with us" },
     ];
 
     staticPages.forEach((page) => {
@@ -126,7 +152,7 @@ export const GET = async (request: Request) => {
         page.description.toLowerCase().includes(query.toLowerCase())
       ) {
         results.push({
-          type: 'page',
+          type: "page",
           id: page.href,
           title: page.title,
           description: page.description,
@@ -138,7 +164,7 @@ export const GET = async (request: Request) => {
 
     return NextResponse.json({ results });
   } catch (error) {
-    console.error('Search API error:', error);
+    console.error("Search API error:", error);
     return NextResponse.json({ results: [] }, { status: 500 });
   }
 };
