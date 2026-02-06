@@ -2,17 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * AOS Fallback Styles - CRITICAL for mobile first render
+ * 
+ * These styles ensure content is ALWAYS visible, even if:
+ * - AOS JS hasn't loaded yet
+ * - AOS is slow to initialize on mobile
+ * - JS is disabled
+ * 
+ * AOS will override these once it initializes properly.
+ */
+[data-aos] {
+    /* Visible by default - AOS will handle animation after init */
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+/* Once AOS is initialized, let it take over */
+.aos-init[data-aos] {
+    opacity: initial;
+    transform: initial;
+    transition: transform 0.8s ease, opacity 0.8s ease;
+}
+
+/* Reduced motion preference - respect user settings */
+@media (prefers-reduced-motion: reduce) {
+    [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
 
 html {
     scroll-behavior: smooth;
     font-family: var(--font-montserrat), 'Montserrat', sans-serif;
 }
 
-/* Smooth page transitions */
+/* Smooth page transitions - only apply after hydration */
 @keyframes pageFadeIn {
     from {
-        opacity: 0;
-        transform: translateY(20px);
+        opacity: 0.95;
+        transform: translateY(8px);
     }
     to {
         opacity: 1;
@@ -21,7 +53,16 @@ html {
 }
 
 main {
-    animation: pageFadeIn 0.4s ease-out;
+    /* Start visible, subtle animation for polish */
+    opacity: 1;
+    animation: pageFadeIn 0.3s ease-out;
+}
+
+/* Disable animation on initial load for mobile performance */
+@media (prefers-reduced-motion: reduce) {
+    main {
+        animation: none;
+    }
 }
 
 * {

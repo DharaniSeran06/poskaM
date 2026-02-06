@@ -1,13 +1,17 @@
 "use client";
-import dynamic from 'next/dynamic';
-import React from 'react';
+import { SessionProvider } from "next-auth/react";
+import React from "react";
 
-// Dynamically import SessionProviderComp with ssr: false to prevent SSR issues
-const SessionProviderComp = dynamic(
-  () => import('./SessionProviderComp'),
-  { ssr: false }
-);
-
+/**
+ * SessionProviderWrapper - Client-side session provider
+ * 
+ * IMPORTANT: Do NOT use dynamic import with ssr: false here!
+ * That causes blank screen on mobile because children don't render
+ * until JS loads completely.
+ * 
+ * SessionProvider from next-auth/react is designed to work with SSR.
+ * It gracefully handles the case when session is undefined during SSR.
+ */
 export default function SessionProviderWrapper({
   children,
   session,
@@ -16,8 +20,13 @@ export default function SessionProviderWrapper({
   session: any;
 }) {
   return (
-    <SessionProviderComp session={session}>
+    <SessionProvider 
+      session={session || undefined}
+      basePath="/api/auth"
+      refetchInterval={0}
+      refetchOnWindowFocus={false}
+    >
       {children}
-    </SessionProviderComp>
+    </SessionProvider>
   );
 }

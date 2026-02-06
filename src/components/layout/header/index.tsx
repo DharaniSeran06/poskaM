@@ -68,20 +68,38 @@ const Header: React.FC = () => {
   }, [navbarOpen, isSignInOpen, isSignUpOpen]);
 
   useEffect(() => {
+    // SSR guard - only access window/localStorage on client
+    if (typeof window === 'undefined') return;
+    
     window.addEventListener("scroll", handleScroll);
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (e) {
+      // localStorage may not be available
     }
+    
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [pathUrl]);
 
   useEffect(() => {
-    // Check if data is already cached in sessionStorage
+    // SSR guard - only access sessionStorage on client
+    if (typeof window === 'undefined') return;
+    
     const cacheKey = `header-data-${locale}`;
-    const cachedData = sessionStorage.getItem(cacheKey);
+    
+    // Try to get cached data with error handling
+    let cachedData: string | null = null;
+    try {
+      cachedData = sessionStorage.getItem(cacheKey);
+    } catch (e) {
+      // sessionStorage may not be available
+    }
     
     if (cachedData) {
       try {
@@ -106,7 +124,11 @@ const Header: React.FC = () => {
         const data = await res.json()
         
         // Cache raw data in sessionStorage for instant access on navigation
-        sessionStorage.setItem(cacheKey, JSON.stringify(data?.headerData || []));
+        try {
+          sessionStorage.setItem(cacheKey, JSON.stringify(data?.headerData || []));
+        } catch (e) {
+          // sessionStorage may be full or unavailable
+        }
         
         const translatedData = translateHeaderData(data?.headerData || [], t);
         setData(translatedData)
@@ -137,7 +159,11 @@ const Header: React.FC = () => {
   }
 
   const handleSignOut = () => {
-    localStorage.removeItem("user");
+    try {
+      localStorage.removeItem("user");
+    } catch (e) {
+      // localStorage may not be available
+    }
     signOut();
     setUser(null);
   };

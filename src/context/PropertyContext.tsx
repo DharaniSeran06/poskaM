@@ -86,9 +86,18 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   /* -------- FETCH ALL PROJECTS (LATEST ONLY) -------- */
 
   useEffect(() => {
-    // Check if we have cached data in sessionStorage
+    // SSR guard - only access sessionStorage on client
+    if (typeof window === 'undefined') return;
+
     const cacheKey = 'sanity-projects-cache';
-    const cachedData = sessionStorage.getItem(cacheKey);
+    
+    // Try to get cached data
+    let cachedData: string | null = null;
+    try {
+      cachedData = sessionStorage.getItem(cacheKey);
+    } catch (e) {
+      // sessionStorage may not be available in some contexts
+    }
     
     if (cachedData) {
       try {
@@ -122,8 +131,12 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
 
         const data: propertyData[] = await client.fetch(query);
         
-        // Cache the data
-        sessionStorage.setItem(cacheKey, JSON.stringify(data));
+        // Cache the data (with error handling)
+        try {
+          sessionStorage.setItem(cacheKey, JSON.stringify(data));
+        } catch (e) {
+          // sessionStorage may be full or unavailable
+        }
         
         setAllProperties(data);
         setProperties(data);
