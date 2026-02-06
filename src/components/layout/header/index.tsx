@@ -1,8 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useTheme } from "next-themes";
-import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useTranslations, useLocale } from 'next-intl';
 import { Link, useRouter } from '@/i18n/routing';
@@ -13,7 +12,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 
 // Default navigation data for immediate render (prevents blank header on mobile)
 const DEFAULT_NAV_DATA = [
-  { label: 'Homes', url: '/' },
+  { label: 'Home', url: '/' },
   { label: 'Services', url: '/services' },
   { label: 'Projects', url: '/projects' },
   { label: 'Company', url: '/about', submenu: [
@@ -26,13 +25,20 @@ const DEFAULT_NAV_DATA = [
 const Header: React.FC = () => {
   const pathUrl = usePathname();
   const router = useRouter();
-  const { data: session } = useSession();
   const { theme, setTheme } = useTheme();
   const t = useTranslations('navbar');
   const locale = useLocale();
   
-  // Handle case where session might not be available
-  const sessionData = session || null;
+  // Track mounted state to prevent hydration mismatches
+  const [mounted, setMounted] = useState(false);
+  
+  // Session state - loaded dynamically to avoid next-auth URL errors when not configured
+  const [session, setSession] = useState<any>(null);
+  
+  // Mark component as mounted (client-side only)
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Helper function to translate header data - defined before useState to use in initial state
   const translateHeaderData = (headerData: any[], translator: typeof t) => {
@@ -64,6 +70,17 @@ const Header: React.FC = () => {
   const signInRef = useRef<HTMLDivElement>(null);
   const signUpRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+
+  // Memoized close function for mobile navbar
+  const closeMobileNav = useCallback(() => {
+    setNavbarOpen(false);
+  }, []);
+
+  // Auto-close mobile navbar on route change
+  useEffect(() => {
+    // Close navbar when path changes (user navigated)
+    setNavbarOpen(false);
+  }, [pathUrl]);
 
   // Company contact info
   const PHONE_NUMBER = "+41 52 347 25 40";
@@ -171,13 +188,18 @@ const Header: React.FC = () => {
     fetchData()
   }, [locale, t]) // Refetch when locale or translations change
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
     try {
       localStorage.removeItem("user");
     } catch (e) {
       // localStorage may not be available
     }
-    signOut();
+    try {
+      const { signOut } = await import("next-auth/react");
+      signOut();
+    } catch (e) {
+      // NextAuth not configured
+    }
     setUser(null);
   };
 
@@ -421,7 +443,7 @@ const Header: React.FC = () => {
         
         <nav className="flex flex-col items-start p-4">
           {data.map((item:any, index:any) => (
-            <MobileHeaderLink key={index} item={item} />
+            <MobileHeaderLink key={index} item={item} onNavigate={closeMobileNav} />
           ))}
           <div className="mt-4 w-full">
             <Link

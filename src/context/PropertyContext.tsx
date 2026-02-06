@@ -10,7 +10,16 @@ import React, {
   Dispatch,
   SetStateAction,
 } from 'react';
-import { client } from '@/sanity/lib/client';
+
+// Lazy import sanity client to avoid SSR issues
+let sanityClient: any = null;
+const getClient = async () => {
+  if (!sanityClient) {
+    const { client } = await import('@/sanity/lib/client');
+    sanityClient = client;
+  }
+  return sanityClient;
+};
 
 /* ---------------- FILTER TYPES ---------------- */
 
@@ -112,6 +121,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
 
     const fetchProjects = async () => {
       try {
+        const client = await getClient();
         const query = `*[
           _type == "project" &&
           !(_id in path("drafts.**")) &&
@@ -161,6 +171,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
       }
 
       try {
+        const client = await getClient();
         const filterStr = buildSanityFilters(filters);
 
         const query = `*[

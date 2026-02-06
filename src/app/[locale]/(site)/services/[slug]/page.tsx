@@ -2,11 +2,11 @@ import { unstable_noStore as noStore } from 'next/cache';
 import React from "react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import BeforeAfterSlider from "@/components/shared/before-after-slider";
-import ServiceGallery from "@/components/services/service-gallery";
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { client } from '@/sanity/lib/client';
+import ServiceGallery from "@/components/services/service-gallery";
+import { ServiceBeforeAfter } from "@/components/services/ServiceDetailClient";
 
 // ===========================================
 // ROUTE SEGMENT CONFIG
@@ -293,23 +293,14 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
               {/* Before/After Slider */}
               {activeService.beforeImage && activeService.afterImage && (
-                <div className="my-16" data-aos="fade-up" data-aos-delay="100">
-                  <div className="text-center mb-8">
-                    <h2 className="text-2xl md:text-3xl font-bold text-midnight_text dark:text-white mb-2">
-                      {t('transformationShowcase') || 'Transformation Showcase'}
-                    </h2>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      {t('transformationDescription') || 'See the before and after'}
-                    </p>
-                  </div>
-                  <BeforeAfterSlider
-                    beforeImage={activeService.beforeImage}
-                    afterImage={activeService.afterImage}
-                    beforeLabel={t('before') || 'Before'}
-                    afterLabel={t('after') || 'After'}
-                    className="w-full"
-                  />
-                </div>
+                <ServiceBeforeAfter
+                  beforeImage={activeService.beforeImage}
+                  afterImage={activeService.afterImage}
+                  beforeLabel={t('before') || 'Before'}
+                  afterLabel={t('after') || 'After'}
+                  title={t('transformationShowcase') || 'Transformation Showcase'}
+                  description={t('transformationDescription') || 'See the before and after'}
+                />
               )}
 
               {/* CTA Button */}

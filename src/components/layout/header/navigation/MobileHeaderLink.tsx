@@ -1,10 +1,15 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { HeaderItem } from '@/types';
-import { usePathname, useRouter } from 'next/navigation';
-import { Link } from '@/i18n/routing';
+import { usePathname } from 'next/navigation';
+import { Link, useRouter } from '@/i18n/routing';
 
-const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
+interface MobileHeaderLinkProps {
+  item: HeaderItem;
+  onNavigate?: () => void; // Callback to close parent navbar
+}
+
+const MobileHeaderLink: React.FC<MobileHeaderLinkProps> = ({ item, onNavigate }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -53,24 +58,33 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
     }
   };
 
-  // Navigate to link
-  const handleNav = () => {
+  // Navigate to link and close mobile navbar
+  const handleNav = useCallback(() => {
     if (item.href && item.href !== "#") {
+      onNavigate?.(); // Close mobile navbar first
       router.push(item.href);
     }
-  };
+  }, [item.href, onNavigate, router]);
 
   // Handle main button click
-  const handleMainClick = (e: React.MouseEvent) => {
+  const handleMainClick = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
     if (item.submenu && item.submenu.length > 0) {
-      e.preventDefault();
       if (!submenuOpen) {
         setSubmenuOpen(true);
       }
     } else {
       handleNav();
     }
-  };
+  }, [item.submenu, submenuOpen, handleNav]);
+  
+  // Handle submenu link click - close both dropdown and navbar
+  const handleSubmenuClick = useCallback(() => {
+    closeDropdown();
+    onNavigate?.();
+  }, [closeDropdown, onNavigate]);
 
   const isActive = path === item.href || path.startsWith(`/${item.label.toLowerCase()}`);
 
@@ -80,10 +94,7 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
       <div className="flex items-center w-full gap-1" style={{ pointerEvents: 'auto' }}>
         <button
           onClick={handleMainClick}
-          onTouchEnd={(e) => { 
-            e.preventDefault(); 
-            handleMainClick(e as unknown as React.MouseEvent); 
-          }}
+          onTouchEnd={handleMainClick}
           className={`
             flex-1 flex items-center py-3.5 px-5 rounded-xl
             text-left font-medium text-[15px] tracking-tight
@@ -103,9 +114,10 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
         {item.submenu && item.submenu.length > 0 && (
           <button
             onClick={handleToggle}
-            onTouchEnd={(e) => { 
-              e.preventDefault(); 
-              handleToggle(e as unknown as React.MouseEvent); 
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleToggle(e as unknown as React.MouseEvent);
             }}
             className={`
               p-3 rounded-xl
@@ -159,7 +171,7 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
                 <Link 
                   key={index} 
                   href={subItem.href}
-                  onClick={() => closeDropdown()}
+                  onClick={handleSubmenuClick}
                   className={`
                     group flex items-center justify-between
                     py-3.5 px-4 mx-1 my-0.5
