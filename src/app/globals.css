@@ -280,44 +280,113 @@ main {
 @tailwind utilities;
 
 /* =========================
-   🔧 MOBILE TOUCH & CLICK FIX (CRITICAL)
+   🔧 CRITICAL: MOBILE TOUCH & CLICK FIX
+   Fixes navbar links not responding on first load
 ========================= */
 html, body {
     visibility: visible !important;
     opacity: 1 !important;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
 }
 
-* {
-    pointer-events: auto;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+/* =========================
+   🔧 HEADER/NAVBAR - HIGHEST PRIORITY
+   Must be clickable immediately on mobile
+========================= */
+header,
+header *,
+nav,
+nav *,
+[role="navigation"],
+[role="navigation"] * {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* If any loader / overlay exists */
+/* Ensure header is always on top and interactive */
+header {
+    z-index: 9999 !important;
+    position: fixed !important;
+}
+
+/* =========================
+   🔧 LINKS & BUTTONS - ALWAYS INTERACTIVE  
+========================= */
+a, button, [role="button"], 
+input[type="submit"], input[type="button"],
+.btn, [class*="btn"] {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+}
+
+/* =========================
+   🔧 REMOVE INVISIBLE OVERLAYS
+   Common culprits for blocking clicks
+========================= */
 .loading-overlay,
-.aos-overlay {
+.aos-overlay,
+[class*="overlay"]:empty,
+[class*="backdrop"]:not(.visible) {
+    pointer-events: none !important;
+}
+
+/* Ensure absolute/fixed positioned elements with inset-0 don't block unless visible */
+.absolute.inset-0:not(:has(*)),
+.fixed.inset-0:not(:has(*)) {
     pointer-events: none !important;
 }
 
 /* =========================
-   🔧 AOS HARD FIX (MOBILE)
+   🔧 AOS - MOBILE HARD FIX
+   Disable all AOS effects on mobile to prevent interaction issues
 ========================= */
-[data-aos] {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-    pointer-events: auto !important;
+@media screen and (max-width: 768px) {
+    [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+    }
+    
+    .aos-init[data-aos],
+    .aos-animate[data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+        pointer-events: auto !important;
+    }
+    
+    /* Remove any AOS-generated invisible elements */
+    [data-aos]::before,
+    [data-aos]::after {
+        display: none !important;
+    }
 }
 
-.aos-init[data-aos],
-.aos-animate[data-aos] {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-    pointer-events: auto !important;
+/* Desktop: Allow AOS animations */
+@media screen and (min-width: 769px) {
+    [data-aos] {
+        pointer-events: auto !important;
+    }
+    
+    .aos-init[data-aos] {
+        opacity: initial;
+        transform: initial;
+        transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+        pointer-events: auto !important;
+    }
+    
+    .aos-animate[data-aos] {
+        opacity: 1;
+        transform: translateZ(0);
+        pointer-events: auto !important;
+    }
 }
 
 /* =========================
@@ -331,17 +400,6 @@ html, body {
         animation: none !important;
         transition: none !important;
         transform: none !important;
-    }
-}
-
-/* =========================
-   MOBILE ONLY AOS FIX
-========================= */
-@media screen and (max-width: 768px) {
-    [data-aos] {
-        opacity: 1 !important;
-        transform: none !important;
-        pointer-events: auto !important;
     }
 }
 

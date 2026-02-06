@@ -200,9 +200,9 @@ const ServiceGallery: React.FC<ServiceGalleryProps> = ({
                     loading={isActive ? 'eager' : 'lazy'}
                   />
                   
-                  {/* Subtle overlay on inactive cards */}
+                  {/* Subtle overlay on inactive cards - pointer-events-none to not block interactions */}
                   {!isActive && (
-                    <div className="absolute inset-0 bg-black/10"></div>
+                    <div className="absolute inset-0 bg-black/10 pointer-events-none"></div>
                   )}
                 </motion.div>
               </motion.div>

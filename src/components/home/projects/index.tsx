@@ -92,7 +92,7 @@ export default async function Projects({ locale }: { locale: string }) {
                       <span className="text-gray-400 dark:text-gray-500">No Image</span>
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                   {project.category && (
                     <div className="absolute top-4 left-4">
                       <span className="bg-[#016aac] text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md">

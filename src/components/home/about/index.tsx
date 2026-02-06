@@ -16,7 +16,7 @@ export default function About() {
             data-aos="fade-right"
           >
             <div className="relative">
-              <div className="absolute inset-0 bg-[#016aac]/10 rounded-2xl transform rotate-3"></div>
+              <div className="absolute inset-0 bg-[#016aac]/10 rounded-2xl transform rotate-3 pointer-events-none"></div>
               <div className="relative bg-white dark:bg-darklight rounded-2xl p-8 shadow-xl overflow-hidden">
                 <div className="aspect-[4/3] relative rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
                   <Image

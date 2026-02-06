@@ -62,7 +62,7 @@ export default function ServiceCard({ service, index, learnMoreText }: ServiceCa
             <span className="text-gray-400 dark:text-gray-500">No Image</span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#016aac]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#016aac]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
       </div>
       
       <div className="p-8 relative z-10">

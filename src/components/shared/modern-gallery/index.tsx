@@ -62,7 +62,7 @@ const ModernGallery: React.FC<ModernGalleryProps> = ({
               />
               
               {/* Hover Overlay - semi-transparent */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300"></div>
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 pointer-events-none"></div>
               
               {/* Title at bottom-left - always visible with gradient background */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 md:p-5 lg:p-6">

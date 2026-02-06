@@ -16,18 +16,19 @@ const Hero = () => {
   const t = useTranslations('home.hero');
   
   return (
-    <section className="relative pt-24 pb-20 lg:pt-32 lg:pb-32 overflow-hidden">
+    <section className="relative pt-24 pb-20 lg:pt-32 lg:pb-32 overflow-hidden" style={{ zIndex: 1 }}>
       {/* Background Image - absolute path required for locale routing */}
-      <div className="absolute inset-0 z-0">
+      {/* CRITICAL: pointer-events-none prevents this layer from blocking header clicks */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={HERO_BG_IMAGE}
           alt="Construction Services"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover pointer-events-none"
           loading="eager"
         />
-        {/* Subtle blue overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#016aac]/80 via-[#016aac]/70 to-[#016aac]/80"></div>
+        {/* Subtle blue overlay for text readability - also non-interactive */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#016aac]/80 via-[#016aac]/70 to-[#016aac]/80 pointer-events-none"></div>
       </div>
 
       <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md relative z-10 px-4 text-white">
@@ -93,7 +94,7 @@ const Hero = () => {
           
           <div className="lg:block hidden col-span-12 lg:col-span-5" data-aos="fade-left">
             <div className="relative">
-              <div className="absolute inset-0 bg-white/20 rounded-2xl transform rotate-6 backdrop-blur-sm"></div>
+              <div className="absolute inset-0 bg-white/20 rounded-2xl transform rotate-6 backdrop-blur-sm pointer-events-none"></div>
               <div className="relative bg-white/95 dark:bg-darklight/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl">
                 <div className="aspect-square relative rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
                   {/* Card image - absolute path required for locale routing */}

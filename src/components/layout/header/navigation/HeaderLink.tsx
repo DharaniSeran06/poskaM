@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { HeaderItem } from '@/types';
 import { usePathname } from 'next/navigation';
 import { Link } from '@/i18n/routing';
@@ -10,35 +10,39 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const path = usePathname();
 
-  // Handle click outside to close dropdown
+  // Memoize the close handler to prevent stale closures
+  const closeDropdown = useCallback(() => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setSubmenuOpen(false);
+      setIsClosing(false);
+    }, 180);
+  }, []);
+
+  // Handle click/touch outside to close dropdown
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         closeDropdown();
       }
     };
 
     if (submenuOpen) {
+      // Small delay to prevent immediate close on the same touch
       const timer = setTimeout(() => {
+        // Add both mouse and touch events for cross-device support
         document.addEventListener('mousedown', handleClickOutside);
-      }, 10);
+        document.addEventListener('touchstart', handleClickOutside, { passive: true });
+      }, 50);
       return () => {
         clearTimeout(timer);
         document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('touchstart', handleClickOutside);
       };
     }
-  }, [submenuOpen]);
+  }, [submenuOpen, closeDropdown]);
 
-  // Close dropdown with animation
-  const closeDropdown = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setSubmenuOpen(false);
-      setIsClosing(false);
-    }, 180);
-  };
-
-  // Toggle dropdown on click
+  // Toggle dropdown on click/touch
   const handleToggleDropdown = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -62,11 +66,12 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
   const isActive = path === item.href || path.startsWith(`/${item.label.toLowerCase()}`);
 
   return (
-    <div ref={dropdownRef} className={`${item.submenu ? "relative" : ""}`}>
+    <div ref={dropdownRef} className={`${item.submenu ? "relative" : ""}`} style={{ pointerEvents: 'auto' }}>
       {/* Main Link/Label */}
       {item.href === "#" || !item.href ? (
         <button
           onClick={handleToggleDropdown}
+          onTouchEnd={(e) => { e.preventDefault(); handleToggleDropdown(e as unknown as React.MouseEvent); }}
           className={`
             text-base flex items-center gap-1.5 py-3 font-medium
             text-midnight_text hover:text-[#016aac] 
@@ -74,6 +79,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
             cursor-pointer transition-all duration-300
             ${isActive ? "!text-[#016aac]" : ""}
           `}
+          style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
         >
           <span>{item.label}</span>
           {item.submenu && (
@@ -89,7 +95,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
           )}
         </button>
       ) : (
-        <div className="flex items-center">
+        <div className="flex items-center" style={{ pointerEvents: 'auto' }}>
           <Link 
             href={item.href} 
             onClick={handleLinkClick}
@@ -101,12 +107,14 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
               ${isActive ? '!text-[#016aac]' : ''}
               ${item.submenu ? 'cursor-pointer' : ''}
             `}
+            style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
           >
             <span>{item.label}</span>
           </Link>
           {item.submenu && (
             <button
               onClick={handleToggleDropdown}
+              onTouchEnd={(e) => { e.preventDefault(); handleToggleDropdown(e as unknown as React.MouseEvent); }}
               className={`
                 p-1 ml-0.5 rounded-md
                 text-midnight_text hover:text-[#016aac]
@@ -114,6 +122,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
                 transition-all duration-300 cursor-pointer
                 ${isActive ? '!text-[#016aac]' : ''}
               `}
+              style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
               aria-label="Toggle dropdown"
             >
               <svg 
@@ -145,6 +154,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
           `}
           style={{
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 12px 24px -8px rgba(1, 106, 172, 0.1)',
+            pointerEvents: 'auto',
           }}
         >
           {/* Subtle top accent */}
@@ -171,6 +181,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
                       : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-[#016aac] dark:hover:text-[#3b9edd]'
                     }
                   `}
+                  style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
                 >
                   <span>{subItem.label}</span>
                   

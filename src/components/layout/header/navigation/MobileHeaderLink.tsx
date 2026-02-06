@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { HeaderItem } from '@/types';
 import { usePathname, useRouter } from 'next/navigation';
 import { Link } from '@/i18n/routing';
@@ -11,33 +11,36 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
   const router = useRouter();
   const path = usePathname();
 
-  // Handle click outside to close dropdown
+  // Memoize the close handler
+  const closeDropdown = useCallback(() => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setSubmenuOpen(false);
+      setIsClosing(false);
+    }, 180);
+  }, []);
+
+  // Handle click/touch outside to close dropdown
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         closeDropdown();
       }
     };
 
     if (submenuOpen) {
+      // Slightly longer delay for mobile to prevent immediate close
       const timer = setTimeout(() => {
         document.addEventListener('mousedown', handleClickOutside);
-      }, 10);
+        document.addEventListener('touchstart', handleClickOutside, { passive: true });
+      }, 100);
       return () => {
         clearTimeout(timer);
         document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('touchstart', handleClickOutside);
       };
     }
-  }, [submenuOpen]);
-
-  // Close dropdown with animation
-  const closeDropdown = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setSubmenuOpen(false);
-      setIsClosing(false);
-    }, 180);
-  };
+  }, [submenuOpen, closeDropdown]);
 
   // Toggle dropdown
   const handleToggle = (e: React.MouseEvent) => {
@@ -72,21 +75,26 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
   const isActive = path === item.href || path.startsWith(`/${item.label.toLowerCase()}`);
 
   return (
-    <div ref={dropdownRef} className="relative w-full mb-1.5">
+    <div ref={dropdownRef} className="relative w-full mb-1.5" style={{ pointerEvents: 'auto' }}>
       {/* Main Button */}
-      <div className="flex items-center w-full gap-1">
+      <div className="flex items-center w-full gap-1" style={{ pointerEvents: 'auto' }}>
         <button
           onClick={handleMainClick}
+          onTouchEnd={(e) => { 
+            e.preventDefault(); 
+            handleMainClick(e as unknown as React.MouseEvent); 
+          }}
           className={`
             flex-1 flex items-center py-3.5 px-5 rounded-xl
             text-left font-medium text-[15px] tracking-tight
             transition-all duration-250 ease-out
-            cursor-pointer
+            cursor-pointer active:scale-[0.98]
             ${isActive 
               ? 'bg-[#016aac] text-white' 
               : 'text-slate-700 dark:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-slate-800/50 hover:text-[#016aac] dark:hover:text-[#3b9edd]'
             }
           `}
+          style={{ touchAction: 'manipulation', pointerEvents: 'auto', WebkitTapHighlightColor: 'transparent' }}
         >
           <span>{item.label}</span>
         </button>
@@ -95,15 +103,20 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
         {item.submenu && item.submenu.length > 0 && (
           <button
             onClick={handleToggle}
+            onTouchEnd={(e) => { 
+              e.preventDefault(); 
+              handleToggle(e as unknown as React.MouseEvent); 
+            }}
             className={`
               p-3 rounded-xl
               transition-all duration-250 ease-out
-              cursor-pointer
+              cursor-pointer active:scale-[0.98]
               ${isActive 
                 ? 'bg-[#016aac] text-white' 
                 : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/50 hover:text-[#016aac]'
               }
             `}
+            style={{ touchAction: 'manipulation', pointerEvents: 'auto', WebkitTapHighlightColor: 'transparent' }}
             aria-label="Toggle submenu"
           >
             <svg 
@@ -160,6 +173,7 @@ const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
                       : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-[#016aac] dark:hover:text-[#3b9edd]'
                     }
                   `}
+                  style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
                 >
                   <span>{subItem.label}</span>
                   

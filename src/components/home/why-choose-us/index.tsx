@@ -82,9 +82,9 @@ export default function WhyChooseUs() {
                 className="object-cover"
                 unoptimized
               />
-              {/* White vertical lines overlay pattern */}
+              {/* White vertical lines overlay pattern - decorative only */}
               <div 
-                className="absolute inset-0 opacity-20"
+                className="absolute inset-0 opacity-20 pointer-events-none"
                 style={{
                   backgroundImage: `repeating-linear-gradient(
                     90deg,
@@ -95,8 +95,8 @@ export default function WhyChooseUs() {
                   )`,
                 }}
               />
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#016aac]/20 via-transparent to-transparent"></div>
+              {/* Gradient overlay - decorative only */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#016aac]/20 via-transparent to-transparent pointer-events-none"></div>
             </div>
 
             {/* Featured Project Card */}

@@ -13,7 +13,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 
 // Default navigation data for immediate render (prevents blank header on mobile)
 const DEFAULT_NAV_DATA = [
-  { label: 'Home', url: '/' },
+  { label: 'Homes', url: '/' },
   { label: 'Services', url: '/services' },
   { label: 'Projects', url: '/projects' },
   { label: 'Company', url: '/about', submenu: [
@@ -183,7 +183,12 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`fixed top-0 z-50 w-full transition-all ${sticky ? "shadow-lg dark:shadow-darkmd bg-white dark:bg-semidark" : "bg-white dark:bg-semidark"}`}
+      className={`fixed top-0 z-[9999] w-full transition-all ${sticky ? "shadow-lg dark:shadow-darkmd bg-white dark:bg-semidark" : "bg-white dark:bg-semidark"}`}
+      style={{ 
+        pointerEvents: 'auto',
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent'
+      }}
     >
       {/* Top Contact Bar - Desktop */}
       <div className="bg-[#016aac] text-white py-2 hidden lg:block">
@@ -246,9 +251,9 @@ const Header: React.FC = () => {
       </div>
       
       {/* Main Navigation */}
-      <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md flex items-center justify-between px-4 py-3">
+      <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md flex items-center justify-between px-4 py-3 relative z-[10]">
         <Logo />
-        <nav className="hidden lg:flex flex-grow items-center justify-center space-x-8">
+        <nav className="hidden lg:flex flex-grow items-center justify-center space-x-8" style={{ pointerEvents: 'auto' }}>
           {data.map((item:any, index:any) => (
             <HeaderLink key={index} item={item} />
           ))}

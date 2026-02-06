@@ -10,11 +10,12 @@ import 'aos/dist/aos.css';
  * - Children render IMMEDIATELY without waiting for AOS
  * - AOS animations are progressive enhancement only
  * - CSS is loaded synchronously to prevent layout shifts
+ * - DISABLED ON MOBILE to prevent touch/click blocking issues
  * 
  * This ensures:
  * 1. Content is ALWAYS visible on first render (no blank screen)
- * 2. Animations enhance the experience after hydration
- * 3. Mobile devices show content immediately even with slower JS
+ * 2. Animations enhance the experience after hydration (desktop only)
+ * 3. Mobile devices have instant interactivity without AOS interference
  * 4. No flash of unstyled content (FOUC)
  */
 const Aoscompo = ({children}: {children: React.ReactNode}) => {
@@ -25,46 +26,55 @@ const Aoscompo = ({children}: {children: React.ReactNode}) => {
         if (initialized.current) return;
         initialized.current = true;
         
-        // Load AOS JS after page is interactive
+        // Check if we're on mobile - if so, skip AOS entirely to avoid interaction issues
+        const isMobile = window.innerWidth < 768 || 
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            // On mobile, just ensure all AOS elements are visible and interactive
+            document.querySelectorAll('[data-aos]').forEach((el) => {
+                (el as HTMLElement).style.opacity = '1';
+                (el as HTMLElement).style.transform = 'none';
+                (el as HTMLElement).style.pointerEvents = 'auto';
+            });
+            return;
+        }
+        
+        // Desktop: Load AOS JS after page is interactive
         const initAOS = async () => {
             try {
                 const AOS = await import('aos');
                 AOS.default.init({
-                    duration: 600, // Slightly faster for better mobile feel
-                    once: true, // Only animate once for better performance
-                    offset: 30, // Lower offset for better mobile experience
+                    duration: 600,
+                    once: true,
+                    offset: 30,
                     delay: 0,
                     easing: 'ease-out-cubic',
-                    // Don't disable on mobile - use CSS to control visibility
                     anchorPlacement: 'top-bottom',
-                    // Ensure elements are visible before AOS takes over
                     initClassName: 'aos-init',
                     animatedClassName: 'aos-animate',
+                    // CRITICAL: Disable on mobile to prevent interaction issues
+                    disable: 'mobile',
                 });
                 
-                // Refresh AOS after a short delay to catch any dynamically loaded content
+                // Refresh AOS after a short delay
                 setTimeout(() => {
                     AOS.default.refresh();
                 }, 500);
             } catch (error) {
-                // If AOS fails to load, content is still visible via CSS fallback
                 console.warn('AOS failed to load, using CSS fallback');
             }
         };
 
-        // Use requestIdleCallback for non-blocking initialization on mobile
+        // Use requestIdleCallback for non-blocking initialization
         if ('requestIdleCallback' in window) {
-            (window as any).requestIdleCallback(initAOS, { timeout: 500 });
+            (window as any).requestIdleCallback(initAOS, { timeout: 1000 });
         } else {
-            // Fallback: use requestAnimationFrame for smoother initialization
-            requestAnimationFrame(() => {
-                setTimeout(initAOS, 50);
-            });
+            setTimeout(initAOS, 100);
         }
     }, []);
 
     // Always render children immediately - never return null
-    // This ensures content is visible on first paint
     return <>{children}</>;
 }
 
