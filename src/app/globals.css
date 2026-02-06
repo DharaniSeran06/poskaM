@@ -3,6 +3,30 @@
 @tailwind utilities;
 
 /**
+ * ===========================================
+ * CRITICAL: Mobile-First Hydration Safeguards
+ * ===========================================
+ * 
+ * These styles ensure content is ALWAYS visible on first render,
+ * especially on mobile Safari and Chrome where JS may be slower.
+ * 
+ * Priority: Content visibility > Animations
+ */
+
+/* Ensure body and html are immediately visible */
+html, body {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Prevent invisible text during font load */
+* {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/**
  * AOS Fallback Styles - CRITICAL for mobile first render
  * 
  * These styles ensure content is ALWAYS visible, even if:
@@ -19,19 +43,60 @@
     transition: none !important;
 }
 
-/* Once AOS is initialized, let it take over */
+/* Once AOS is initialized, let it take over animations smoothly */
 .aos-init[data-aos] {
     opacity: initial;
     transform: initial;
-    transition: transform 0.8s ease, opacity 0.8s ease;
+    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+/* AOS animated state */
+.aos-animate[data-aos] {
+    opacity: 1;
+    transform: translateZ(0);
 }
 
 /* Reduced motion preference - respect user settings */
 @media (prefers-reduced-motion: reduce) {
-    [data-aos] {
+    [data-aos],
+    .aos-init[data-aos],
+    .aos-animate[data-aos] {
         opacity: 1 !important;
         transform: none !important;
         transition: none !important;
+        animation: none !important;
+    }
+    
+    main {
+        animation: none !important;
+    }
+}
+
+/**
+ * Mobile-specific hydration fixes
+ * Targets iOS Safari and Chrome on Android
+ */
+@media screen and (max-width: 768px) {
+    /* Ensure content renders immediately on mobile */
+    [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    
+    /* Faster/simpler transitions on mobile for better performance */
+    .aos-init[data-aos] {
+        transition: opacity 0.4s ease-out !important;
+        transform: none !important;
+    }
+    
+    /* Disable complex animations on mobile for better First Contentful Paint */
+    .aos-init[data-aos="fade-up"],
+    .aos-init[data-aos="fade-down"],
+    .aos-init[data-aos="fade-left"],
+    .aos-init[data-aos="fade-right"],
+    .aos-init[data-aos="zoom-in"],
+    .aos-init[data-aos="zoom-out"] {
+        transform: none !important;
     }
 }
 

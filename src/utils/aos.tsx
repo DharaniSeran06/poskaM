@@ -1,16 +1,21 @@
 'use client'
 import { useEffect, useRef } from "react";
+// Import AOS CSS synchronously to prevent style flickering
+import 'aos/dist/aos.css';
 
 /**
  * AOS (Animate On Scroll) wrapper component
  * 
- * IMPORTANT: Children render immediately without waiting for AOS.
- * AOS animations are progressive enhancement only.
+ * CRITICAL FOR MOBILE:
+ * - Children render IMMEDIATELY without waiting for AOS
+ * - AOS animations are progressive enhancement only
+ * - CSS is loaded synchronously to prevent layout shifts
  * 
  * This ensures:
  * 1. Content is ALWAYS visible on first render (no blank screen)
  * 2. Animations enhance the experience after hydration
  * 3. Mobile devices show content immediately even with slower JS
+ * 4. No flash of unstyled content (FOUC)
  */
 const Aoscompo = ({children}: {children: React.ReactNode}) => {
     const initialized = useRef(false);
@@ -20,34 +25,41 @@ const Aoscompo = ({children}: {children: React.ReactNode}) => {
         if (initialized.current) return;
         initialized.current = true;
         
-        // Load AOS only after page is interactive
-        // Use requestIdleCallback for better performance on mobile
-        const initAOS = () => {
-            import('aos').then((AOS) => {
-                import('aos/dist/aos.css');
+        // Load AOS JS after page is interactive
+        const initAOS = async () => {
+            try {
+                const AOS = await import('aos');
                 AOS.default.init({
-                    duration: 800,
+                    duration: 600, // Slightly faster for better mobile feel
                     once: true, // Only animate once for better performance
-                    offset: 50, // Reduced offset for better mobile experience
+                    offset: 30, // Lower offset for better mobile experience
                     delay: 0,
-                    // Remove disable: 'mobile' - it can cause visibility issues
-                    // Instead, use reduced animations on mobile via CSS
                     easing: 'ease-out-cubic',
-                    // Start with opacity: 1 so content is visible while AOS loads
-                    startEvent: 'DOMContentLoaded',
+                    // Don't disable on mobile - use CSS to control visibility
+                    anchorPlacement: 'top-bottom',
+                    // Ensure elements are visible before AOS takes over
+                    initClassName: 'aos-init',
+                    animatedClassName: 'aos-animate',
                 });
-            }).catch(() => {
-                // If AOS fails to load, content is still visible
-                // This is just progressive enhancement
-            });
+                
+                // Refresh AOS after a short delay to catch any dynamically loaded content
+                setTimeout(() => {
+                    AOS.default.refresh();
+                }, 500);
+            } catch (error) {
+                // If AOS fails to load, content is still visible via CSS fallback
+                console.warn('AOS failed to load, using CSS fallback');
+            }
         };
 
-        // Delay AOS initialization slightly to prioritize content rendering
+        // Use requestIdleCallback for non-blocking initialization on mobile
         if ('requestIdleCallback' in window) {
-            (window as any).requestIdleCallback(initAOS, { timeout: 1000 });
+            (window as any).requestIdleCallback(initAOS, { timeout: 500 });
         } else {
-            // Fallback for browsers without requestIdleCallback
-            setTimeout(initAOS, 100);
+            // Fallback: use requestAnimationFrame for smoother initialization
+            requestAnimationFrame(() => {
+                setTimeout(initAOS, 50);
+            });
         }
     }, []);
 

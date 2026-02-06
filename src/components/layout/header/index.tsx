@@ -11,6 +11,18 @@ import HeaderLink from "./navigation/HeaderLink";
 import MobileHeaderLink from "./navigation/MobileHeaderLink";
 import LanguageSwitcher from "./LanguageSwitcher";
 
+// Default navigation data for immediate render (prevents blank header on mobile)
+const DEFAULT_NAV_DATA = [
+  { label: 'Home', url: '/' },
+  { label: 'Services', url: '/services' },
+  { label: 'Projects', url: '/projects' },
+  { label: 'Company', url: '/about', submenu: [
+    { label: 'About Us', url: '/about' },
+    { label: 'Vacancies', url: '/vacancies' }
+  ]},
+  { label: 'Contact', url: '/contact' },
+];
+
 const Header: React.FC = () => {
   const pathUrl = usePathname();
   const router = useRouter();
@@ -22,7 +34,26 @@ const Header: React.FC = () => {
   // Handle case where session might not be available
   const sessionData = session || null;
 
-  const [data, setData] = useState<any[]>([]);
+  // Helper function to translate header data - defined before useState to use in initial state
+  const translateHeaderData = (headerData: any[], translator: typeof t) => {
+    return headerData?.map((item: any) => ({
+      ...item,
+      label: item.label === 'Home' ? translator('home') :
+             item.label === 'Services' ? translator('services') :
+             item.label === 'Company' ? translator('company') :
+             item.label === 'References' ? translator('projects') :
+             item.label === 'Projects' ? translator('projects') :
+             item.label === 'Contact' ? translator('contact') : item.label,
+      submenu: item.submenu?.map((sub: any) => ({
+        ...sub,
+        label: sub.label === 'About Us' ? translator('submenu.aboutUs') : 
+               sub.label === 'Vacancies' ? translator('submenu.vacancies') : sub.label
+      }))
+    })) || []
+  };
+
+  // Start with translated default navigation data for immediate render
+  const [data, setData] = useState<any[]>(() => translateHeaderData(DEFAULT_NAV_DATA, t));
   const [user, setUser] = useState<{ user: any } | null>(null);
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [sticky, setSticky] = useState(false);
@@ -138,25 +169,7 @@ const Header: React.FC = () => {
     }
 
     fetchData()
-  }, [locale]) // Only refetch when locale changes, not when t changes
-  
-  // Helper function to translate header data
-  const translateHeaderData = (headerData: any[], translator: typeof t) => {
-    return headerData?.map((item: any) => ({
-      ...item,
-      label: item.label === 'Home' ? translator('home') :
-             item.label === 'Services' ? translator('services') :
-             item.label === 'Company' ? translator('company') :
-             item.label === 'References' ? translator('projects') :
-             item.label === 'Projects' ? translator('projects') :
-             item.label === 'Contact' ? translator('contact') : item.label,
-      submenu: item.submenu?.map((sub: any) => ({
-        ...sub,
-        label: sub.label === 'About Us' ? translator('submenu.aboutUs') : 
-               sub.label === 'Vacancies' ? translator('submenu.vacancies') : sub.label
-      }))
-    })) || []
-  }
+  }, [locale, t]) // Refetch when locale or translations change
 
   const handleSignOut = () => {
     try {

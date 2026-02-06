@@ -4,25 +4,23 @@ import HeroSub from "@/components/shared/hero-sub";
 
 export default function OurStoryPage() {
   const videoRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  // Start visible to prevent blank content on mobile first render
+  const [isVisible, setIsVisible] = useState(true);
+  const [hasAnimated, setHasAnimated] = useState(true); // Start true to show video immediately
 
   useEffect(() => {
-    // Page load animation
-    setIsVisible(true);
-
-    // Intersection Observer for video reveal animation
+    // Video section animation enhancement (optional - content is already visible)
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAnimated) {
+          if (entry.isIntersecting) {
             setHasAnimated(true);
           }
         });
       },
       {
-        threshold: 0.3,
-        rootMargin: "0px 0px -100px 0px",
+        threshold: 0.1, // Lower threshold for earlier trigger
+        rootMargin: "50px 0px 0px 0px",
       }
     );
 
@@ -35,7 +33,7 @@ export default function OurStoryPage() {
         observer.unobserve(videoRef.current);
       }
     };
-  }, [hasAnimated]);
+  }, []);
 
   const breadcrumbLinks = [
     { href: "/", text: "Home" },

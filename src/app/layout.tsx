@@ -2,7 +2,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import Aoscompo from "@/utils/aos";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 // Optimized font loading with display swap and preload
 const montserrat = Montserrat({ 
@@ -17,6 +17,14 @@ const montserrat = Montserrat({
 import { AppContextProvider } from "@/context/PropertyContext";
 import ScrollToTop from "@/components/scroll-to-top";
 import SessionProviderWrapper from "@/providers/SessionProviderWrapper";
+
+// Viewport configuration for proper mobile rendering
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#016aac',
+};
 
 // Metadata configuration - favicon.ico in app folder is auto-detected by Next.js
 export const metadata: Metadata = {
@@ -35,7 +43,25 @@ export default function RootLayout({
   session?: any;
 }>) {
   return (
-    <html suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Critical: Prevent FOUC on mobile Safari/Chrome */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                // Apply theme immediately to prevent flash
+                try {
+                  var theme = localStorage.getItem('theme') || 'light';
+                  if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={`${montserrat.className} ${montserrat.variable}`}>
       <AppContextProvider>
       <SessionProviderWrapper session={session || null}>

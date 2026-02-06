@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
@@ -28,38 +28,43 @@ export default function WhyChooseUs() {
       description: t('features.trust.description')
     }
   ];
-  const [isVisible, setIsVisible] = useState(false);
-  const [cardScale, setCardScale] = useState(0.95);
+  // Start visible to prevent blank content on mobile first render
+  const [isVisible, setIsVisible] = useState(true);
+  const [cardScale, setCardScale] = useState(1);
+  const hasAnimated = useRef(false);
 
   useEffect(() => {
-    setIsVisible(true);
+    // Only run animation once after hydration
+    if (hasAnimated.current) return;
+    hasAnimated.current = true;
     
-    // Initial zoom in
-    setTimeout(() => {
-      setCardScale(1);
-    }, 300);
-
-    // Smooth zoom in/out animation loop
-    let isZoomingIn = true;
-    const zoomInterval = setInterval(() => {
-      setCardScale(prev => {
-        if (isZoomingIn) {
-          if (prev >= 1.05) {
-            isZoomingIn = false;
-            return 1.05;
+    // Start subtle scale animation after component is visible
+    const startAnimation = () => {
+      let isZoomingIn = true;
+      const zoomInterval = setInterval(() => {
+        setCardScale(prev => {
+          if (isZoomingIn) {
+            if (prev >= 1.03) {
+              isZoomingIn = false;
+              return 1.03;
+            }
+            return prev + 0.003;
+          } else {
+            if (prev <= 1) {
+              isZoomingIn = true;
+              return 1;
+            }
+            return prev - 0.003;
           }
-          return prev + 0.005;
-        } else {
-          if (prev <= 1) {
-            isZoomingIn = true;
-            return 1;
-          }
-          return prev - 0.005;
-        }
-      });
-    }, 50);
+        });
+      }, 60);
 
-    return () => clearInterval(zoomInterval);
+      return () => clearInterval(zoomInterval);
+    };
+
+    // Delay animation start to prioritize content rendering
+    const timeoutId = setTimeout(startAnimation, 500);
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (

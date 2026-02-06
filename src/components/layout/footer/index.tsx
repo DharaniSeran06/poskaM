@@ -56,14 +56,18 @@ const renderSocialIcon = (platform: string) => {
 const Footer: React.FC<FooterProps> = ({ footerData }) => {
   const t = useTranslations('footer');
   const footerRef = useRef<HTMLElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  // Start visible to avoid blank footer on mobile - animations are progressive enhancement
+  const [isVisible, setIsVisible] = useState(true);
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
-    // Intersection Observer for footer animations
+    // Intersection Observer for footer animations - only triggers animation enhancement
+    // Footer is already visible, this just adds smooth transitions when scrolled into view
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true);
             setIsVisible(true);
           }
         });
@@ -83,7 +87,7 @@ const Footer: React.FC<FooterProps> = ({ footerData }) => {
         observer.unobserve(footerRef.current);
       }
     };
-  }, []);
+  }, [hasAnimated]);
 
   // Use Sanity data if available, otherwise fallback to translations
   const description = footerData?.description || t('description');

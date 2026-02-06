@@ -19,9 +19,9 @@ const ServiceGallery: React.FC<ServiceGalleryProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [visibleCards, setVisibleCards] = useState(5); // Desktop: 5, Tablet: 3, Mobile: 1
+  // Default to 1 for mobile-first SSR, will update on client
+  const [visibleCards, setVisibleCards] = useState(1);
   const [isMounted, setIsMounted] = useState(false);
-  const [isClient, setIsClient] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Navigation handlers
@@ -39,10 +39,8 @@ const ServiceGallery: React.FC<ServiceGalleryProps> = ({
     setTimeout(() => setIsAnimating(false), 500);
   }, [images.length, isAnimating]);
 
-  // Calculate visible cards based on screen size
+  // Calculate visible cards based on screen size - runs after hydration
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
     const updateVisibleCards = () => {
       if (window.innerWidth < 768) {
         setVisibleCards(1); // Mobile: single card
@@ -53,7 +51,10 @@ const ServiceGallery: React.FC<ServiceGalleryProps> = ({
       }
     };
 
+    // Update immediately on mount
     updateVisibleCards();
+    setIsMounted(true);
+    
     window.addEventListener('resize', updateVisibleCards);
     return () => window.removeEventListener('resize', updateVisibleCards);
   }, []);
@@ -89,23 +90,6 @@ const ServiceGallery: React.FC<ServiceGalleryProps> = ({
       }
     }
   }, [handleNext, handlePrev]);
-
-  // Mount animation and client-side check
-  useEffect(() => {
-    setIsClient(true);
-    setIsMounted(true);
-  }, []);
-
-  // Don't render until client-side
-  if (!isClient) {
-    return (
-      <div className="w-full py-8">
-        <div className="relative w-full h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center">
-          <div className="animate-pulse text-gray-400">Loading gallery...</div>
-        </div>
-      </div>
-    );
-  }
 
   // Get visible card indices
   const getVisibleIndices = () => {
@@ -158,9 +142,9 @@ const ServiceGallery: React.FC<ServiceGalleryProps> = ({
   return (
     <motion.div
       className="w-full py-8"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isMounted ? 1 : 0 }}
-      transition={{ duration: 0.6 }}
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
     >
       {/* Gallery Container */}
       <div
