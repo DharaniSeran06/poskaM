@@ -6,21 +6,26 @@ import ContactForm from "@/components/contact/form";
 import Location from "@/components/contact/office-location";
 import { getContactPageData } from "@/sanity/lib/contactPage";
 
+// 🔥 REQUIRED FIX
+export const dynamic = "force-dynamic";
+
+// SEO metadata (this is fine)
 export const metadata: Metadata = {
   title: "Contact | POSKA MANOLITO AG",
 };
 
+// Optional caching (still allowed with force-dynamic)
 export const revalidate = 3600;
 
-const page = async () => {
-  // Fetch contact data from Sanity (default to 'en' locale)
-  const contactData = await getContactPageData('en');
-  
+const Page = async () => {
+  // Fetch contact data from Sanity
+  const contactData = await getContactPageData("en");
+
   const breadcrumbLinks = [
     { href: "/", text: "Home" },
     { href: "/contact", text: "Contact" },
   ];
-  
+
   return (
     <>
       <HeroSub
@@ -35,4 +40,4 @@ const page = async () => {
   );
 };
 
-export default page;
+export default Page;
