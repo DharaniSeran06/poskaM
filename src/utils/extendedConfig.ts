@@ -75,5 +75,6 @@ export const extendedConfig = {
   },
   fontFamily: {
     sans: ['var(--font-montserrat)', 'Montserrat', 'sans-serif'],
+    serif: ['var(--font-playfair)', 'Playfair Display', 'Georgia', 'serif'],
   },
 }

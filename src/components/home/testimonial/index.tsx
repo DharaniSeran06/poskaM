@@ -1,7 +1,10 @@
 'use client';
-import React, { useState } from 'react';
+
+import React, { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+
+/* ─────────────────────────── types ─────────────────────────── */
 
 interface Testimonial {
   _id: string;
@@ -16,152 +19,230 @@ interface TestimonialsProps {
   testimonials: Testimonial[];
 }
 
+/* ─────────────────────────── card ──────────────────────────── */
+
+function TestimonialCard({
+  testimonial,
+  index,
+}: {
+  testimonial: Testimonial;
+  index: number;
+}) {
+  return (
+    <div
+      className="group relative break-inside-avoid mb-6
+        bg-white/80 dark:bg-white/[0.07] backdrop-blur-xl rounded-2xl p-7
+        shadow-[0_4px_24px_rgba(1,106,172,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.25)]
+        transition-all duration-300 ease-out
+        lg:hover:-translate-y-1
+        lg:hover:shadow-[0_8px_32px_rgba(1,106,172,0.18),0_0_0_1px_rgba(1,106,172,0.10)]
+        dark:lg:hover:shadow-[0_12px_40px_rgba(1,106,172,0.3),0_0_0_1px_rgba(1,106,172,0.20)]
+        active:shadow-[0_4px_20px_rgba(1,106,172,0.22)] active:scale-[0.985]
+        will-change-transform"
+      data-aos="fade-up"
+      data-aos-delay={index * 80}
+      data-aos-duration="600"
+    >
+      {/* Background quote icon – decorative */}
+      <svg
+        className="absolute top-5 right-5 w-10 h-10 text-[#016aac]/[0.06] dark:text-white/[0.06] pointer-events-none"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.996 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-10z" />
+      </svg>
+
+      {/* Star rating */}
+      <div className="flex gap-1 mb-4">
+        {[...Array(testimonial.rating || 5)].map((_, i) => (
+          <svg
+            key={i}
+            className="w-4 h-4 text-amber-400"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 .587l3.668 7.431L24 9.763l-6 5.847L19.336 24 12 20.019 4.664 24 6 15.61 0 9.763l8.332-1.745z" />
+          </svg>
+        ))}
+      </div>
+
+      {/* Quote */}
+      <p className="text-[15px] leading-relaxed text-gray-700 dark:text-white/90 mb-6 italic">
+        &ldquo;{testimonial.content}&rdquo;
+      </p>
+
+      {/* Divider */}
+      <div className="h-px bg-[#016aac]/10 dark:bg-white/10 mb-5" />
+
+      {/* Author */}
+      <div className="flex items-center gap-3">
+        {testimonial.image ? (
+          <div className="relative w-11 h-11 rounded-full overflow-hidden ring-2 ring-[#016aac]/15 dark:ring-white/20 flex-shrink-0">
+            <Image
+              src={testimonial.image}
+              alt={testimonial.name}
+              fill
+              className="object-cover"
+              sizes="44px"
+            />
+          </div>
+        ) : (
+          <div className="w-11 h-11 rounded-full bg-[#016aac]/10 dark:bg-[#016aac]/40 flex items-center justify-center ring-2 ring-[#016aac]/15 dark:ring-white/20 flex-shrink-0">
+            <span className="text-[#016aac] dark:text-white font-semibold text-sm">
+              {testimonial.name.charAt(0)}
+            </span>
+          </div>
+        )}
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-midnight_text dark:text-white truncate">
+            {testimonial.name}
+          </p>
+          {testimonial.role && (
+            <p className="text-xs text-gray-500 dark:text-white/50 truncate">{testimonial.role}</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────── main section ─────────────────────── */
+
 export default function Testimonials({ testimonials }: TestimonialsProps) {
   const t = useTranslations('home.testimonials');
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-  // Calculate how many pairs we can show
-  const maxPairs = Math.ceil(testimonials.length / 2);
-  const currentPair = Math.floor(currentIndex / 2);
-
-  const nextTestimonial = () => {
-    setCurrentIndex((prev) => {
-      const nextIndex = prev + 2;
-      // If we've reached the end, loop back to start
-      if (nextIndex >= testimonials.length) {
-        return 0;
-      }
-      return nextIndex;
-    });
+  /* ── mobile scroll state ─────────────────────────────────── */
+  const updateScrollButtons = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
   };
 
-  const prevTestimonial = () => {
-    setCurrentIndex((prev) => {
-      const prevIndex = prev - 2;
-      // If we go before the start, loop to the last pair
-      if (prevIndex < 0) {
-        const lastPairStart = Math.floor((testimonials.length - 1) / 2) * 2;
-        return lastPairStart;
-      }
-      return prevIndex;
-    });
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    updateScrollButtons();
+    el.addEventListener('scroll', updateScrollButtons, { passive: true });
+    window.addEventListener('resize', updateScrollButtons);
+    return () => {
+      el.removeEventListener('scroll', updateScrollButtons);
+      window.removeEventListener('resize', updateScrollButtons);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [testimonials]);
+
+  const scrollBy = (dir: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: 'smooth' });
   };
+
+  /* ── masonry column distribution (desktop) ───────────────── */
+  const cols: [Testimonial[], Testimonial[], Testimonial[]] = [[], [], []];
+  testimonials.forEach((t, i) => cols[i % 3].push(t));
 
   return (
-    <section className="px-4 md:px-0 py-20 lg:py-28 bg-section dark:bg-darkmode">
-      <div className="container lg:max-w-screen-xl md:max-w-screen-md mx-auto">
-        <div className="text-center mb-16" data-aos="fade-up">
+    <section className="relative py-20 lg:py-28 overflow-hidden">
+      {/* ── light-blue gradient background ──────────────────── */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#f0f7ff] via-[#e4f0fb] to-[#d6eaf8] dark:from-[#0a1628] dark:via-[#0e1f3d] dark:to-[#012a52] pointer-events-none" />
+      {/* subtle radial glow for depth */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_60%_-5%,rgba(1,106,172,0.08),transparent)] dark:bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(1,106,172,0.25),transparent)] pointer-events-none" />
+      {/* soft diagonal accent */}
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(1,106,172,0.04)_0%,transparent_50%,rgba(1,106,172,0.03)_100%)] dark:bg-none pointer-events-none" />
+
+      <div className="container lg:max-w-screen-xl md:max-w-screen-md mx-auto px-4 relative z-10">
+        {/* ── section header ───────────────────────────────── */}
+        <div className="text-center mb-14" data-aos="fade-up">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#016aac] dark:text-[#4da8e0] mb-3">
+            Testimonials
+          </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-midnight_text dark:text-white mb-4">
             {t('title')}
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-gray-500 dark:text-white/60 max-w-2xl mx-auto">
             {t('description')}
           </p>
         </div>
 
         {testimonials.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-lg text-gray-600 dark:text-gray-400">
+            <p className="text-lg text-gray-500 dark:text-white/50">
               {t('noTestimonials') || 'No testimonials available at the moment.'}
             </p>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-              {testimonials.slice(currentIndex, currentIndex + 2).map((testimonial, index) => {
-                // Calculate actual index for animation delay
-                const actualIndex = currentIndex + index;
-                return (
+            {/* ── desktop / tablet: masonry columns ────────── */}
+            <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {cols.map((col, colIdx) => (
                 <div
-                  key={testimonial._id || actualIndex}
-                  className="bg-white dark:bg-darklight rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300"
-                  data-aos="fade-up"
-                  data-aos-delay={index * 100}
+                  key={colIdx}
+                  className={colIdx === 1 ? 'md:mt-8' : ''}
                 >
-                  <div className="flex items-center mb-4">
-                    {[...Array(testimonial.rating || 5)].map((_, i) => (
-                      <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 .587l3.668 7.431L24 9.763l-6 5.847L19.336 24 12 20.019 4.664 24 6 15.61 0 9.763l8.332-1.745z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <div className="mb-6">
-                    <svg className="w-12 h-12 text-[#016aac]/20 mb-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.996 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-10z"/>
-                    </svg>
-                    <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed italic">
-                      "{testimonial.content}"
-                    </p>
-                  </div>
-                  <div className="border-t border-gray-200 dark:border-dark_border pt-4 flex items-center gap-4">
-                    {testimonial.image && (
-                      <div className="relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
-                        <Image
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    )}
-                    <div>
-                      <p className="text-xl font-bold text-midnight_text dark:text-white">
-                        {testimonial.name}
-                      </p>
-                      {testimonial.role && (
-                        <p className="text-gray-600 dark:text-gray-400">
-                          {testimonial.role}
-                        </p>
-                      )}
-                    </div>
-                  </div>
+                  {col.map((testimonial, cardIdx) => (
+                    <TestimonialCard
+                      key={testimonial._id || `${colIdx}-${cardIdx}`}
+                      testimonial={testimonial}
+                      index={colIdx + cardIdx * 3}
+                    />
+                  ))}
                 </div>
-                );
-              })}
+              ))}
+            </div>
+
+            {/* ── mobile: horizontal swipe carousel ────────── */}
+            <div className="md:hidden relative">
+              <div
+                ref={scrollRef}
+                className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth
+                  pb-4 -mx-4 px-4
+                  scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+              >
+                {testimonials.map((testimonial, idx) => (
+                  <div
+                    key={testimonial._id || idx}
+                    className="flex-shrink-0 w-[85vw] max-w-[340px] snap-center"
+                  >
+                    <TestimonialCard testimonial={testimonial} index={idx} />
+                  </div>
+                ))}
+              </div>
+
+              {/* Scroll arrows */}
+              <div className="flex justify-center gap-3 mt-4">
+                <button
+                  onClick={() => scrollBy(-1)}
+                  disabled={!canScrollLeft}
+                  aria-label="Scroll left"
+                  className="p-2.5 rounded-full bg-[#016aac]/10 dark:bg-white/10 backdrop-blur-sm text-[#016aac] dark:text-white
+                    transition-all duration-200
+                    disabled:opacity-30 disabled:cursor-default
+                    active:scale-95"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => scrollBy(1)}
+                  disabled={!canScrollRight}
+                  aria-label="Scroll right"
+                  className="p-2.5 rounded-full bg-[#016aac]/10 dark:bg-white/10 backdrop-blur-sm text-[#016aac] dark:text-white
+                    transition-all duration-200
+                    disabled:opacity-30 disabled:cursor-default
+                    active:scale-95"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </>
-        )}
-
-        {/* Slider Controls - Only show if there are more than 2 testimonials */}
-        {testimonials.length > 2 && (
-          <div className="flex justify-center items-center space-x-4">
-            <button
-              onClick={prevTestimonial}
-              className="p-3 bg-white dark:bg-darklight border border-gray-200 dark:border-dark_border rounded-lg hover:bg-[#016aac] hover:text-white hover:border-[#016aac] transition-all duration-300"
-              aria-label="Previous testimonial"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <div className="flex space-x-2">
-              {Array.from({ length: maxPairs }).map((_, pairIndex) => {
-                const pairStartIndex = pairIndex * 2;
-                const isActive = Math.floor(currentIndex / 2) === pairIndex;
-                return (
-                  <button
-                    key={pairIndex}
-                    onClick={() => setCurrentIndex(pairStartIndex)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      isActive
-                        ? "bg-[#016aac] w-8"
-                        : "bg-gray-300 dark:bg-gray-600"
-                    }`}
-                    aria-label={`Go to testimonial pair ${pairIndex + 1}`}
-                  />
-                );
-              })}
-            </div>
-            <button
-              onClick={nextTestimonial}
-              className="p-3 bg-white dark:bg-darklight border border-gray-200 dark:border-dark_border rounded-lg hover:bg-[#016aac] hover:text-white hover:border-[#016aac] transition-all duration-300"
-              aria-label="Next testimonial"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
         )}
       </div>
     </section>

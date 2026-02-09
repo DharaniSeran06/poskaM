@@ -1,9 +1,10 @@
 import React from 'react';
 import { Metadata } from "next";
 import Hero from '@/components/home/hero';
+import VideoIntro from '@/components/home/video-intro';
+import FounderSpotlight from '@/components/home/founder-spotlight';
+import Stats from '@/components/home/stats';
 import Services from '@/components/home/services';
-import About from '@/components/home/about';
-import WhyChooseUs from '@/components/home/why-choose-us';
 import Projects from '@/components/home/projects';
 import TestimonialsWrapper from '@/components/home/testimonial/TestimonialsWrapper';
 import CompanyInfoWrapper from '@/components/home/info/CompanyInfoWrapper';
@@ -25,9 +26,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   return (
     <main>
       <Hero />
+      <VideoIntro />
+      <FounderSpotlight />
+      <Stats />
       <Services locale={locale} />
-      <About />
-      <WhyChooseUs />
       <Projects locale={locale} />
       <TestimonialsWrapper locale={locale} />
       <CompanyInfoWrapper />

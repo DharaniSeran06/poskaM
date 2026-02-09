@@ -299,7 +299,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   </div>
                   <div>
                     <p className="text-[10px] font-medium text-neutral-400 uppercase tracking-[0.2em] mb-2">
-                      Category
+                      {t('categoryLabel')}
                     </p>
                     <p className="text-xl lg:text-2xl font-medium text-neutral-800 dark:text-white">
                       {project.category}
@@ -321,7 +321,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   </div>
                   <div>
                     <p className="text-[10px] font-medium text-neutral-400 uppercase tracking-[0.2em] mb-2">
-                      Location
+                      {t('locationLabel')}
                     </p>
                     <p className="text-xl lg:text-2xl font-medium text-neutral-800 dark:text-white">
                       {project.location}
@@ -349,7 +349,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     </span>
                   </div>
                   <h3 className="text-2xl md:text-3xl font-semibold text-neutral-900 dark:text-white tracking-tight">
-                    Scope of Work
+                    {t('scopeOfWork')}
                   </h3>
                 </div>
               </div>
@@ -395,7 +395,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   </span>
                 </div>
                 <h3 className="text-2xl md:text-3xl font-semibold text-neutral-900 dark:text-white tracking-tight">
-                  Design Partner
+                  {t('designPartner')}
                 </h3>
               </div>
 
@@ -414,7 +414,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                           {project.architecturePlanning.title}
                         </p>
                         <p className="mt-3 text-sm text-neutral-500 uppercase tracking-[0.15em] flex items-center gap-2">
-                          View website
+                          {t('viewWebsite')}
                           <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 17L17 7M17 7H7M17 7V17" />
                           </svg>
@@ -433,9 +433,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </section>
       )}
 
-      {/* Reference Gallery Section - Masonry-like Grid */}
+      {/* Reference Gallery Section — Adaptive Professional Layout */}
       {project.gallery && project.gallery.length > 0 && (
-        <section className="py-20 lg:py-32">
+        <section className="py-20 lg:py-32 bg-neutral-50/50 dark:bg-darkmode">
           <div className="container mx-auto lg:max-w-screen-xl px-6 lg:px-8">
             {/* Gallery Header */}
             <div className="flex items-center justify-between mb-12 lg:mb-16" data-aos="fade-up">
@@ -450,40 +450,122 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   {t('galleryDescription')}
                 </h2>
               </div>
-              <span className="hidden md:block text-5xl lg:text-6xl font-bold text-neutral-100 dark:text-neutral-800">
+              <span className="hidden md:block text-5xl lg:text-6xl font-bold text-neutral-100 dark:text-neutral-800 select-none">
                 {String(project.gallery.length).padStart(2, '0')}
               </span>
             </div>
 
-            {/* Gallery Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
-              {project.gallery.map((galleryItem: any, index: number) => (
+            {/* Gallery Grid — adaptive layout based on image count */}
+            {(() => {
+              const images = project.gallery;
+              const count = images.length;
+
+              /* Reusable gallery tile */
+              const GalleryTile = ({ item, idx, aspect, span, sizes }: { item: any; idx: number; aspect: string; span?: string; sizes: string }) => (
                 <div
-                  key={index}
-                  className={`relative overflow-hidden group ${
-                    index === 0 ? 'md:col-span-2 md:row-span-2' : ''
-                  }`}
+                  key={idx}
+                  className={`relative overflow-hidden rounded-xl group ${span || ''}`}
                   data-aos="fade-up"
-                  data-aos-delay={Math.min(index * 50, 200)}
+                  data-aos-delay={Math.min(idx * 80, 320)}
                 >
-                  <div className={`relative ${index === 0 ? 'aspect-[4/3]' : 'aspect-square'} bg-neutral-100 dark:bg-neutral-800`}>
+                  <div className={`relative ${aspect} bg-neutral-200 dark:bg-neutral-800`}>
                     <Image
-                      src={galleryItem.image || ''}
-                      alt={galleryItem.alt || galleryItem.caption || `${t('projectGallery')} - Image ${index + 1}`}
+                      src={item.image || ''}
+                      alt={item.alt || item.caption || `${t('projectGallery')} - Image ${idx + 1}`}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      sizes={index === 0 ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
+                      className="object-cover transition-all duration-500 ease-out group-hover:scale-[1.03]"
+                      sizes={sizes}
                     />
-                    {/* Subtle overlay on hover */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
-                    {/* Image number */}
-                    <div className="absolute bottom-4 left-4 text-xs font-medium text-white/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      {String(index + 1).padStart(2, '0')}
+                    {/* Hover overlay gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                    {/* Image number badge */}
+                    <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded-md bg-white/90 dark:bg-black/60 backdrop-blur-sm
+                      text-[11px] font-semibold text-neutral-700 dark:text-neutral-200 tabular-nums
+                      opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0
+                      transition-all duration-300">
+                      {String(idx + 1).padStart(2, '0')}
                     </div>
+                    {/* Caption badge */}
+                    {item.caption && (
+                      <div className="absolute bottom-3 right-3 px-3 py-1 rounded-md bg-white/90 dark:bg-black/60 backdrop-blur-sm
+                        text-[11px] font-medium text-neutral-600 dark:text-neutral-300 max-w-[220px] truncate
+                        opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0
+                        transition-all duration-300 delay-75">
+                        {item.caption}
+                      </div>
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
+              );
+
+              /* 1 image: single large hero */
+              if (count === 1) {
+                return (
+                  <div className="grid grid-cols-1 gap-4">
+                    <GalleryTile item={images[0]} idx={0} aspect="aspect-[16/9]" sizes="100vw" />
+                  </div>
+                );
+              }
+
+              /* 2 images: equal two-column */
+              if (count === 2) {
+                return (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {images.map((img: any, i: number) => (
+                      <GalleryTile key={i} item={img} idx={i} aspect="aspect-[4/3]" sizes="(max-width: 768px) 100vw, 50vw" />
+                    ))}
+                  </div>
+                );
+              }
+
+              /* 3 images: 1 large left + 2 stacked right */
+              if (count === 3) {
+                return (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <GalleryTile item={images[0]} idx={0} aspect="aspect-[3/4] md:aspect-auto md:h-full" span="md:row-span-2" sizes="(max-width: 768px) 100vw, 50vw" />
+                    <GalleryTile item={images[1]} idx={1} aspect="aspect-[4/3]" sizes="(max-width: 768px) 100vw, 50vw" />
+                    <GalleryTile item={images[2]} idx={2} aspect="aspect-[4/3]" sizes="(max-width: 768px) 100vw, 50vw" />
+                  </div>
+                );
+              }
+
+              /* 4 images: 2×2 uniform grid */
+              if (count === 4) {
+                return (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {images.map((img: any, i: number) => (
+                      <GalleryTile key={i} item={img} idx={i} aspect="aspect-[4/3]" sizes="(max-width: 640px) 100vw, 50vw" />
+                    ))}
+                  </div>
+                );
+              }
+
+              /* 5 images: featured hero + 2×2 grid */
+              if (count === 5) {
+                return (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <GalleryTile item={images[0]} idx={0} aspect="aspect-[4/3]" span="md:col-span-1" sizes="(max-width: 768px) 100vw, 50vw" />
+                      <GalleryTile item={images[1]} idx={1} aspect="aspect-[4/3]" span="md:col-span-1" sizes="(max-width: 768px) 100vw, 50vw" />
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {images.slice(2, 5).map((img: any, i: number) => (
+                        <GalleryTile key={i + 2} item={img} idx={i + 2} aspect="aspect-[4/3]" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+
+              /* 6+ images: uniform 3-column grid */
+              return (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {images.map((img: any, i: number) => (
+                    <GalleryTile key={i} item={img} idx={i} aspect="aspect-[4/3]" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                  ))}
+                </div>
+              );
+            })()}
           </div>
         </section>
       )}
@@ -508,7 +590,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               data-aos="fade-up" 
               data-aos-delay="100"
             >
-              Ready to Start<br />Your Project?
+              {t('readyToStartProject')}
             </h2>
             
             <p 

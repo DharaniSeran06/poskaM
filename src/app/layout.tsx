@@ -1,4 +1,4 @@
-import { Montserrat } from "next/font/google";
+import { Montserrat, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import ClientProviders from "@/components/providers/ClientProviders";
@@ -11,6 +11,15 @@ const montserrat = Montserrat({
   display: "swap",
   preload: true,
   fallback: ["system-ui", "arial"],
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-playfair",
+  display: "swap",
+  preload: true,
+  fallback: ["Georgia", "serif"],
 });
 
 // Viewport configuration for proper mobile rendering
@@ -53,7 +62,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${montserrat.className} ${montserrat.variable}`}>
+      <body className={`${montserrat.className} ${montserrat.variable} ${playfair.variable}`}>
         <ClientProviders>
           {children}
         </ClientProviders>

@@ -38,6 +38,29 @@ const Hero = () => {
             data-aos="fade-right"
           >
             <div className="mb-6">
+              {/* Founded badge – subtle trust signal */}
+              <div
+                className="inline-flex items-center gap-2 px-4 py-1.5 mb-5 rounded-full
+                  bg-white/10 backdrop-blur-md border border-white/20
+                  text-white/90 text-sm font-medium tracking-wide
+                  animate-[fadeSlideUp_0.8s_ease-out_both]"
+              >
+                <svg
+                  className="w-3.5 h-3.5 opacity-80"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                Founded in 2003
+              </div>
+
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight text-white font-bold mb-4 drop-shadow-lg whitespace-nowrap">
                 {t('title')}
               </h1>
