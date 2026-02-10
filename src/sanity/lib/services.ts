@@ -1,14 +1,28 @@
 /**
  * Shared utility functions for fetching Services from Sanity
- * Used by both Navbar and Home page to ensure consistency
+ * Used by Navbar, Home page, and Services listing to ensure consistency
  */
 
 import { client } from './client';
+
+// ─── Types ───────────────────────────────────────────────────────────
 
 export interface ServiceMenuItem {
   label: string;
   href: string;
   slug: string;
+}
+
+export interface ServiceItem {
+  _id: string;
+  title: string;
+  shortDescription: string;
+  description: string;
+  slug: string;
+  thumbnail: string;
+  heroImage: string;
+  featured: boolean;
+  order: number;
 }
 
 // Fallback services when Sanity is unavailable
@@ -69,5 +83,57 @@ export async function getServicesForMenu(locale: string): Promise<ServiceMenuIte
     console.error('❌ Services Menu: Error fetching services from Sanity:', error);
     // Return fallback services on error to prevent 505
     return fallbackServices;
+  }
+}
+
+// ─── Landing page services ──────────────────────────────────────────
+
+/**
+ * Fetch ALL published services from Sanity with full card data.
+ * Used on the landing page Services section.
+ *
+ * @param locale - Active locale ('en' | 'de')
+ * @returns Array of ServiceItem objects ordered by _createdAt desc
+ */
+export async function getServices(locale: string): Promise<ServiceItem[]> {
+  const safeLocale = locale && ['en', 'de'].includes(locale) ? locale : 'en';
+
+  try {
+    const titleField =
+      safeLocale === 'en' ? 'title.en' : `coalesce(title.${safeLocale}, title.en)`;
+    const shortDescField =
+      safeLocale === 'en'
+        ? 'shortDescription.en'
+        : `coalesce(shortDescription.${safeLocale}, shortDescription.en)`;
+    const descField =
+      safeLocale === 'en'
+        ? 'description.en'
+        : `coalesce(description.${safeLocale}, description.en)`;
+
+    const query = `*[
+      _type == "service" &&
+      !(_id in path("drafts.**")) &&
+      defined(slug.current)
+    ] | order(_createdAt desc) {
+      _id,
+      "title": ${titleField},
+      "shortDescription": ${shortDescField},
+      "description": ${descField},
+      "thumbnail": coalesce(thumbnail.asset->url, ""),
+      "heroImage": coalesce(heroImage.asset->url, ""),
+      "slug": slug.current,
+      featured,
+      order
+    }`;
+
+    const services: ServiceItem[] = await client.fetch(query, {}, {
+      cache: 'force-cache',
+      next: { revalidate: 3600, tags: ['services', 'home-services'] },
+    });
+
+    return services || [];
+  } catch (error) {
+    console.error('❌ getServices: Error fetching from Sanity:', error);
+    return [];
   }
 }
