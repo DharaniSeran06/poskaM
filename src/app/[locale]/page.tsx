@@ -3,8 +3,9 @@ import { Metadata } from "next";
 import Hero from '@/components/home/hero';
 import VideoIntro from '@/components/home/video-intro';
 import FounderSpotlight from '@/components/home/founder-spotlight';
-import Stats from '@/components/home/stats';
+
 import Services from '@/components/home/services';
+import VirtualTour from '@/components/home/virtual-tour';
 import Projects from '@/components/home/projects';
 import TestimonialsWrapper from '@/components/home/testimonial/TestimonialsWrapper';
 import CompanyInfoWrapper from '@/components/home/info/CompanyInfoWrapper';
@@ -28,8 +29,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <Hero />
       <VideoIntro />
       <FounderSpotlight />
-      <Stats />
       <Services locale={locale} />
+      <VirtualTour />
       <Projects locale={locale} />
       <TestimonialsWrapper locale={locale} />
       <CompanyInfoWrapper />

@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 
-const CUTOUT_IMAGE = "/images/owner_picture-removebg-preview.png";
+const CUTOUT_IMAGE = "/images/owner-picture.jpeg";
 
 export default function FounderSpotlight() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -222,24 +222,33 @@ export default function FounderSpotlight() {
 
             <Link
               href="/about/ermond-poshka"
-              className="inline-block w-fit
-                bg-[#0F4C81] text-white
-                dark:bg-[#0F4C81] dark:text-white
-                text-[10px] uppercase tracking-[0.2em] font-bold
-                px-8 py-3.5 rounded-md
-                shadow-lg shadow-[#0F4C81]/25
-                hover:bg-[#22C55E] hover:shadow-[#22C55E]/30
-                active:scale-[0.97]
-                transition-all duration-300"
+              className="inline-flex w-fit items-center gap-2 px-6 py-3
+                bg-primary text-white rounded-lg
+                hover:bg-primaryDark active:scale-[0.97]
+                transition-all duration-300
+                font-semibold text-sm tracking-wide shadow-lg shadow-primary/20"
             >
               Read More
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
             </Link>
           </div>
 
           {/* ── RIGHT: Director Image ────────────────────── */}
           <div
             ref={imageRef}
-            className="order-1 lg:order-2 flex justify-center lg:justify-end items-end relative self-end"
+            className="order-1 lg:order-2 flex justify-center lg:justify-end items-end relative self-end lg:mr-[-20px]"
             style={centerStyle}
           >
             {/* Soft radial glow behind the person */}
@@ -252,16 +261,15 @@ export default function FounderSpotlight() {
               }}
             />
 
-            <div className="relative w-[280px] sm:w-[340px] md:w-[380px] lg:w-[440px] xl:w-[500px]">
+            <div className="relative w-[240px] sm:w-[280px] md:w-[320px] lg:w-[350px] xl:w-[400px]">
               <Image
                 src={CUTOUT_IMAGE}
                 alt="Ermond Poshka, Founder & Management"
                 width={500}
                 height={680}
-                className="relative z-10 w-full h-auto object-contain
-                  grayscale
+                className="relative z-10 w-full h-auto object-cover rounded-lg
                   drop-shadow-[0_12px_48px_rgba(0,0,0,0.2)]"
-                sizes="(max-width: 640px) 280px, (max-width: 768px) 340px, (max-width: 1024px) 380px, 500px"
+                sizes="(max-width: 640px) 240px, (max-width: 768px) 280px, (max-width: 1024px) 320px, 400px"
                 priority
               />
             </div>

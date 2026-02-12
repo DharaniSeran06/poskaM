@@ -35,7 +35,7 @@ const Hero = () => {
           LAYER 2 — Hero Content
           ═══════════════════════════════════════════════════ */}
       <div className="relative z-10 w-full container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-6 md:px-10 py-32 lg:py-40">
-        <div className="flex flex-col items-start max-w-3xl">
+        <div className="flex flex-col items-start">
 
           {/* Founded badge */}
           <div
@@ -61,17 +61,15 @@ const Hero = () => {
             Founded in 2003
           </div>
 
-          {/* Title: POSKA MANOLITO / AG */}
+          {/* Title: POSKA MANOLITO AG */}
           <h1
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[6.5rem]
-              font-bold leading-[0.95] tracking-tight
+            className="whitespace-nowrap text-[clamp(2rem,7vw,6.5rem)]
+              font-bold leading-[1] tracking-tight
               text-midnight_text dark:text-white mb-6"
             data-aos="fade-right"
             data-aos-duration="800"
           >
-            POSKA MANOLITO
-            <br />
-            <span className="text-primary">AG</span>
+            POSKA MANOLITO <span className="text-primary">AG</span>
           </h1>
 
           {/* Accent line */}
@@ -85,7 +83,7 @@ const Hero = () => {
 
           {/* Services */}
           <p
-            className="text-base md:text-lg tracking-[0.15em] uppercase font-medium
+            className="max-w-3xl text-base md:text-lg tracking-[0.15em] uppercase font-medium
               text-gray dark:text-gray mb-12"
             data-aos="fade-right"
             data-aos-delay="300"
