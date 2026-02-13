@@ -211,17 +211,17 @@ const ServiceGallery: React.FC<ServiceGalleryProps> = ({
         </AnimatePresence>
       </div>
 
-      {/* Navigation Arrows */}
+      {/* Navigation Arrows - Always visible on all screen sizes */}
       {images.length > 1 && (
-        <div className="flex items-center justify-center gap-4 mt-8">
+        <div className="flex items-center justify-center gap-3 sm:gap-4 mt-8 px-4">
           <button
             onClick={handlePrev}
             disabled={isAnimating}
-            className="w-12 h-12 rounded-full bg-white dark:bg-darklight border border-gray-200 dark:border-dark_border shadow-md hover:shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#016aac] focus:ring-offset-2"
+            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white dark:bg-darklight border-2 border-gray-200 dark:border-dark_border shadow-lg hover:shadow-xl hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-[#016aac] dark:hover:border-[#016aac] transition-all duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#016aac] focus:ring-offset-2 active:scale-95"
             aria-label="Previous image"
           >
             <svg
-              className="w-6 h-6 text-gray-800 dark:text-white"
+              className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800 dark:text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -229,21 +229,21 @@ const ServiceGallery: React.FC<ServiceGalleryProps> = ({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={2.5}
                 d="M15 19l-7-7 7-7"
               />
             </svg>
           </button>
 
-          <div className="flex gap-2">
+          <div className="flex gap-1.5 sm:gap-2 flex-wrap justify-center max-w-[200px] sm:max-w-none">
             {images.map((_, index) => (
               <button
                 key={index}
                 onClick={() => handleCardClick(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                className={`flex-shrink-0 h-2 rounded-full transition-all duration-300 ${
                   index === currentIndex
-                    ? 'w-8 bg-[#016aac]'
-                    : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                    ? 'w-6 sm:w-8 bg-[#016aac]'
+                    : 'w-2 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
                 }`}
                 aria-label={`Go to image ${index + 1}`}
               />
@@ -253,11 +253,11 @@ const ServiceGallery: React.FC<ServiceGalleryProps> = ({
           <button
             onClick={handleNext}
             disabled={isAnimating}
-            className="w-12 h-12 rounded-full bg-white dark:bg-darklight border border-gray-200 dark:border-dark_border shadow-md hover:shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#016aac] focus:ring-offset-2"
+            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white dark:bg-darklight border-2 border-gray-200 dark:border-dark_border shadow-lg hover:shadow-xl hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-[#016aac] dark:hover:border-[#016aac] transition-all duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#016aac] focus:ring-offset-2 active:scale-95"
             aria-label="Next image"
           >
             <svg
-              className="w-6 h-6 text-gray-800 dark:text-white"
+              className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800 dark:text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -265,7 +265,7 @@ const ServiceGallery: React.FC<ServiceGalleryProps> = ({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={2.5}
                 d="M9 5l7 7-7 7"
               />
             </svg>

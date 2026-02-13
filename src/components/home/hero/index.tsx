@@ -30,7 +30,7 @@ const Hero = () => {
           </div>
 
           <h1 className="whitespace-nowrap text-[clamp(2rem,7vw,6.5rem)] font-bold leading-[1] tracking-tight text-midnight_text mb-6">
-            POSKA MANOLITO <span className="text-primary">AG</span>
+            POSKA MANOLITO AG
           </h1>
 
           <div className="w-16 h-[3px] rounded-full bg-primary mb-8" />
@@ -46,9 +46,9 @@ const Hero = () => {
           <Link
             href="/contact"
             className="inline-flex items-center gap-2 px-10 py-4
-            bg-primary text-white rounded-lg
-            hover:bg-primaryDark transition-all duration-300
-            font-semibold shadow-lg shadow-primary/20"
+            bg-[#016aac] text-white rounded-lg
+            hover:bg-[#015a94] transition-all duration-300
+            font-semibold shadow-lg shadow-[#016aac]/20"
           >
             {t("contactUs")}
           </Link>

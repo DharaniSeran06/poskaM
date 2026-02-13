@@ -222,10 +222,10 @@ export default function FounderSpotlight() {
             <Link
               href="/about/ermond-poshka"
               className="inline-flex w-fit items-center gap-2 px-6 py-3
-                bg-primary text-white rounded-lg
-                hover:bg-primaryDark active:scale-[0.97]
+                bg-[#016aac] text-white rounded-lg
+                hover:bg-[#015a94] active:scale-[0.97]
                 transition-all duration-300
-                font-semibold text-sm tracking-wide shadow-lg shadow-primary/20"
+                font-semibold text-sm tracking-wide shadow-lg shadow-[#016aac]/20"
             >
               {t("readMore")}
               <svg

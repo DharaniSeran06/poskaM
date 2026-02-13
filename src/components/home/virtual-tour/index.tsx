@@ -59,11 +59,11 @@ export default function VirtualTour() {
             <Link
               href="/projects"
               className="inline-flex items-center gap-2.5 px-7 py-3.5
-                bg-primary text-white rounded-xl
+                bg-[#016aac] text-white rounded-xl
                 font-semibold text-sm md:text-base
-                shadow-lg shadow-primary/20
+                shadow-lg shadow-[#016aac]/20
                 transition-all duration-300 ease-out
-                hover:bg-primaryDark hover:shadow-xl hover:scale-[1.02]
+                hover:bg-[#015a94] hover:shadow-xl hover:scale-[1.02]
                 active:scale-[0.97] active:shadow-md"
             >
               {t("cta")}
