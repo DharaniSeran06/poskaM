@@ -4,12 +4,42 @@
       "title": "POSKA MANOLITO AG",
       "subtitle": "Construction • Plastering • Facades • Painting • Renovation",
       "description": "Professional construction services with Swiss precision and reliability. Transforming your vision into reality with expert craftsmanship and attention to detail.",
+      "foundedIn": "Founded in 2003",
+      "plastering": "Plastering",
+      "facades": "Facades",
+      "painting": "Painting",
       "contactUs": "Contact Us",
       "getQuote": "Get a Quote",
       "rating": "4.9/5",
       "fromReviews": "from 658 reviews",
       "yearsExperience": "Years Experience",
       "projectsCompleted": "References Completed"
+    },
+    "founderSpotlight": {
+      "role": "Founder & Management",
+      "description": "Ermond Poshka realized his dream of owning his own company and founded the sole proprietorship \u201cPOSKA Plastering Business\u201d in Zurich. He gradually expanded his services, which his customers greatly appreciated.",
+      "readMore": "Read More"
+    },
+    "virtualTour": {
+      "badge": "Virtual Tour",
+      "heading": "Explore Our Work in",
+      "headingHighlight": "3D",
+      "workLabel": "Work:",
+      "workValue": "General plastering work",
+      "pmLabel": "Project Manager:",
+      "pmValue": "Ermond Poshka",
+      "locationLabel": "Location:",
+      "locationValue": "Canton of Zurich",
+      "archLabel": "Architecture and planning:",
+      "archValue": "Fuchs Architekten AG",
+      "cta": "Reference"
+    },
+    "videoIntro": {
+      "label": "Who We Are",
+      "heading": "Building Excellence with",
+      "headingHighlight": "Swiss Precision",
+      "description": "Since 2003, delivering trusted construction and façade excellence across Switzerland.",
+      "cta": "Company"
     },
     "services": {
       "title": "Our Services",

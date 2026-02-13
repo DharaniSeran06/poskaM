@@ -4,12 +4,42 @@
       "title": "POSKA MANOLITO AG",
       "subtitle": "Bau • Verputzen • Fassaden • Malerei • Renovierung",
       "description": "Professionelle Bauservices mit Schweizer Präzision und Zuverlässigkeit. Wir verwandeln Ihre Vision mit Expertenhandwerk und Liebe zum Detail in die Realität.",
+      "foundedIn": "Gegründet 2003",
+      "plastering": "Verputzen",
+      "facades": "Fassaden",
+      "painting": "Malerei",
       "contactUs": "Kontaktieren Sie uns",
       "getQuote": "Angebot anfordern",
       "rating": "4,9/5",
       "fromReviews": "von 658 Bewertungen",
       "yearsExperience": "Jahre Erfahrung",
       "projectsCompleted": "Abgeschlossene Referenzen"
+    },
+    "founderSpotlight": {
+      "role": "Gründer & Geschäftsleitung",
+      "description": "Ermond Poshka verwirklichte seinen Traum, ein eigenes Unternehmen zu besitzen, und gründete das Einzelunternehmen \u201eGipsergeschäft POSKA\u201c in Zürich. Er erweiterte seine Dienstleistungen schrittweise, was seine Kunden sehr schätzten.",
+      "readMore": "Mehr erfahren"
+    },
+    "virtualTour": {
+      "badge": "Virtuelle Tour",
+      "heading": "Entdecken Sie unsere Arbeit in",
+      "headingHighlight": "3D",
+      "workLabel": "Arbeit:",
+      "workValue": "Allgemeine Gipserarbeiten",
+      "pmLabel": "Projektleiter:",
+      "pmValue": "Ermond Poshka",
+      "locationLabel": "Standort:",
+      "locationValue": "Kanton Zürich",
+      "archLabel": "Architektur und Planung:",
+      "archValue": "Fuchs Architekten AG",
+      "cta": "Referenz"
+    },
+    "videoIntro": {
+      "label": "Wer wir sind",
+      "heading": "Bauexzellenz mit",
+      "headingHighlight": "Schweizer Präzision",
+      "description": "Seit 2003 liefern wir vertrauenswürdige Bau- und Fassadenexzellenz in der gesamten Schweiz.",
+      "cta": "Unternehmen"
     },
     "services": {
       "title": "Unsere Dienstleistungen",

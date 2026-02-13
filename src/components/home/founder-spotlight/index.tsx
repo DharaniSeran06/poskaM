@@ -2,11 +2,13 @@
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 
 const CUTOUT_IMAGE = "/images/owner-picture.jpeg";
 
 export default function FounderSpotlight() {
+  const t = useTranslations("home.founderSpotlight");
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const [leftVisible, setLeftVisible] = useState(false);
@@ -198,7 +200,7 @@ export default function FounderSpotlight() {
             </h2>
 
             <p className="text-xs uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 font-medium mb-5">
-              Founder &amp; Management
+              {t("role")}
             </p>
 
             {/* Blue→Green gradient accent line */}
@@ -213,10 +215,7 @@ export default function FounderSpotlight() {
             {/* Description — staggered entrance (rightVisible delay) */}
             <div style={rightStyle}>
               <p className="text-sm md:text-[15px] text-gray-500 dark:text-gray-400 leading-[1.9] max-w-[400px] mb-10">
-                Ermond Poshka realized his dream of owning his own company and
-                founded the sole proprietorship &ldquo;POSKA Plastering
-                Business&rdquo; in Zurich. He gradually expanded his services,
-                which his customers greatly appreciated.
+                {t("description")}
               </p>
             </div>
 
@@ -228,7 +227,7 @@ export default function FounderSpotlight() {
                 transition-all duration-300
                 font-semibold text-sm tracking-wide shadow-lg shadow-primary/20"
             >
-              Read More
+              {t("readMore")}
               <svg
                 className="w-4 h-4"
                 fill="none"

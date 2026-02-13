@@ -11,6 +11,9 @@ const withNextIntl = createNextIntlPlugin(
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Disable React Strict Mode to prevent double-mounting of WebGL components
+  // (Strict Mode creates/destroys WebGL contexts twice, exhausting browser limits)
+  reactStrictMode: false,
   /**
    * 🔥 VERY IMPORTANT
    * These two options prevent Vercel build from failing
